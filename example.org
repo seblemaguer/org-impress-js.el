@@ -1,0 +1,59 @@
+#+TITLE: Test
+#+AUTHOR: Takumi KINJO (@libkinjo)
+#+OPTIONS: toc:nil num:nil ^:nil 
+
+* paragraph
+  :PROPERTIES:
+  :data-x:      1000
+  :data-y:      0
+  :step:      slide step
+  :END:
+
+  ja
+
+* items
+  :PROPERTIES:
+  :data-x:   2000
+  :data-y:   0
+  :step:   slide step
+  :END:
+
+  - item1
+    - sub item
+      - sub sub item
+  - item2
+  - item3
+
+* table
+  :PROPERTIES:
+  :data-x:   3000
+  :data-y:   0
+  :step: slide step
+  :END:
+
+  | col | col2 | col3 |
+  |-----+------+------|
+  | v   | v    | v    |
+
+* table
+  :PROPERTIES:
+  :data-x:   4000
+  :data-y:   0
+  :step: slide step
+  :END:
+
+  | col | col2 | col3 |
+  |-----+------+------|
+  | v   | v    | v    |
+
+* num items
+  :PROPERTIES:
+  :data-x:   3000
+  :data-y:   1000
+  :data-rotate:   180
+  :step:   step
+  :END:
+
+  1) foo
+  2) bar
+  3) baz

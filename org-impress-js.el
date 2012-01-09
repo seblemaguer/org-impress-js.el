@@ -1,4 +1,4 @@
-;;; org-html.el --- HTML export for Org-mode
+;;; org-impress-js.el --- HTML export for Org-mode
 
 ;; Copyright (C) 2004-2011 Free Software Foundation, Inc.
 
@@ -36,12 +36,12 @@
 (declare-function org-pop-to-buffer-same-window
 		  "org-compat" (&optional buffer-or-name norecord label))
 
-(defgroup org-export-html nil
+(defgroup org-export-impress-js nil
   "Options specific for HTML export of Org-mode files."
   :tag "Org Export HTML"
   :group 'org-export)
 
-(defcustom org-export-html-footnotes-section "<div id=\"footnotes\">
+(defcustom org-export-impress-js-footnotes-section "<div id=\"footnotes\">
 <h2 class=\"footnotes\">%s: </h2>
 <div id=\"text-footnotes\">
 %s
@@ -51,53 +51,53 @@
 Should contain a two instances of %s.  The first will be replaced with the
 language-specific word for \"Footnotes\", the second one will be replaced
 by the footnotes themselves."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-footnote-format "<sup>%s</sup>"
+(defcustom org-export-impress-js-footnote-format "<sup>%s</sup>"
   "The format for the footnote reference.
 %s will be replaced by the footnote reference itself."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
 
-(defcustom org-export-html-footnote-separator "<sup>, </sup>"
+(defcustom org-export-impress-js-footnote-separator "<sup>, </sup>"
   "Text used to separate footnotes."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-coding-system nil
+(defcustom org-export-impress-js-coding-system nil
   "Coding system for HTML export, defaults to `buffer-file-coding-system'."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'coding-system)
 
-(defcustom org-export-html-extension "html"
+(defcustom org-export-impress-js-extension "html"
   "The extension for exported HTML files."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-xml-declaration
+(defcustom org-export-impress-js-xml-declaration
   '(("html" . "<?xml version=\"1.0\" encoding=\"%s\"?>")
     ("php" . "<?php echo \"<?xml version=\\\"1.0\\\" encoding=\\\"%s\\\" ?>\"; ?>"))
   "The extension for exported HTML files.
 %s will be replaced with the charset of the exported file.
 This may be a string, or an alist with export extensions
 and corresponding declarations."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type '(choice
 	  (string :tag "Single declaration")
 	  (repeat :tag "Dependent on extension"
 		  (cons (string :tag "Extension")
 			(string :tag "Declaration")))))
 
-(defcustom org-export-html-style-include-scripts t
+(defcustom org-export-impress-js-style-include-scripts t
   "Non-nil means include the JavaScript snippets in exported HTML files.
-The actual script is defined in `org-export-html-scripts' and should
+The actual script is defined in `org-export-impress-js-scripts' and should
 not be modified."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'boolean)
 
-(defconst org-export-html-scripts
+(defconst org-export-impress-js-scripts
 "<script type=\"text/javascript\">
 <!--/*--><![CDATA[/*><!--*/
  function CodeHighlightOn(elem, id)
@@ -122,7 +122,7 @@ not be modified."
 </script>"
 "Basic JavaScript that is needed by HTML files produced by Org-mode.")
 
-(defconst org-export-html-style-default
+(defconst org-export-impress-js-style-default
 "<style type=\"text/css\">
  <!--/*--><![CDATA[/*><!--*/
   html { font-family: Times, serif; font-size: 12pt; }
@@ -173,22 +173,22 @@ not be modified."
   /*]]>*/-->
 </style>"
   "The default style specification for exported HTML files.
-Please use the variables `org-export-html-style' and
-`org-export-html-style-extra' to add to this style.  If you wish to not
+Please use the variables `org-export-impress-js-style' and
+`org-export-impress-js-style-extra' to add to this style.  If you wish to not
 have the default style included, customize the variable
-`org-export-html-style-include-default'.")
+`org-export-impress-js-style-include-default'.")
 
-(defcustom org-export-html-style-include-default t
+(defcustom org-export-impress-js-style-include-default t
   "Non-nil means include the default style in exported HTML files.
-The actual style is defined in `org-export-html-style-default' and should
-not be modified.  Use the variables `org-export-html-style' to add
+The actual style is defined in `org-export-impress-js-style-default' and should
+not be modified.  Use the variables `org-export-impress-js-style' to add
 your own style information."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'boolean)
 ;;;###autoload
-(put 'org-export-html-style-include-default 'safe-local-variable 'booleanp)
+(put 'org-export-impress-js-style-include-default 'safe-local-variable 'booleanp)
 
-(defcustom org-export-html-style ""
+(defcustom org-export-impress-js-style ""
   "Org-wide style definitions for exported HTML files.
 
 This variable needs to contain the full HTML structure to provide a style,
@@ -214,24 +214,24 @@ If you'd like to refer to an external style file, use something like
 
 As the value of this option simply gets inserted into the HTML <head> header,
 you can \"misuse\" it to add arbitrary text to the header.
-See also the variable `org-export-html-style-extra'."
-  :group 'org-export-html
+See also the variable `org-export-impress-js-style-extra'."
+  :group 'org-export-impress-js
   :type 'string)
 ;;;###autoload
-(put 'org-export-html-style 'safe-local-variable 'stringp)
+(put 'org-export-impress-js-style 'safe-local-variable 'stringp)
 
-(defcustom org-export-html-style-extra ""
+(defcustom org-export-impress-js-style-extra ""
   "Additional style information for HTML export.
 The value of this variable is inserted into the HTML buffer right after
-the value of `org-export-html-style'.  Use this variable for per-file
+the value of `org-export-impress-js-style'.  Use this variable for per-file
 settings of style information, and do not forget to surround the style
 settings with <style>...</style> tags."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 ;;;###autoload
-(put 'org-export-html-style-extra 'safe-local-variable 'stringp)
+(put 'org-export-impress-js-style-extra 'safe-local-variable 'stringp)
 
-(defcustom org-export-html-mathjax-options
+(defcustom org-export-impress-js-mathjax-options
   '((path  "http://orgmode.org/mathjax/MathJax.js")
     (scale "100")
     (align "center")
@@ -251,7 +251,7 @@ mathml      Should a MathML player be used if available?
 You can also customize this for each buffer, using something like
 
 #+MATHJAX: scale:\"133\" align:\"right\" mathml:t path:\"/MathJax/\""
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type '(list :greedy t
 	      (list :tag "path   (the path from where to load MathJax.js)"
 		    (const :format "       " path) (string))
@@ -264,7 +264,7 @@ You can also customize this for each buffer, using something like
 	      (list :tag "mathml (should MathML display be used is possible)"
 		    (const :format "       " mathml) (boolean))))
 
-(defun org-export-html-mathjax-config (template options in-buffer)
+(defun org-export-impress-js-mathjax-config (template options in-buffer)
   "Insert the user setup into the matchjax template."
   (let (name val (yes "   ") (no "// ") x)
     (mapc
@@ -291,7 +291,7 @@ You can also customize this for each buffer, using something like
     ;; Return the modified template
     template))
 
-(defcustom org-export-html-mathjax-template
+(defcustom org-export-impress-js-mathjax-template
   "<script type=\"text/javascript\" src=\"%PATH\">
 <!--/*--><![CDATA[/*><!--*/
     MathJax.Hub.Config({
@@ -334,54 +334,54 @@ You can also customize this for each buffer, using something like
 /*]]>*///-->
 </script>"
   "The MathJax setup for XHTML files."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-tag-class-prefix ""
+(defcustom org-export-impress-js-tag-class-prefix ""
   "Prefix to class names for TODO keywords.
 Each tag gets a class given by the tag itself, with this prefix.
 The default prefix is empty because it is nice to just use the keyword
 as a class name.  But if you get into conflicts with other, existing
 CSS classes, then this prefix can be very useful."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-todo-kwd-class-prefix ""
+(defcustom org-export-impress-js-todo-kwd-class-prefix ""
   "Prefix to class names for TODO keywords.
 Each TODO keyword gets a class given by the keyword itself, with this prefix.
 The default prefix is empty because it is nice to just use the keyword
 as a class name.  But if you get into conflicts with other, existing
 CSS classes, then this prefix can be very useful."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-headline-anchor-format "<a name=\"%s\" id=\"%s\"></a>"
+(defcustom org-export-impress-js-headline-anchor-format "<a name=\"%s\" id=\"%s\"></a>"
   "Format for anchors in HTML headlines.
 It requires to %s: both will be replaced by the anchor referring
 to the headline (e.g. \"sec-2\").  When set to `nil', don't insert
 HTML anchors in headlines."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-preamble t
+(defcustom org-export-impress-js-preamble t
   "Non-nil means insert a preamble in HTML export.
 
 When `t', insert a string as defined by one of the formatting
-strings in `org-export-html-preamble-format'.  When set to a
-string, this string overrides `org-export-html-preamble-format'.
+strings in `org-export-impress-js-preamble-format'.  When set to a
+string, this string overrides `org-export-impress-js-preamble-format'.
 When set to a function, apply this function and insert the
 returned string.  The function takes no argument, but you can
 use `opt-plist' to access the current export options.
 
 Setting :html-preamble in publishing projects will take
 precedence over this variable."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type '(choice (const :tag "No preamble" nil)
 		 (const :tag "Default preamble" t)
 		 (string :tag "Custom formatting string")
 		 (function :tag "Function (must return a string)")))
 
-(defcustom org-export-html-preamble-format '(("en" ""))
+(defcustom org-export-impress-js-preamble-format '(("en" ""))
   "The format for the HTML preamble.
 
 %t stands for the title.
@@ -391,16 +391,16 @@ precedence over this variable."
 
 If you need to use a \"%\" character, you need to escape it
 like that: \"%%\"."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-postamble 'auto
+(defcustom org-export-impress-js-postamble 'auto
   "Non-nil means insert a postamble in HTML export.
 
 When `t', insert a string as defined by the formatting string in
-`org-export-html-postamble-format'.  When set to a string, this
-string overrides `org-export-html-postamble-format'.  When set to
-'auto, discard `org-export-html-postamble-format' and honor
+`org-export-impress-js-postamble-format'.  When set to a string, this
+string overrides `org-export-impress-js-postamble-format'.  When set to
+'auto, discard `org-export-impress-js-postamble-format' and honor
 `org-export-author/email/creator-info' variables.  When set to a
 function, apply this function and insert the returned string.
 The function takes no argument, but you can use `opt-plist' to
@@ -408,14 +408,14 @@ access the current export options.
 
 Setting :html-postamble in publishing projects will take
 precedence over this variable."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type '(choice (const :tag "No postamble" nil)
 		 (const :tag "Auto preamble" 'auto)
 		 (const :tag "Default formatting string" t)
 		 (string :tag "Custom formatting string")
 		 (function :tag "Function (must return a string)")))
 
-(defcustom org-export-html-postamble-format
+(defcustom org-export-impress-js-postamble-format
   '(("en" "<p class=\"author\">Author: %a (%e)</p>
 <p class=\"date\">Date: %d</p>
 <p class=\"creator\">Generated by %c</p>
@@ -427,14 +427,14 @@ precedence over this variable."
 %e stands for the author's email.
 %d stands for the date.
 %c will be replaced by information about Org/Emacs versions.
-%v will be replaced by `org-export-html-validation-link'.
+%v will be replaced by `org-export-impress-js-validation-link'.
 
 If you need to use a \"%\" character, you need to escape it
 like that: \"%%\"."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-home/up-format
+(defcustom org-export-impress-js-home/up-format
   "<div id=\"org-div-home-and-up\" style=\"text-align:right;font-size:70%%;white-space:nowrap;\">
  <a accesskey=\"h\" href=\"%s\"> UP </a>
  |
@@ -442,13 +442,13 @@ like that: \"%%\"."
 </div>"
   "Snippet used to insert the HOME and UP links.
 This is a format string, the first %s will receive the UP link,
-the second the HOME link.  If both `org-export-html-link-up' and
-`org-export-html-link-home' are empty, the entire snippet will be
+the second the HOME link.  If both `org-export-impress-js-link-up' and
+`org-export-impress-js-link-home' are empty, the entire snippet will be
 ignored."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-toplevel-hlevel 2
+(defcustom org-export-impress-js-toplevel-hlevel 2
   "The <H> level for level 1 headings in HTML export.
 This is also important for the classes that will be wrapped around headlines
 and outline structure.  If this variable is 1, the top-level headlines will
@@ -456,10 +456,10 @@ be <h1>, and the corresponding classes will be outline-1, section-number-1,
 and outline-text-1.  If this is 2, all of these will get a 2 instead.
 The default for this variable is 2, because we use <h1> for formatting the
 document title."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
-(defcustom org-export-html-link-org-files-as-html t
+(defcustom org-export-impress-js-link-org-files-as-impress-js t
   "Non-nil means make file links to `file.org' point to `file.html'.
 When org-mode is exporting an org-mode file to HTML, links to
 non-html files are directly put into a href tag in HTML.
@@ -468,32 +468,32 @@ extension `.org.) should become links to the corresponding html
 file, assuming that the linked org-mode file will also be
 converted to HTML.
 When nil, the links still point to the plain `.org' file."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'boolean)
 
-(defcustom org-export-html-inline-images 'maybe
+(defcustom org-export-impress-js-inline-images 'maybe
   "Non-nil means inline images into exported HTML pages.
 This is done using an <img> tag.  When nil, an anchor with href is used to
 link to the image.  If this option is `maybe', then images in links with
 an empty description will be inlined, while images with a description will
 be linked only."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type '(choice (const :tag "Never" nil)
 		 (const :tag "Always" t)
 		 (const :tag "When there is no description" maybe)))
 
-(defcustom org-export-html-inline-image-extensions
+(defcustom org-export-impress-js-inline-image-extensions
   '("png" "jpeg" "jpg" "gif" "svg")
   "Extensions of image files that can be inlined into HTML."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type '(repeat (string :tag "Extension")))
 
-(defcustom org-export-html-table-tag
+(defcustom org-export-impress-js-table-tag
   "<table border=\"2\" cellspacing=\"0\" cellpadding=\"6\" rules=\"groups\" frame=\"hsides\">"
   "The HTML tag that is used to start a table.
 This must be a <table> tag, but you may change the options like
 borders and spacing."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
 (defcustom org-export-table-header-tags '("<th scope=\"%s\"%s>" . "</th>")
@@ -501,8 +501,8 @@ borders and spacing."
 This is customizable so that alignment options can be specified.
 The first %s will be filled with the scope of the field, either row or col.
 The second %s will be replaced by a style entry to align the field.
-See also the variable `org-export-html-table-use-header-tags-for-first-column'.
-See also the variable `org-export-html-table-align-individual-fields'."
+See also the variable `org-export-impress-js-table-use-header-tags-for-first-column'.
+See also the variable `org-export-impress-js-table-align-individual-fields'."
   :group 'org-export-tables
   :type '(cons (string :tag "Opening tag") (string :tag "Closing tag")))
 
@@ -511,7 +511,7 @@ See also the variable `org-export-html-table-align-individual-fields'."
 This is customizable so that alignment options can be specified.
 The first %s will be filled with the scope of the field, either row or col.
 The second %s will be replaced by a style entry to align the field.
-See also the variable `org-export-html-table-align-individual-fields'."
+See also the variable `org-export-impress-js-table-align-individual-fields'."
   :group 'org-export-tables
   :type '(cons (string :tag "Opening tag") (string :tag "Closing tag")))
 
@@ -542,7 +542,7 @@ will give even lines the class \"tr-even\" and odd lines the class \"tr-odd\"."
 		  (string :tag "Specify")
 		  (sexp))))
 
-(defcustom org-export-html-table-align-individual-fields t
+(defcustom org-export-impress-js-table-align-individual-fields t
   "Non-nil means attach style attributes for alignment to each table field.
 When nil, alignment will only be specified in the column tags, but this
 is ignored by some browsers (like Firefox, Safari).  Opera does it right
@@ -550,43 +550,43 @@ though."
   :group 'org-export-tables
   :type 'boolean)
 
-(defcustom org-export-html-table-use-header-tags-for-first-column nil
+(defcustom org-export-impress-js-table-use-header-tags-for-first-column nil
   "Non-nil means format column one in tables with header tags.
 When nil, also column one will use data tags."
   :group 'org-export-tables
   :type 'boolean)
 
-(defcustom org-export-html-validation-link
+(defcustom org-export-impress-js-validation-link
   "<a href=\"http://validator.w3.org/check?uri=referer\">Validate XHTML 1.0</a>"
   "Link to HTML validation service."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type 'string)
 
 ;; FIXME Obsolete since Org 7.7
 ;; Use the :timestamp option or `org-export-time-stamp-file' instead
-(defvar org-export-html-with-timestamp nil
+(defvar org-export-impress-js-with-timestamp nil
   "If non-nil, write container for HTML-helper-mode timestamp.")
 
 ;; FIXME Obsolete since Org 7.7
-(defvar org-export-html-html-helper-timestamp
+(defvar org-export-impress-js-html-helper-timestamp
   "\n<p><br/><br/>\n<!-- hhmts start --> <!-- hhmts end --></p>\n"
   "The HTML tag used as timestamp delimiter for HTML-helper-mode.")
 
-(defcustom org-export-html-protect-char-alist
+(defcustom org-export-impress-js-protect-char-alist
   '(("&" . "&amp;")
     ("<" . "&lt;")
     (">" . "&gt;"))
-  "Alist of characters to be converted by `org-html-protect'."
-  :group 'org-export-html
+  "Alist of characters to be converted by `org-impress-js-protect'."
+  :group 'org-export-impress-js
   :type '(repeat (cons (string :tag "Character")
 		       (string :tag "HTML equivalent"))))
 
-(defgroup org-export-htmlize nil
+(defgroup org-export-impress-jsize nil
   "Options for processing examples with htmlize.el."
   :tag "Org Export Htmlize"
-  :group 'org-export-html)
+  :group 'org-export-impress-js)
 
-(defcustom org-export-htmlize-output-type 'inline-css
+(defcustom org-export-impress-jsize-output-type 'inline-css
   "Output type to be used by htmlize when formatting code snippets.
 Choices are `css', to export the CSS selectors only, or `inline-css', to
 export the CSS attribute values inline in the HTML.  We use as default
@@ -601,16 +601,16 @@ a style file to define the look of these classes.
 To get a start for your css file, start Emacs session and make sure that
 all the faces you are interested in are defined, for example by loading files
 in all modes you want.  Then, use the command
-\\[org-export-htmlize-generate-css] to extract class definitions."
-  :group 'org-export-htmlize
+\\[org-export-impress-jsize-generate-css] to extract class definitions."
+  :group 'org-export-impress-jsize
   :type '(choice (const css) (const inline-css)))
 
-(defcustom org-export-htmlize-css-font-prefix "org-"
+(defcustom org-export-impress-jsize-css-font-prefix "org-"
   "The prefix for CSS class names for htmlize font specifications."
-  :group 'org-export-htmlize
+  :group 'org-export-impress-jsize
   :type 'string)
 
-(defcustom org-export-htmlized-org-css-url nil
+(defcustom org-export-impress-jsized-org-css-url nil
   "URL pointing to a CSS file defining text colors for htmlized Emacs buffers.
 Normally when creating an htmlized version of an Org buffer, htmlize will
 create CSS to define the font colors.  However, this does not work when
@@ -619,26 +619,26 @@ with different fontification setup work on the same website.
 When this variable is non-nil, creating an htmlized version of an Org buffer
 using `org-export-as-org' will remove the internal CSS section and replace it
 with a link to this URL."
-  :group 'org-export-htmlize
+  :group 'org-export-impress-jsize
   :type '(choice
 	  (const :tag "Keep internal css" nil)
 	  (string :tag "URL or local href")))
 
 ;; FIXME: The following variable is obsolete since Org 7.7 but is
 ;; still declared and checked within code for compatibility reasons.
-;; Use the custom variables `org-export-html-divs' instead.
-(defvar org-export-html-content-div "content"
+;; Use the custom variables `org-export-impress-js-divs' instead.
+(defvar org-export-impress-js-content-div "content"
   "The name of the container DIV that holds all the page contents.
 
 This variable is obsolete since Org version 7.7.
-Please set `org-export-html-divs' instead.")
+Please set `org-export-impress-js-divs' instead.")
 
-(defcustom org-export-html-divs '("preamble" "content" "postamble")
+(defcustom org-export-impress-js-divs '("preamble" "content" "postamble")
   "The name of the main divs for HTML export.
 This is a list of three strings, the first one for the preamble
 DIV, the second one for the content DIV and the third one for the
 postamble DIV."
-  :group 'org-export-html
+  :group 'org-export-impress-js
   :type '(list
 	  (string :tag " Div for the preamble:")
 	  (string :tag "  Div for the content:")
@@ -646,15 +646,15 @@ postamble DIV."
 
 ;;; Hooks
 
-(defvar org-export-html-after-blockquotes-hook nil
+(defvar org-export-impress-js-after-blockquotes-hook nil
   "Hook run during HTML export, after blockquote, verse, center are done.")
 
-(defvar org-export-html-final-hook nil
+(defvar org-export-impress-js-final-hook nil
   "Hook run at the end of HTML export, in the new buffer.")
 
 ;;; HTML export
 
-(defun org-export-html-preprocess (parameters)
+(defun org-export-impress-js-preprocess (parameters)
   "Convert LaTeX fragments to images."
   (when (and org-current-export-file
 	     (plist-get parameters :LaTeX-fragments))
@@ -682,33 +682,33 @@ postamble DIV."
 	(replace-match (format "[[#%s][%s]]" label l1) t t)))))
 
 ;;;###autoload
-(defun org-export-as-html-and-open (arg)
+(defun org-export-as-impress-js-and-open (arg)
   "Export the outline as HTML and immediately open it with a browser.
 If there is an active region, export only the region.
 The prefix ARG specifies how many levels of the outline should become
 headlines.  The default is 3.  Lower levels will become bulleted lists."
   (interactive "P")
-  (org-export-as-html arg 'hidden)
+  (org-export-as-impress-js arg 'hidden)
   (org-open-file buffer-file-name)
   (when org-export-kill-product-buffer-when-displayed
     (kill-buffer (current-buffer))))
 
 ;;;###autoload
-(defun org-export-as-html-batch ()
-  "Call the function `org-export-as-html'.
+(defun org-export-as-impress-js-batch ()
+  "Call the function `org-export-as-impress-js'.
 This function can be used in batch processing as:
 emacs   --batch
         --load=$HOME/lib/emacs/org.el
         --eval \"(setq org-export-headline-levels 2)\"
-        --visit=MyFile --funcall org-export-as-html-batch"
-  (org-export-as-html org-export-headline-levels 'hidden))
+        --visit=MyFile --funcall org-export-as-impress-js-batch"
+  (org-export-as-impress-js org-export-headline-levels 'hidden))
 
 ;;;###autoload
-(defun org-export-as-html-to-buffer (arg)
-  "Call `org-export-as-html` with output to a temporary buffer.
-No file is created.  The prefix ARG is passed through to `org-export-as-html'."
+(defun org-export-as-impress-js-to-buffer (arg)
+  "Call `org-export-as-impress-js` with output to a temporary buffer.
+No file is created.  The prefix ARG is passed through to `org-export-as-impress-js'."
   (interactive "P")
-  (org-export-as-html arg nil nil "*Org HTML Export*")
+  (org-export-as-impress-js arg nil nil "*Org HTML Export*")
   (when org-export-show-temporary-export-buffer
     (switch-to-buffer-other-window "*Org HTML Export*")))
 
@@ -722,7 +722,7 @@ command to convert it."
   (let (reg html buf pop-up-frames)
     (save-window-excursion
       (if (eq major-mode 'org-mode)
-	  (setq html (org-export-region-as-html
+	  (setq html (org-export-region-as-impress-js
 		      beg end t 'string))
 	(setq reg (buffer-substring beg end)
 	      buf (get-buffer-create "*Org tmp*"))
@@ -730,14 +730,14 @@ command to convert it."
 	  (erase-buffer)
 	  (insert reg)
 	  (org-mode)
-	  (setq html (org-export-region-as-html
+	  (setq html (org-export-region-as-impress-js
 		      (point-min) (point-max) t 'string)))
 	(kill-buffer buf)))
     (delete-region beg end)
     (insert html)))
 
 ;;;###autoload
-(defun org-export-region-as-html (beg end &optional body-only buffer)
+(defun org-export-region-as-impress-js (beg end &optional body-only buffer)
   "Convert region from BEG to END in org-mode buffer to HTML.
 If prefix arg BODY-ONLY is set, omit file header, footer, and table of
 contents, and only produce the region of converted text, useful for
@@ -747,7 +747,7 @@ of the converted HTML.  If BUFFER is the symbol `string', return the
 produced HTML as a string and leave not buffer behind.  For example,
 a Lisp program could call this function in the following way:
 
-  (setq html (org-export-region-as-html beg end t 'string))
+  (setq html (org-export-region-as-impress-js beg end t 'string))
 
 When called interactively, the output buffer is selected, and shown
 in a window.  A non-interactive call will only return the buffer."
@@ -760,7 +760,7 @@ in a window.  A non-interactive call will only return the buffer."
     (goto-char end)
     (set-mark (point)) ;; to activate the region
     (goto-char beg)
-    (setq rtn (org-export-as-html
+    (setq rtn (org-export-as-impress-js
 	       nil nil ext-plist
 	       buffer body-only))
     (if (fboundp 'deactivate-mark) (deactivate-mark))
@@ -771,23 +771,23 @@ in a window.  A non-interactive call will only return the buffer."
 (defvar html-table-tag nil) ; dynamically scoped into this.
 (defvar org-par-open nil)
 
-;;; org-html-cvt-link-fn
-(defconst org-html-cvt-link-fn
+;;; org-impress-js-cvt-link-fn
+(defconst org-impress-js-cvt-link-fn
    nil
    "Function to convert link URLs to exportable URLs.
 Takes two arguments, TYPE and PATH.
 Returns exportable url as (TYPE PATH), or nil to signal that it
 didn't handle this case.
-Intended to be locally bound around a call to `org-export-as-html'." )
+Intended to be locally bound around a call to `org-export-as-impress-js'." )
 
-(defun org-html-cvt-org-as-html (opt-plist type path)
+(defun org-impress-js-cvt-org-as-impress-js (opt-plist type path)
    "Convert an org filename to an equivalent html filename.
 If TYPE is not file, just return `nil'.
-See variable `org-export-html-link-org-files-as-html'"
+See variable `org-export-impress-js-link-org-files-as-impress-js'"
 
    (save-match-data
       (and
-	 org-export-html-link-org-files-as-html
+	 org-export-impress-js-link-org-files-as-impress-js
 	 (string= type "file")
 	 (string-match "\\.org$" path)
 	 (progn
@@ -799,23 +799,23 @@ See variable `org-export-html-link-org-files-as-html'"
 		  (plist-get opt-plist :html-extension)))))))
 
 
-;;; org-html-should-inline-p
-(defun org-html-should-inline-p (filename descp)
+;;; org-impress-js-should-inline-p
+(defun org-impress-js-should-inline-p (filename descp)
    "Return non-nil if link FILENAME should be inlined.
 The decision to inline the FILENAME link is based on the current
 settings.  DESCP is the boolean of whether there was a link
-description.  See variables `org-export-html-inline-images' and
-`org-export-html-inline-image-extensions'."
+description.  See variables `org-export-impress-js-inline-images' and
+`org-export-impress-js-inline-image-extensions'."
    (declare (special
-	     org-export-html-inline-images
-	     org-export-html-inline-image-extensions))
-   (and (or (eq t org-export-html-inline-images)
-	    (and org-export-html-inline-images (not descp)))
+	     org-export-impress-js-inline-images
+	     org-export-impress-js-inline-image-extensions))
+   (and (or (eq t org-export-impress-js-inline-images)
+	    (and org-export-impress-js-inline-images (not descp)))
 	(org-file-image-p
-	 filename org-export-html-inline-image-extensions)))
+	 filename org-export-impress-js-inline-image-extensions)))
 
-;;; org-html-make-link
-(defun org-html-make-link (opt-plist type path fragment desc attr
+;;; org-impress-js-make-link
+(defun org-impress-js-make-link (opt-plist type path fragment desc attr
 			     may-inline-p)
    "Make an HTML link.
 OPT-PLIST is an options list.
@@ -848,10 +848,10 @@ MAY-INLINE-P allows inlining it as an image."
 	       ;;to a remote site.
 	       (components-2
 		  (or
-		     (and org-html-cvt-link-fn
-			(apply org-html-cvt-link-fn
+		     (and org-impress-js-cvt-link-fn
+			(apply org-impress-js-cvt-link-fn
 			   opt-plist components-1))
-		     (apply #'org-html-cvt-org-as-html
+		     (apply #'org-impress-js-cvt-org-as-impress-js
 			opt-plist components-1)
 		     components-1))
 	       (type    (first  components-2))
@@ -875,7 +875,7 @@ MAY-INLINE-P allows inlining it as an image."
 	 ;;Final URL-build, for all types.
 	 (setq thefile
 	    (let
-	       ((str (org-export-html-format-href thefile)))
+	       ((str (org-export-impress-js-format-href thefile)))
 	      (if (and type (not (or (string= "file" type)
 				     (string= "coderef" type))))
 		  (concat type ":" str)
@@ -887,13 +887,13 @@ MAY-INLINE-P allows inlining it as an image."
 		(not fragment))
 	    (progn
 	       (message "image %s %s" thefile org-par-open)
-	       (org-export-html-format-image thefile org-par-open))
+	       (org-export-impress-js-format-image thefile org-par-open))
 	    (concat
 	       "<a href=\"" thefile "\"" (if attr (concat " " attr)) ">"
-	       (org-export-html-format-desc desc)
+	       (org-export-impress-js-format-desc desc)
 	       "</a>")))))
 
-(defun org-html-handle-links (line opt-plist)
+(defun org-impress-js-handle-links (line opt-plist)
   "Return LINE with markup of Org mode links.
 OPT-PLIST is the export options list."
   (let ((start 0)
@@ -922,7 +922,7 @@ OPT-PLIST is the export options list."
 	    desc (or desc1 desc2))
       ;; Make an image out of the description if that is so wanted
       (when (and descp (org-file-image-p
-			desc org-export-html-inline-image-extensions))
+			desc org-export-impress-js-inline-image-extensions))
 	(save-match-data
 	  (if (string-match "^file:" desc)
 	      (setq desc (substring desc (match-end 0)))))
@@ -938,7 +938,7 @@ OPT-PLIST is the export options list."
 		  (substring path 1)
 		path)))
 	  (setq rpl
-		(org-html-make-link
+		(org-impress-js-make-link
 		 opt-plist
 		 ""
 		 ""
@@ -955,7 +955,7 @@ OPT-PLIST is the export options list."
 			 id-file
 			 (file-name-directory org-current-export-file)))
 	  (setq rpl
-		(org-html-make-link opt-plist
+		(org-impress-js-make-link opt-plist
 				    "file" id-file
 				    (concat (if (org-uuidgen-p path) "ID-") path)
 				    desc
@@ -964,15 +964,15 @@ OPT-PLIST is the export options list."
        ((member type '("http" "https"))
 	;; standard URL, can inline as image
 	(setq rpl
-	      (org-html-make-link opt-plist
+	      (org-impress-js-make-link opt-plist
 				  type path nil
 				  desc
 				  attr
-				  (org-html-should-inline-p path descp))))
+				  (org-impress-js-should-inline-p path descp))))
        ((member type '("ftp" "mailto" "news"))
 	;; standard URL, can't inline as image
 	(setq rpl
-	      (org-html-make-link opt-plist
+	      (org-impress-js-make-link opt-plist
 				  type path nil
 				  desc
 				  attr
@@ -985,7 +985,7 @@ OPT-PLIST is the export options list."
 	      (format "class=\"coderef\" onmouseover=\"CodeHighlightOn(this, '%s');\" onmouseout=\"CodeHighlightOff(this, '%s');\""
 		      coderef-str coderef-str)))
 	  (setq rpl
-		(org-html-make-link opt-plist
+		(org-impress-js-make-link opt-plist
 				    type "" coderef-str
 				    (format
 				     (org-export-get-coderef-format
@@ -1048,9 +1048,9 @@ OPT-PLIST is the export options list."
 		       (functionp link-validate)
 		       (not (funcall link-validate path-1 current-dir)))
 		      desc
-		    (org-html-make-link opt-plist
+		    (org-impress-js-make-link opt-plist
 					"file" path-1 fragment-1 desc-2 attr
-					(org-html-should-inline-p path-1 descp)))))))
+					(org-impress-js-should-inline-p path-1 descp)))))))
 
        (t
 	;; just publish the path, as default
@@ -1061,12 +1061,12 @@ OPT-PLIST is the export options list."
 	    start (+ start (length rpl))))
     line))
 
-;;; org-export-as-html
+;;; org-export-as-impress-js
 
 (defvar org-heading-keyword-regexp-format) ; defined in org.el
 
 ;;;###autoload
-(defun org-export-as-html (arg &optional hidden ext-plist
+(defun org-export-as-impress-js (arg &optional hidden ext-plist
 			       to-buffer body-only pub-dir)
   "Export the outline as a pretty HTML file.
 If there is an active region, export only the region.  The prefix
@@ -1106,12 +1106,12 @@ PUB-DIR is set, use this as the publishing directory."
 			       (org-infile-export-plist))))
 	 (body-only (or body-only (plist-get opt-plist :body-only)))
 	 (style (concat (if (plist-get opt-plist :style-include-default)
-			    org-export-html-style-default)
+			    org-export-impress-js-style-default)
 			(plist-get opt-plist :style)
 			(plist-get opt-plist :style-extra)
 			"\n"
 			(if (plist-get opt-plist :style-include-scripts)
-			    org-export-html-scripts)))
+			    org-export-impress-js-scripts)))
 	 (html-extension (plist-get opt-plist :html-extension))
 	 valid thetoc have-headings first-heading-pos
 	 (odd org-odd-levels-only)
@@ -1165,10 +1165,10 @@ PUB-DIR is set, use this as the publishing directory."
 		      (t (get-buffer-create to-buffer)))
 		   (find-file-noselect filename)))
 	 (org-levels-open (make-vector org-level-max nil))
-	 (date        (org-html-expand (plist-get opt-plist :date)))
-	 (author      (org-html-expand (plist-get opt-plist :author)))
-	 (html-validation-link (or org-export-html-validation-link ""))
-	 (title       (org-html-expand
+	 (date        (org-impress-js-expand (plist-get opt-plist :date)))
+	 (author      (org-impress-js-expand (plist-get opt-plist :author)))
+	 (html-validation-link (or org-export-impress-js-validation-link ""))
+	 (title       (org-impress-js-expand
 		       (or (and subtree-p (org-export-get-title-from-subtree))
 			   (plist-get opt-plist :title)
 			   (and (not body-only)
@@ -1195,17 +1195,17 @@ PUB-DIR is set, use this as the publishing directory."
 	 (inverse     nil)
 	 (email       (plist-get opt-plist :email))
 	 (language    (plist-get opt-plist :language))
-	 (keywords    (org-html-expand (plist-get opt-plist :keywords)))
-	 (description (org-html-expand (plist-get opt-plist :description)))
+	 (keywords    (org-impress-js-expand (plist-get opt-plist :keywords)))
+	 (description (org-impress-js-expand (plist-get opt-plist :description)))
 	 (num         (plist-get opt-plist :section-numbers))
 	 (lang-words  nil)
 	 (head-count  0) cnt
 	 (start       0)
 	 (coding-system (and (boundp 'buffer-file-coding-system)
 			     buffer-file-coding-system))
-	 (coding-system-for-write (or org-export-html-coding-system
+	 (coding-system-for-write (or org-export-impress-js-coding-system
 				      coding-system))
-	 (save-buffer-coding-system (or org-export-html-coding-system
+	 (save-buffer-coding-system (or org-export-impress-js-coding-system
 					coding-system))
 	 (charset (and coding-system-for-write
 		       (fboundp 'coding-system-get)
@@ -1247,9 +1247,9 @@ PUB-DIR is set, use this as the publishing directory."
 		  (and org-export-have-math
 		       (eq (plist-get opt-plist :LaTeX-fragments) t)))
 
-	      (org-export-html-mathjax-config
-	       org-export-html-mathjax-template
-	       org-export-html-mathjax-options
+	      (org-export-impress-js-mathjax-config
+	       org-export-impress-js-mathjax-template
+	       org-export-impress-js-mathjax-options
 	       (or (plist-get opt-plist :mathjax) ""))
 	    ""))
 	 table-open
@@ -1327,10 +1327,10 @@ PUB-DIR is set, use this as the publishing directory."
 %s
 "
 		 (format
-		  (or (and (stringp org-export-html-xml-declaration)
-			   org-export-html-xml-declaration)
-		      (cdr (assoc html-extension org-export-html-xml-declaration))
-		      (cdr (assoc "html" org-export-html-xml-declaration))
+		  (or (and (stringp org-export-impress-js-xml-declaration)
+			   org-export-impress-js-xml-declaration)
+		      (cdr (assoc html-extension org-export-impress-js-xml-declaration))
+		      (cdr (assoc "html" org-export-impress-js-xml-declaration))
 
 		      "")
 		  (or charset "iso-8859-1"))
@@ -1342,7 +1342,7 @@ PUB-DIR is set, use this as the publishing directory."
 		 mathjax
 		 (if (or link-up link-home)
 		     (concat
-		      (format org-export-html-home/up-format
+		      (format org-export-impress-js-home/up-format
 			      (or link-up link-home)
 			      (or link-home link-up))
 		      "\n")
@@ -1357,29 +1357,29 @@ PUB-DIR is set, use this as the publishing directory."
 			 (format-spec html-pre `((?t . ,title) (?a . ,author)
 						 (?d . ,date) (?e . ,email)))))
 		  ((functionp html-pre)
-		   (insert "<div id=\"" (nth 0 org-export-html-divs) "\">\n")
+		   (insert "<div id=\"" (nth 0 org-export-impress-js-divs) "\">\n")
 		   (if (stringp (funcall html-pre)) (insert (funcall html-pre)))
 		   (insert "\n</div>\n"))
 		  (t
 		   (setq html-pre-real-contents
 		    (format-spec
 		     (or (cadr (assoc (nth 0 lang-words)
-				      org-export-html-preamble-format))
-			 (cadr (assoc "en" org-export-html-preamble-format)))
+				      org-export-impress-js-preamble-format))
+			 (cadr (assoc "en" org-export-impress-js-preamble-format)))
 		     `((?t . ,title) (?a . ,author)
 		       (?d . ,date) (?e . ,email))))))
 	    ;; don't output an empty preamble DIV
 	    (unless (and (functionp html-pre)
 			 (equal html-pre-real-contents ""))
-	      (insert "<div id=\"" (nth 0 org-export-html-divs) "\">\n")
+	      (insert "<div id=\"" (nth 0 org-export-impress-js-divs) "\">\n")
 	      (insert html-pre-real-contents)
 	      (insert "\n</div>\n"))))
 
 	;; begin wrap around body
 	(insert (format "\n<div id=\"%s\">"
-			;; FIXME org-export-html-content-div is obsolete since 7.7
-			(or org-export-html-content-div
-			    (nth 1 org-export-html-divs)))
+			;; FIXME org-export-impress-js-content-div is obsolete since 7.7
+			(or org-export-impress-js-content-div
+			    (nth 1 org-export-impress-js-divs)))
 		;; FIXME this should go in the preamble but is here so
 		;; that org-infojs can still find it
 		"\n<h1 class=\"title\">" title "</h1>\n"))
@@ -1388,9 +1388,9 @@ PUB-DIR is set, use this as the publishing directory."
       (if (and org-export-with-toc (not body-only))
 	  (progn
 	    (push (format "<h%d>%s</h%d>\n"
-			  org-export-html-toplevel-hlevel
+			  org-export-impress-js-toplevel-hlevel
 			  (nth 3 lang-words)
-			  org-export-html-toplevel-hlevel)
+			  org-export-impress-js-toplevel-hlevel)
 		  thetoc)
 	    (push "<div id=\"text-table-of-contents\">\n" thetoc)
 	    (push "<ul>\n<li>" thetoc)
@@ -1406,7 +1406,7 @@ PUB-DIR is set, use this as the publishing directory."
 					    level-offset)
 				   level (org-tr-level level)
 				   txt (save-match-data
-					 (org-html-expand
+					 (org-impress-js-expand
 					  (org-export-cleanup-toc-line
 					   (match-string 3 line))))
 				   todo
@@ -1491,7 +1491,7 @@ PUB-DIR is set, use this as the publishing directory."
 	    (setq inquote nil))
 	  ;; inside a quote section?
 	  (when inquote
-	    (insert (org-html-protect line) "\n")
+	    (insert (org-impress-js-protect line) "\n")
 	    (throw 'nextline nil))
 
 	  ;; Fixed-width, verbatim lines (examples)
@@ -1502,7 +1502,7 @@ PUB-DIR is set, use this as the publishing directory."
 	      (org-close-par-maybe)
 
 	      (insert "<pre class=\"example\">\n"))
-	    (insert (org-html-protect (match-string 3 line)) "\n")
+	    (insert (org-impress-js-protect (match-string 3 line)) "\n")
 	    (when (or (not lines)
 		      (not (string-match "^[ \t]*:\\(\\([ \t]\\|$\\)\\(.*\\)\\)"
 					 (car lines))))
@@ -1566,7 +1566,7 @@ PUB-DIR is set, use this as the publishing directory."
 	    (insert "\n</div>")
 	    (org-open-par)
 	    (throw 'nextline nil))
-	  (run-hooks 'org-export-html-after-blockquotes-hook)
+	  (run-hooks 'org-export-impress-js-after-blockquotes-hook)
 	  (when inverse
 	    (let ((i (org-get-string-indentation line)))
 	      (if (> i 0)
@@ -1605,17 +1605,17 @@ PUB-DIR is set, use this as the publishing directory."
 				  "@</a> ")
 			  t t line)))))
 
-	  (setq line (org-html-handle-time-stamps line))
+	  (setq line (org-impress-js-handle-time-stamps line))
 
 	  ;; replace "&" by "&amp;", "<" and ">" by "&lt;" and "&gt;"
 	  ;; handle @<..> HTML tags (replace "@&gt;..&lt;" by "<..>")
 	  ;; Also handle sub_superscripts and checkboxes
 	  (or (string-match org-table-hline-regexp line)
 	      (string-match "^[ \t]*\\([+]-\\||[ ]\\)[-+ |]*[+|][ \t]*$" line)
-	      (setq line (org-html-expand line)))
+	      (setq line (org-impress-js-expand line)))
 
 	  ;; Format the links
-	  (setq line (org-html-handle-links line opt-plist))
+	  (setq line (org-impress-js-handle-links line opt-plist))
 
 	  ;; TODO items
 	  (if (and org-todo-line-regexp
@@ -1628,7 +1628,7 @@ PUB-DIR is set, use this as the publishing directory."
 			    (if (member (match-string 2 line)
 					org-done-keywords)
 				"done" "todo")
-			    " " (org-export-html-get-todo-kwd-class-name
+			    " " (org-export-impress-js-get-todo-kwd-class-name
 				 (match-string 2 line))
 			    "\"> " (match-string 2 line)
 			    "</span>" (substring line (match-end 2)))))
@@ -1654,7 +1654,7 @@ PUB-DIR is set, use this as the publishing directory."
 			 (concat
 			  (format
 			   (concat "%s"
-				   (format org-export-html-footnote-format
+				   (format org-export-impress-js-footnote-format
 					   (concat "<a class=\"footref\" name=\"fnr.%s%s\" href=\"#fn.%s\">%s</a>")))
 			   (or (match-string 1 line) "") n extra n n)
 			  ;; If another footnote is following the
@@ -1662,7 +1662,7 @@ PUB-DIR is set, use this as the publishing directory."
 			  (if (save-match-data
 				(string-match "\\`\\[[0-9]+\\]"
 					      (substring line (match-end 0))))
-			      org-export-html-footnote-separator
+			      org-export-impress-js-footnote-separator
 			    ""))
 			 t t line))))))
 
@@ -1677,7 +1677,7 @@ PUB-DIR is set, use this as the publishing directory."
 	    (if (<= level (max umax umax-toc))
 		(setq head-count (+ head-count 1)))
 	    (setq first-heading-pos (or first-heading-pos (point)))
-	    (org-html-level-start level txt umax
+	    (org-impress-js-level-start level txt umax
 				  (and org-export-with-toc (<= level umax))
 				  head-count opt-plist)
 
@@ -1710,7 +1710,7 @@ PUB-DIR is set, use this as the publishing directory."
 	   (t
 	    ;; This line either is list item or end a list.
 	    (when (get-text-property 0 'list-item line)
-	      (setq line (org-html-export-list-line
+	      (setq line (org-impress-js-export-list-line
 			  line
 			  (get-text-property 0 'list-item line)
 			  (get-text-property 0 'list-struct line)
@@ -1742,7 +1742,7 @@ PUB-DIR is set, use this as the publishing directory."
 			line (replace-match
 			      (format
 			       (concat "<p class=\"footnote\">"
-				       (format org-export-html-footnote-format
+				       (format org-export-impress-js-footnote-format
 					       "<a class=\"footnum\" name=\"fn.%s\" href=\"#fnr.%s\">%s</a>"))
 			       n n n) t t line)))))
 	    ;; Check if the line break needs to be conserved
@@ -1770,7 +1770,7 @@ PUB-DIR is set, use this as the publishing directory."
 	(insert "</pre>\n")
 	(org-open-par))
 
-      (org-html-level-start 1 nil umax
+      (org-impress-js-level-start 1 nil umax
 			    (and org-export-with-toc (<= level umax))
 			    head-count opt-plist)
       ;; the </div> to close the last text-... div.
@@ -1785,11 +1785,11 @@ PUB-DIR is set, use this as the publishing directory."
 	  (replace-match "\\4" t nil)
 	  (goto-char (match-beginning 0))))
       (when footnotes
-	(insert (format org-export-html-footnotes-section
+	(insert (format org-export-impress-js-footnotes-section
 			(nth 4 lang-words)
 			(mapconcat 'identity (nreverse footnotes) "\n"))
 		"\n"))
-      (let ((bib (org-export-html-get-bibliography)))
+      (let ((bib (org-export-impress-js-get-bibliography)))
 	(when bib
 	  (insert "\n" bib "\n")))
 
@@ -1809,7 +1809,7 @@ PUB-DIR is set, use this as the publishing directory."
 		       (number-to-string emacs-major-version))))
 
 	  (when (plist-get opt-plist :html-postamble)
-	    (insert "\n<div id=\"" (nth 2 org-export-html-divs) "\">\n")
+	    (insert "\n<div id=\"" (nth 2 org-export-impress-js-divs) "\">\n")
 	    (cond ((stringp html-post)
 		   (insert (format-spec html-post
 					`((?a . ,author) (?e . ,email)
@@ -1833,17 +1833,17 @@ PUB-DIR is set, use this as the publishing directory."
 		  (t
 		   (insert (format-spec
 			    (or (cadr (assoc (nth 0 lang-words)
-					     org-export-html-postamble-format))
-				(cadr (assoc "en" org-export-html-postamble-format)))
+					     org-export-impress-js-postamble-format))
+				(cadr (assoc "en" org-export-impress-js-postamble-format)))
 			    `((?a . ,author) (?e . ,email)
 			      (?d . ,date)   (?c . ,creator-info)
 			      (?v . ,html-validation-link))))))
 	    (insert "\n</div>"))))
 
-      ;; FIXME `org-export-html-with-timestamp' has been declared
+      ;; FIXME `org-export-impress-js-with-timestamp' has been declared
       ;; obsolete since Org 7.7 -- don't forget to remove this.
-      (if org-export-html-with-timestamp
-	  (insert org-export-html-html-helper-timestamp))
+      (if org-export-impress-js-with-timestamp
+	  (insert org-export-impress-js-html-helper-timestamp))
 
       (unless body-only (insert "\n</body>\n</html>\n"))
 
@@ -1893,7 +1893,7 @@ PUB-DIR is set, use this as the publishing directory."
       ;; Remove display properties
       (remove-text-properties (point-min) (point-max) '(display t))
       ;; Run the hook
-      (run-hooks 'org-export-html-final-hook)
+      (run-hooks 'org-export-impress-js-final-hook)
       (or to-buffer (save-buffer))
       (goto-char (point-min))
       (or (org-export-push-to-kill-ring "HTML")
@@ -1903,7 +1903,7 @@ PUB-DIR is set, use this as the publishing directory."
 	    (kill-buffer (current-buffer)))
 	(current-buffer)))))
 
-(defun org-export-html-format-href (s)
+(defun org-export-impress-js-format-href (s)
   "Make sure the S is valid as a href reference in an XHTML document."
   (save-match-data
     (let ((start 0))
@@ -1912,14 +1912,14 @@ PUB-DIR is set, use this as the publishing directory."
 	      s (replace-match "&amp;" t t s)))))
   s)
 
-(defun org-export-html-format-desc (s)
+(defun org-export-impress-js-format-desc (s)
   "Make sure the S is valid as a description in a link."
   (if (and s (not (get-text-property 1 'org-protected s)))
       (save-match-data
-	(org-html-do-expand s))
+	(org-impress-js-do-expand s))
     s))
 
-(defun org-export-html-format-image (src par-open)
+(defun org-export-impress-js-format-image (src par-open)
   "Create image tag with source and attributes."
   (save-match-data
     (if (string-match "^ltxpng/" src)
@@ -1928,7 +1928,7 @@ PUB-DIR is set, use this as the publishing directory."
       (let* ((caption (org-find-text-property-in-string 'org-caption src))
 	     (attr (org-find-text-property-in-string 'org-attributes src))
 	     (label (org-find-text-property-in-string 'org-label src)))
-	(setq caption (and caption (org-html-do-expand caption)))
+	(setq caption (and caption (org-impress-js-do-expand caption)))
 	(concat
 	(if caption
 	    (format "%s<div %sclass=\"figure\">
@@ -1946,7 +1946,7 @@ PUB-DIR is set, use this as the publishing directory."
 		(concat "\n<p>" caption "</p>")
 		(if org-par-open "\n<p>" ""))))))))
 
-(defun org-export-html-get-bibliography ()
+(defun org-export-impress-js-get-bibliography ()
   "Find bibliography, cut it out and return it."
   (catch 'exit
     (let (beg end (cnt 1) bib)
@@ -2013,7 +2013,7 @@ for formatting.  This is required for the DocBook exporter."
 	 (nline 0) fnum nfields i (cnt 0)
 	 tbopen line fields html gr colgropen rowstart rowend
 	 ali align aligns n)
-    (setq caption (and caption (org-html-do-expand caption)))
+    (setq caption (and caption (org-impress-js-do-expand caption)))
     (when (and col-cookies org-table-clean-did-remove-column)
       (setq col-cookies
 	    (mapcar (lambda (x) (cons (1- (car x)) (cdr x))) col-cookies)))
@@ -2051,7 +2051,7 @@ for formatting.  This is required for the DocBook exporter."
 				    "col" ali)
 			    x
 			    (cdr org-export-table-header-tags)))
-			  ((and (= i 0) org-export-html-table-use-header-tags-for-first-column)
+			  ((and (= i 0) org-export-impress-js-table-use-header-tags-for-first-column)
 			   (concat
 			    (format (car org-export-table-header-tags)
 				    "row" ali)
@@ -2116,7 +2116,7 @@ for formatting.  This is required for the DocBook exporter."
 		  (replace-regexp-in-string
 		   "@@class\\([0-9]+\\)@@"
 		   (lambda (txt)
-		     (if (not org-export-html-table-align-individual-fields)
+		     (if (not org-export-impress-js-table-align-individual-fields)
 			 ""
 		       (setq n (string-to-number (match-string 1 txt)))
 		       (format (if no-css " align=\"%s\"" " class=\"%s\"")
@@ -2230,7 +2230,7 @@ for further information."
 	      (substring style (match-beginning 0)))
     style))
 
-(defun org-html-handle-time-stamps (s)
+(defun org-impress-js-handle-time-stamps (s)
   "Format time stamps in string S, or remove them."
   (catch 'exit
     (let (r b)
@@ -2257,12 +2257,12 @@ for further information."
 	r))))
 
 (defvar htmlize-buffer-places)  ; from htmlize.el
-(defun org-export-htmlize-region-for-paste (beg end)
+(defun org-export-impress-jsize-region-for-paste (beg end)
   "Convert the region to HTML, using htmlize.el.
 This is much like `htmlize-region-for-paste', only that it uses
 the settings define in the org-... variables."
-  (let* ((htmlize-output-type org-export-htmlize-output-type)
-	 (htmlize-css-name-prefix org-export-htmlize-css-font-prefix)
+  (let* ((htmlize-output-type org-export-impress-jsize-output-type)
+	 (htmlize-css-name-prefix org-export-impress-jsize-css-font-prefix)
 	 (htmlbuf (htmlize-region beg end)))
     (unwind-protect
 	(with-current-buffer htmlbuf
@@ -2271,7 +2271,7 @@ the settings define in the org-... variables."
       (kill-buffer htmlbuf))))
 
 ;;;###autoload
-(defun org-export-htmlize-generate-css ()
+(defun org-export-impress-jsize-generate-css ()
   "Create the CSS for all font definitions in the current Emacs session.
 Use this to create face definitions in your CSS style file that can then
 be used by code snippets transformed by htmlize.
@@ -2279,8 +2279,8 @@ This command just produces a buffer that contains class definitions for all
 faces used in the current Emacs session.  You can copy and paste the ones you
 need into your CSS file.
 
-If you then set `org-export-htmlize-output-type' to `css', calls to
-the function `org-export-htmlize-region-for-paste' will produce code
+If you then set `org-export-impress-jsize-output-type' to `css', calls to
+the function `org-export-impress-jsize-region-for-paste' will produce code
 that uses these same face definitions."
   (interactive)
   (require 'htmlize)
@@ -2305,10 +2305,10 @@ that uses these same face definitions."
   (if (looking-at " +") (replace-match ""))
   (goto-char (point-min)))
 
-(defun org-html-protect (s)
+(defun org-impress-js-protect (s)
   "Convert characters to HTML equivalent.
-Possible conversions are set in `org-export-html-protect-char-alist'."
-  (let ((cl org-export-html-protect-char-alist) c)
+Possible conversions are set in `org-export-impress-js-protect-char-alist'."
+  (let ((cl org-export-impress-js-protect-char-alist) c)
     (while (setq c (pop cl))
       (let ((start 0))
 	(while (string-match (car c) s start)
@@ -2316,7 +2316,7 @@ Possible conversions are set in `org-export-html-protect-char-alist'."
 		start (1+ (match-beginning 0))))))
     s))
 
-(defun org-html-expand (string)
+(defun org-impress-js-expand (string)
   "Prepare STRING for HTML export.  Apply all active conversions.
 If there are links in the string, don't modify these.  If STRING
 is nil, return nil."
@@ -2328,23 +2328,23 @@ is nil, return nil."
 	(setq s (substring string 0 m)
 	      l (match-string 0 string)
 	      string (substring string (match-end 0)))
-	(push (org-html-do-expand s) res)
+	(push (org-impress-js-do-expand s) res)
       (push l res))
-      (push (org-html-do-expand string) res)
+      (push (org-impress-js-do-expand string) res)
       (apply 'concat (nreverse res)))))
 
-(defun org-html-do-expand (s)
+(defun org-impress-js-do-expand (s)
   "Apply all active conversions to translate special ASCII to HTML."
-  (setq s (org-html-protect s))
+  (setq s (org-impress-js-protect s))
   (if org-export-html-expand
       (while (string-match "@&lt;\\([^&]*\\)&gt;" s)
 	(setq s (replace-match "<\\1>" t nil s))))
   (if org-export-with-emphasize
-      (setq s (org-export-html-convert-emphasize s)))
+      (setq s (org-export-impress-js-convert-emphasize s)))
   (if org-export-with-special-strings
-      (setq s (org-export-html-convert-special-strings s)))
+      (setq s (org-export-impress-js-convert-special-strings s)))
   (if org-export-with-sub-superscripts
-      (setq s (org-export-html-convert-sub-super s)))
+      (setq s (org-export-impress-js-convert-sub-super s)))
   (if org-export-with-TeX-macros
       (let ((start 0) wd rep)
 	(while (setq start (string-match "\\\\\\([a-zA-Z]+[0-9]*\\)\\({}\\)?"
@@ -2357,7 +2357,7 @@ is nil, return nil."
 	      (setq start (+ start (length wd))))))))
   s)
 
-(defun org-export-html-convert-special-strings (string)
+(defun org-export-impress-js-convert-special-strings (string)
   "Convert special characters in STRING to HTML."
   (let ((all org-export-html-special-string-regexps)
 	e a re rpl start)
@@ -2369,7 +2369,7 @@ is nil, return nil."
 	  (setq string (replace-match rpl t nil string)))))
     string))
 
-(defun org-export-html-convert-sub-super (string)
+(defun org-export-impress-js-convert-sub-super (string)
   "Convert sub- and superscripts in STRING to HTML."
   (let (key c (s 0) (requireb (eq org-export-with-sub-superscripts '{})))
     (while (string-match org-match-substring-regexp string s)
@@ -2391,7 +2391,7 @@ is nil, return nil."
       (setq string (replace-match (match-string 1 string) t t string)))
     string))
 
-(defun org-export-html-convert-emphasize (string)
+(defun org-export-impress-js-convert-emphasize (string)
   "Apply emphasis."
   (let ((s 0) rpl)
     (while (string-match org-emph-re string s)
@@ -2428,7 +2428,7 @@ is nil, return nil."
   (insert (if (equal type "d") "</dd>\n" "</li>\n")))
 
 (defvar body-only) ; dynamically scoped into this.
-(defun org-html-level-start (level title umax with-toc head-count &optional opt-plist)
+(defun org-impress-js-level-start (level title umax with-toc head-count &optional opt-plist)
   "Insert a new level in HTML export.
 When TITLE is nil, just close all open levels."
   (org-close-par-maybe)
@@ -2446,15 +2446,15 @@ When TITLE is nil, just close all open levels."
 	  (mapconcat (lambda (x)
 		       (setq x (org-solidify-link-text
 				(if (org-uuidgen-p x) (concat "ID-" x) x)))
-		       (if (stringp org-export-html-headline-anchor-format)
-			   (format org-export-html-headline-anchor-format x x)
+		       (if (stringp org-export-impress-js-headline-anchor-format)
+			   (format org-export-impress-js-headline-anchor-format x x)
 			 ""))
 		     extra-targets
 		     ""))
     (while (>= l level)
       (if (aref org-levels-open (1- l))
 	  (progn
-	    (org-html-level-close l umax)
+	    (org-impress-js-level-close l umax)
 	    (aset org-levels-open (1- l) nil)))
       (setq l (1- l)))
     (when title
@@ -2469,7 +2469,7 @@ When TITLE is nil, just close all open levels."
 			      (mapconcat
 			       (lambda (x)
 				 (format "<span class=\"%s\">%s</span>"
-					 (org-export-html-get-tag-class-name x)
+					 (org-export-impress-js-get-tag-class-name x)
 					 x))
 			       (org-split-string (match-string 1 title) ":")
 			       "&nbsp;")
@@ -2494,7 +2494,7 @@ When TITLE is nil, just close all open levels."
 	(aset org-levels-open (1- level) t)
 	(setq snumber (org-section-number level)
 	      snu (replace-regexp-in-string "\\." "-" snumber))
-	(setq level (+ level org-export-html-toplevel-hlevel -1))
+	(setq level (+ level org-export-impress-js-toplevel-hlevel -1))
 	(if (and num (not body-only))
 	    (setq title (concat
 			 (format "<span class=\"section-number-%d\">%s</span>"
@@ -2504,7 +2504,7 @@ When TITLE is nil, just close all open levels."
 					      ;; fix up num to take into
 					      ;; account the top-level
 					      ;; heading value
-					      (>= (+ num org-export-html-toplevel-hlevel -1)
+					      (>= (+ num org-export-impress-js-toplevel-hlevel -1)
 						  level)
 					    num))
 				     snumber
@@ -2521,30 +2521,30 @@ When TITLE is nil, just close all open levels."
 			title level level suffix))
 	(org-open-par)))))
 
-(defun org-export-html-get-tag-class-name (tag)
+(defun org-export-impress-js-get-tag-class-name (tag)
   "Turn tag into a valid class name.
 Replaces invalid characters with \"_\" and then prepends a prefix."
   (save-match-data
     (while (string-match "[^a-zA-Z0-9_]" tag)
       (setq tag (replace-match "_" t t tag))))
-  (concat org-export-html-tag-class-prefix tag))
+  (concat org-export-impress-js-tag-class-prefix tag))
 
-(defun org-export-html-get-todo-kwd-class-name (kwd)
+(defun org-export-impress-js-get-todo-kwd-class-name (kwd)
   "Turn todo keyword into a valid class name.
 Replaces invalid characters with \"_\" and then prepends a prefix."
   (save-match-data
     (while (string-match "[^a-zA-Z0-9_]" kwd)
       (setq kwd (replace-match "_" t t kwd))))
-  (concat org-export-html-todo-kwd-class-prefix kwd))
+  (concat org-export-impress-js-todo-kwd-class-prefix kwd))
 
-(defun org-html-level-close (level max-outline-level)
+(defun org-impress-js-level-close (level max-outline-level)
   "Terminate one level in HTML export."
   (if (<= level max-outline-level)
       (insert "</div>\n")
     (org-close-li)
     (insert "</ul>\n")))
 
-(defun org-html-export-list-line (line pos struct prevs)
+(defun org-impress-js-export-list-line (line pos struct prevs)
   "Insert list syntax in export buffer. Return LINE, maybe modified.
 
 POS is the item position or line position the line had before
@@ -2637,6 +2637,6 @@ the alist of previous items."
      ;; Not at an item: return line unchanged (side-effects only).
      (t line))))
 
-(provide 'org-html)
+(provide 'org-impress-js)
 
-;;; org-html.el ends here
+;;; org-impress-js.el ends here

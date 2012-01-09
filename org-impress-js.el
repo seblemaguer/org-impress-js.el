@@ -1,4 +1,4 @@
-;;; org-impress-js.el --- HTML export for Org-mode
+;;; org-impress-js.el --- impress.js export for Org-mode
 
 ;; Copyright (C) 2004-2011 Free Software Foundation, Inc.
 
@@ -23,6 +23,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
+
+;; About impress.js see http://bartaz.github.com/impress.js/
+
+;; Modifications: Takumi KINJO (takumi.kinjo@gmail.com)
+
+;; Before trying this, please make sure that your Org-mode version is
+;; 7.8.03(M-x org-version) and emacs version is GNU Emacs 24.0.92.1.
 
 ;;; Code:
 

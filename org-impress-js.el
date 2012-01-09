@@ -2365,8 +2365,12 @@ is nil, return nil."
 When TITLE is nil, just close all open levels."
   (org-close-par-maybe)
   (let* ((target (and title (org-get-text-property-any 0 'target title)))
+	 (step (and title (org-get-text-property-any 0 'step title)))
 	 (data-x (and title (org-get-text-property-any 0 'data-x title)))
 	 (data-y (and title (org-get-text-property-any 0 'data-y title)))
+	 (data-z (and title (org-get-text-property-any 0 'data-z title)))
+	 (data-rotate (and title (org-get-text-property-any 0 'data-rotate title)))
+	 (data-scale (and title (org-get-text-property-any 0 'data-scale title)))
 	 (extra-targets (and target
 			     (assoc target org-export-target-aliases)))
 	 (extra-class (and title (org-get-text-property-any 0 'html-container-class title)))
@@ -2448,9 +2452,9 @@ When TITLE is nil, just close all open levels."
 	(setq href (cdr (assoc (concat "sec-" snu) org-export-preferred-target-alist)))
 	(setq suffix (org-solidify-link-text (or href snu)))
 	(setq href (org-solidify-link-text (or href (concat "sec-" snu))))
-	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s step slide\" data-x=\"%s\" data-y=\"%s\">\n<h%d id=\"%s\">%s%s</h%d>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
+	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s %s\" data-x=\"%s\" data-y=\"%s\" data-z=\"%s\" data-rotate=\"%s\" data-scale=\"%s\">\n<h%d id=\"%s\">%s%s</h%d>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
 			suffix level (if extra-class (concat " " extra-class) "")
-			data-x data-y level href
+			step data-x data-y data-z data-rotate data-scale level href
 			extra-targets
 			title level level suffix))
 	(org-open-par)))))
@@ -2578,8 +2582,12 @@ the alist of previous items."
    (lambda () 
      (let* ((start (point))
 	    (end (+ start (+ (org-current-level) 2))))
-       (put-text-property start end 'data-x (org-entry-get (point) "data-x"))
-       (put-text-property start end 'data-y (org-entry-get (point) "data-y"))))))
+       (put-text-property start end 'step (or (org-entry-get (point) "step") 1))
+       (put-text-property start end 'data-x (or (org-entry-get (point) "data-x") 0))
+       (put-text-property start end 'data-y (or (org-entry-get (point) "data-y") 0))
+       (put-text-property start end 'data-z (or (org-entry-get (point) "data-z") 0))
+       (put-text-property start end 'data-rotate (or (org-entry-get (point) "data-rotate") 0))
+       (put-text-property start end 'data-scale (or (org-entry-get (point) "data-scale") 1))))))
 
 (add-hook 'org-export-preprocess-after-headline-targets-hook 'org-impress-js-put-text-properties)
 

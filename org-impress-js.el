@@ -2584,11 +2584,10 @@ the alist of previous items."
 
 (defun org-impress-js-put-text-properties ()
   ""
-  (interactive)
   (org-map-entries
    (lambda () 
      (let* ((start (point))
-	    (end (+ start (+ (org-current-level) 2))))
+	    (end (+ start (+ (org-current-level) 2)))) ;; FIXME
        (put-text-property start end 'step (or (org-entry-get (point) "step") 1))
        (put-text-property start end 'data-x (or (org-entry-get (point) "data-x") 0))
        (put-text-property start end 'data-y (or (org-entry-get (point) "data-y") 0))

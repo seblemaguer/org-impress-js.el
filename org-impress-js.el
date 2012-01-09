@@ -77,7 +77,7 @@ by the footnotes themselves."
   :type 'string)
 
 (defcustom org-export-impress-js-xml-declaration
-  '(("html" . "<?xml version=\"1.0\" encoding=\"%s\"?>")
+  '(("html" . "<!doctype html>")
     ("php" . "<?php echo \"<?xml version=\\\"1.0\\\" encoding=\\\"%s\\\" ?>\"; ?>"))
   "The extension for exported HTML files.
 %s will be replaced with the charset of the exported file.
@@ -98,80 +98,11 @@ not be modified."
   :type 'boolean)
 
 (defconst org-export-impress-js-scripts
-"<script type=\"text/javascript\">
-<!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = \"code-highlighted\";
-     elem.className   = \"code-highlighted\";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
-</script>"
+""
 "Basic JavaScript that is needed by HTML files produced by Org-mode.")
 
 (defconst org-export-impress-js-style-default
-"<style type=\"text/css\">
- <!--/*--><![CDATA[/*><!--*/
-  html { font-family: Times, serif; font-size: 12pt; }
-  .title  { text-align: center; }
-  .todo   { color: red; }
-  .done   { color: green; }
-  .tag    { background-color: #add8e6; font-weight:normal }
-  .target { }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
-  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
-  .center {margin-left:auto; margin-right:auto; text-align:center;}
-  p.verse { margin-left: 3% }
-  pre {
-	border: 1pt solid #AEBDCC;
-	background-color: #F3F5F7;
-	padding: 5pt;
-	font-family: courier, monospace;
-        font-size: 90%;
-        overflow:auto;
-  }
-  table { border-collapse: collapse; }
-  td, th { vertical-align: top;  }
-  th.right  { text-align:center;  }
-  th.left   { text-align:center;   }
-  th.center { text-align:center; }
-  td.right  { text-align:right;  }
-  td.left   { text-align:left;   }
-  td.center { text-align:center; }
-  dt { font-weight: bold; }
-  div.figure { padding: 0.5em; }
-  div.figure p { text-align: center; }
-  div.inlinetask {
-    padding:10px;
-    border:2px solid gray;
-    margin:10px;
-    background: #ffffcc;
-  }
-  textarea { overflow-x: auto; }
-  .linenr { font-size:smaller }
-  .code-highlighted {background-color:#ffff00;}
-  .org-info-js_info-navigation { border-style:none; }
-  #org-info-js_console-label { font-size:10px; font-weight:bold;
-                               white-space:nowrap; }
-  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
-                                 font-weight:bold; }
-  /*]]>*/-->
-</style>"
+  ""
   "The default style specification for exported HTML files.
 Please use the variables `org-export-impress-js-style' and
 `org-export-impress-js-style-extra' to add to this style.  If you wish to not
@@ -627,13 +558,13 @@ with a link to this URL."
 ;; FIXME: The following variable is obsolete since Org 7.7 but is
 ;; still declared and checked within code for compatibility reasons.
 ;; Use the custom variables `org-export-impress-js-divs' instead.
-(defvar org-export-impress-js-content-div "content"
+(defvar org-export-impress-js-content-div "impress"
   "The name of the container DIV that holds all the page contents.
 
 This variable is obsolete since Org version 7.7.
 Please set `org-export-impress-js-divs' instead.")
 
-(defcustom org-export-impress-js-divs '("preamble" "content" "postamble")
+(defcustom org-export-impress-js-divs '("preamble" "impress" "postamble")
   "The name of the main divs for HTML export.
 This is a list of three strings, the first one for the preamble
 DIV, the second one for the content DIV and the third one for the
@@ -1308,20 +1239,20 @@ PUB-DIR is set, use this as the publishing directory."
 	;; File header
 	(insert (format
 		 "%s
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
-               \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\">
+<html lang=\"%s\"> <!-- %s -->
 <head>
 <title>%s</title>
-<meta http-equiv=\"Content-Type\" content=\"text/html;charset=%s\"/>
+<meta charset=\"%s\" />
 <meta name=\"title\" content=\"%s\"/>
 <meta name=\"generator\" content=\"Org-mode\"/>
 <meta name=\"generated\" content=\"%s\"/>
 <meta name=\"author\" content=\"%s\"/>
-<meta name=\"description\" content=\"%s\"/>
+<meta name=\"description\" content=\"%s impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.\"/>
 <meta name=\"keywords\" content=\"%s\"/>
 %s
 %s
+<link href=\"http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic\" rel=\"stylesheet\" />
+<link href=\"css/style.css\" rel=\"stylesheet\" />
 </head>
 <body>
 %s
@@ -1376,13 +1307,13 @@ PUB-DIR is set, use this as the publishing directory."
 	      (insert "\n</div>\n"))))
 
 	;; begin wrap around body
-	(insert (format "\n<div id=\"%s\">"
+	(insert (format "\n<div id=\"%s\" class=\"impress-not-supported\">"
 			;; FIXME org-export-impress-js-content-div is obsolete since 7.7
 			(or org-export-impress-js-content-div
 			    (nth 1 org-export-impress-js-divs)))
 		;; FIXME this should go in the preamble but is here so
 		;; that org-infojs can still find it
-		"\n<h1 class=\"title\">" title "</h1>\n"))
+		"\n<h1 class=\"title\">" title "</h1>\n\n<div class=\"fallback-message\">\n<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>\n<p>For the best experience please use the latest <b>Chrome</b> or <b>Safari</b> browser. Firefox 10 (to be released soon) will also handle it.</p>\n</div>\n"))
 
       ;; insert body
       (if (and org-export-with-toc (not body-only))
@@ -1795,6 +1726,7 @@ PUB-DIR is set, use this as the publishing directory."
 
       (unless body-only
 	;; end wrap around body
+	;; (insert "<div id=\"overview\" class=\"step\" data-x=\"3000\" data-y=\"1500\" data-scale=\"10\"></div></div>\n")
 	(insert "</div>\n")
 
 	;; export html postamble
@@ -1845,7 +1777,7 @@ PUB-DIR is set, use this as the publishing directory."
       (if org-export-impress-js-with-timestamp
 	  (insert org-export-impress-js-html-helper-timestamp))
 
-      (unless body-only (insert "\n</body>\n</html>\n"))
+      (unless body-only (insert "\n\n<div class=\"\hint\">\n<p>Use a spacebar or arrow keys to navigate</p>\n</div>\n\n<script src=\"js/impress.js\"></script>\n\n</body>\n</html>\n"))
 
       (unless (plist-get opt-plist :buffer-will-be-killed)
 	(normal-mode)
@@ -2514,9 +2446,9 @@ When TITLE is nil, just close all open levels."
 	(setq href (cdr (assoc (concat "sec-" snu) org-export-preferred-target-alist)))
 	(setq suffix (org-solidify-link-text (or href snu)))
 	(setq href (org-solidify-link-text (or href (concat "sec-" snu))))
-	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s\">\n<h%d id=\"%s\">%s%s</h%d>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
+	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s step slide\" data-x=\"%d\" data-y=\"%d\">\n<h%d id=\"%s\">%s%s</h%d>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
 			suffix level (if extra-class (concat " " extra-class) "")
-			level href
+			(* head-count 1000) 0 level href
 			extra-targets
 			title level level suffix))
 	(org-open-par)))))

@@ -2365,6 +2365,8 @@ is nil, return nil."
 When TITLE is nil, just close all open levels."
   (org-close-par-maybe)
   (let* ((target (and title (org-get-text-property-any 0 'target title)))
+	 (data-x (and title (org-get-text-property-any 0 'data-x title)))
+	 (data-y (and title (org-get-text-property-any 0 'data-y title)))
 	 (extra-targets (and target
 			     (assoc target org-export-target-aliases)))
 	 (extra-class (and title (org-get-text-property-any 0 'html-container-class title)))
@@ -2446,9 +2448,9 @@ When TITLE is nil, just close all open levels."
 	(setq href (cdr (assoc (concat "sec-" snu) org-export-preferred-target-alist)))
 	(setq suffix (org-solidify-link-text (or href snu)))
 	(setq href (org-solidify-link-text (or href (concat "sec-" snu))))
-	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s step slide\" data-x=\"%d\" data-y=\"%d\">\n<h%d id=\"%s\">%s%s</h%d>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
+	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s step slide\" data-x=\"%s\" data-y=\"%s\">\n<h%d id=\"%s\">%s%s</h%d>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
 			suffix level (if extra-class (concat " " extra-class) "")
-			(* head-count 1000) 0 level href
+			data-x data-y level href
 			extra-targets
 			title level level suffix))
 	(org-open-par)))))
@@ -2568,6 +2570,18 @@ the alist of previous items."
      ((equal "ORG-LIST-END-MARKER" line) (throw 'nextline nil))
      ;; Not at an item: return line unchanged (side-effects only).
      (t line))))
+
+(defun org-impress-js-put-text-properties ()
+  ""
+  (interactive)
+  (org-map-entries
+   (lambda () 
+     (let* ((start (point))
+	    (end (+ start (+ (org-current-level) 2))))
+       (put-text-property start end 'data-x (org-entry-get (point) "data-x"))
+       (put-text-property start end 'data-y (org-entry-get (point) "data-y"))))))
+
+(add-hook 'org-export-preprocess-after-headline-targets-hook 'org-impress-js-put-text-properties)
 
 (provide 'org-impress-js)
 

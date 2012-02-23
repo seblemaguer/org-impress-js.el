@@ -1259,7 +1259,7 @@ PUB-DIR is set, use this as the publishing directory."
 %s
 %s
 <link href=\"http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic\" rel=\"stylesheet\" />
-<link href=\"css/style.css\" rel=\"stylesheet\" />
+<link href=\"css/impress-demo.css\" rel=\"stylesheet\" />
 </head>
 <body>
 %s
@@ -2585,7 +2585,7 @@ the alist of previous items."
 (defun org-impress-js-put-text-properties ()
   ""
   (org-map-entries
-   (lambda () 
+   (lambda ()
      (let* ((start (point))
 	    (end (+ start (+ (org-current-level) 2)))) ;; FIXME
        (put-text-property start end 'step (or (org-entry-get (point) "step") 1))

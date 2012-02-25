@@ -1250,16 +1250,17 @@ PUB-DIR is set, use this as the publishing directory."
 <head>
 <title>%s</title>
 <meta charset=\"%s\" />
+<meta name=\"viewport\" content=\"width=1024\" />
+<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />
 <meta name=\"title\" content=\"%s\"/>
 <meta name=\"generator\" content=\"Org-mode\"/>
 <meta name=\"generated\" content=\"%s\"/>
 <meta name=\"author\" content=\"%s\"/>
 <meta name=\"description\" content=\"%s impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com.\"/>
-<meta name=\"keywords\" content=\"%s\"/>
+<meta name=\"keywords\" content=\"%s\"/>&nbsp;
 %s
 %s
-<link href=\"http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic\" rel=\"stylesheet\" />
-<link href=\"css/impress-demo.css\" rel=\"stylesheet\" />
+<link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\" />
 </head>
 <body>
 %s
@@ -1286,33 +1287,6 @@ PUB-DIR is set, use this as the publishing directory."
 		      "\n")
 		   "")))
 
-	;; insert html preamble
-	(when (plist-get opt-plist :html-preamble)
-	  (let ((html-pre (plist-get opt-plist :html-preamble))
-		html-pre-real-contents)
-	    (cond ((stringp html-pre)
-		   (setq html-pre-real-contents
-			 (format-spec html-pre `((?t . ,title) (?a . ,author)
-						 (?d . ,date) (?e . ,email)))))
-		  ((functionp html-pre)
-		   (insert "<div id=\"" (nth 0 org-export-impress-js-divs) "\">\n")
-		   (if (stringp (funcall html-pre)) (insert (funcall html-pre)))
-		   (insert "\n</div>\n"))
-		  (t
-		   (setq html-pre-real-contents
-		    (format-spec
-		     (or (cadr (assoc (nth 0 lang-words)
-				      org-export-impress-js-preamble-format))
-			 (cadr (assoc "en" org-export-impress-js-preamble-format)))
-		     `((?t . ,title) (?a . ,author)
-		       (?d . ,date) (?e . ,email))))))
-	    ;; don't output an empty preamble DIV
-	    (unless (and (functionp html-pre)
-			 (equal html-pre-real-contents ""))
-	      (insert "<div id=\"" (nth 0 org-export-impress-js-divs) "\">\n")
-	      (insert html-pre-real-contents)
-	      (insert "\n</div>\n"))))
-
 	;; begin wrap around body
 	(insert (format "\n<div id=\"%s\" class=\"impress-not-supported\">"
 			;; FIXME org-export-impress-js-content-div is obsolete since 7.7
@@ -1320,7 +1294,20 @@ PUB-DIR is set, use this as the publishing directory."
 			    (nth 1 org-export-impress-js-divs)))
 		;; FIXME this should go in the preamble but is here so
 		;; that org-infojs can still find it
-		"\n<h1 class=\"title\">" title "</h1>\n\n<div class=\"fallback-message\">\n<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>\n<p>For the best experience please use the latest <b>Chrome</b> or <b>Safari</b> browser. Firefox 10 (to be released soon) will also handle it.</p>\n</div>\n"))
+		"
+<div class=\"fallback-message\">
+<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+<p>For the best experience please use the latest <b>Chrome</b> or <b>Safari</b> browser. Firefox 10 (to be released soon) will also handle it.</p>
+</div>
+
+<div id=\"title\" class=\"step slide\" data-x=\"0\" data-y=\"0\">"
+		"<h1 class=\"title\">" title "</h1>"
+		"<div class=\"author\">" author "</div>"
+		"<div class=\"date\">" date "</div>"
+		"<div class=\"creator\">"
+		"Org version " org-version " with Emacs version " (number-to-string emacs-major-version)
+		"</div>"
+		"</div>"))
 
       ;; insert body
       (if (and org-export-with-toc (not body-only))
@@ -1736,55 +1723,16 @@ PUB-DIR is set, use this as the publishing directory."
 	;; (insert "<div id=\"overview\" class=\"step\" data-x=\"3000\" data-y=\"1500\" data-scale=\"10\"></div></div>\n")
 	(insert "</div>\n")
 
-	;; export html postamble
-	(let ((html-post (plist-get opt-plist :html-postamble))
-	      (email
-	       (mapconcat (lambda(e)
-			    (format "<a href=\"mailto:%s\">%s</a>" e e))
-			  (split-string email ",+ *")
-			  ", "))
-	      (creator-info
-	       (concat "Org version " org-version " with Emacs version "
-		       (number-to-string emacs-major-version))))
-
-	  (when (plist-get opt-plist :html-postamble)
-	    (insert "\n<div id=\"" (nth 2 org-export-impress-js-divs) "\">\n")
-	    (cond ((stringp html-post)
-		   (insert (format-spec html-post
-					`((?a . ,author) (?e . ,email)
-					  (?d . ,date)   (?c . ,creator-info)
-					  (?v . ,html-validation-link)))))
-		  ((functionp html-post)
-		   (if (stringp (funcall html-post)) (insert (funcall html-post))))
-		  ((eq html-post 'auto)
-		   ;; fall back on default postamble
-		   (when (plist-get opt-plist :time-stamp-file)
-		     (insert "<p class=\"date\">" (nth 2 lang-words) ": " date "</p>\n"))
-		   (when (and (plist-get opt-plist :author-info) author)
-		       (insert "<p class=\"author\">" (nth 1 lang-words) ": " author "</p>\n"))
-		   (when (and (plist-get opt-plist :email-info) email)
-		     (insert "<p class=\"email\">" email "</p>\n"))
-		   (when (plist-get opt-plist :creator-info)
-		     (insert "<p class=\"creator\">"
-			     (concat "Org version " org-version " with Emacs version "
-				     (number-to-string emacs-major-version) "</p>\n")))
-		   (insert html-validation-link "\n"))
-		  (t
-		   (insert (format-spec
-			    (or (cadr (assoc (nth 0 lang-words)
-					     org-export-impress-js-postamble-format))
-				(cadr (assoc "en" org-export-impress-js-postamble-format)))
-			    `((?a . ,author) (?e . ,email)
-			      (?d . ,date)   (?c . ,creator-info)
-			      (?v . ,html-validation-link))))))
-	    (insert "\n</div>"))))
+	)
 
       ;; FIXME `org-export-impress-js-with-timestamp' has been declared
       ;; obsolete since Org 7.7 -- don't forget to remove this.
       (if org-export-impress-js-with-timestamp
 	  (insert org-export-impress-js-html-helper-timestamp))
 
-      (unless body-only (insert "\n\n<div class=\"\hint\">\n<p>Use a spacebar or arrow keys to navigate</p>\n</div>\n\n<script src=\"js/impress.js\"></script>\n\n</body>\n</html>\n"))
+      (unless body-only (insert "\n\n<div class=\"\hint\">\n<p>Use a spacebar or arrow keys to navigate</p>\n</div>\n<script>\nif (\"ontouchstart\" in document.documentElement) {\ndocument.querySelector(\".hint\").innerHTML = \"<p>Tap on the left or right to navigate</p>\";\n}\n</script>\n\n<script>impress();</script>\n\n</body>\n</html>\n"))
+
+
 
       (unless (plist-get opt-plist :buffer-will-be-killed)
 	(normal-mode)
@@ -2459,11 +2407,11 @@ When TITLE is nil, just close all open levels."
 	(setq href (cdr (assoc (concat "sec-" snu) org-export-preferred-target-alist)))
 	(setq suffix (org-solidify-link-text (or href snu)))
 	(setq href (org-solidify-link-text (or href (concat "sec-" snu))))
-	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s %s\" data-x=\"%s\" data-y=\"%s\" data-z=\"%s\" data-rotate=\"%s\" data-scale=\"%s\">\n<h%d id=\"%s\">%s%s</h%d>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
+	(insert (format "\n<div id=\"outline-container-%s\" class=\"outline-%d%s %s\" data-x=\"%s\" data-y=\"%s\" data-z=\"%s\" data-rotate=\"%s\" data-scale=\"%s\">\n<header><h%d id=\"%s\">%s%s</h%d></header>\n<section>\n<div class=\"outline-text-%d\" id=\"text-%s\">\n"
 			suffix level (if extra-class (concat " " extra-class) "")
-			step data-x data-y data-z data-rotate data-scale level href
+			step data-x data-y data-z data-rotate data-scale (or 1 level) href
 			extra-targets
-			title level level suffix))
+			title (or 1 level) level suffix))
 	(org-open-par)))))
 
 (defun org-export-impress-js-get-tag-class-name (tag)
@@ -2485,7 +2433,7 @@ Replaces invalid characters with \"_\" and then prepends a prefix."
 (defun org-impress-js-level-close (level max-outline-level)
   "Terminate one level in HTML export."
   (if (<= level max-outline-level)
-      (insert "</div>\n")
+      (insert "</div>\n</section>\n")
     (org-close-li)
     (insert "</ul>\n")))
 

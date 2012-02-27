@@ -2600,15 +2600,10 @@ the alist of previous items."
 	(data-rotate 0)
 	(data-rotate-x 0)
 	(data-rotate-y 0)
-	(data-scale 1)
-	(make-num-f (lambda (s) (and s (string-to-number (format "%s" s)))))
-	)
+	(data-scale 1))
     (org-map-entries
      (lambda ()
-       (let* ((move-x 0)
-	      (start (point))
-	      (end (+ start (+ (org-current-level) 2)))) ;; FIXME
-
+       (let ((move-x 0))
 	 (and (org-entry-get (point) "left")
 	      (setq move-x org-export-impress-js-slide-width))
 
@@ -2641,38 +2636,40 @@ the alist of previous items."
 	     (setq data-y (string-to-number (format "%f" y)))
 	     (setq data-z (string-to-number (format "%f" z)))))
 
-	 (put-text-property start end 'step
-			    (or (org-entry-get (point) "step") "slide step"))
+	 (let* ((start (point))
+		(end (+ start (+ (org-current-level) 2)))) ;; FIXME
+	   (put-text-property start end 'step
+			      (or (org-entry-get (point) "step") "slide step"))
 
-	 (put-text-property start end 'data-x
-			    (if (setq v (org-entry-get (point) "data-x"))
-				(setq data-x (org-export-impress-js-number v))
-			      data-x))
-	 (put-text-property start end 'data-y
-			    (if (setq v (org-entry-get (point) "data-y"))
-				(setq data-y (org-export-impress-js-number v))
-			      data-y))
-	 (put-text-property start end 'data-z
-			    (if (setq v (org-entry-get (point) "data-z"))
-				(setq data-z (org-export-impress-js-number v))
-			      data-z))
+	   (put-text-property start end 'data-x
+			      (if (setq v (org-entry-get (point) "data-x"))
+				  (setq data-x (org-export-impress-js-number v))
+				data-x))
+	   (put-text-property start end 'data-y
+			      (if (setq v (org-entry-get (point) "data-y"))
+				  (setq data-y (org-export-impress-js-number v))
+				data-y))
+	   (put-text-property start end 'data-z
+			      (if (setq v (org-entry-get (point) "data-z"))
+				  (setq data-z (org-export-impress-js-number v))
+				data-z))
 
-	 (put-text-property start end 'data-rotate
-			    (if (setq v (org-entry-get (point) "data-rotate"))
-				(setq data-rotate (org-export-impress-js-number v))
-			      data-rotate))
-	 (put-text-property start end 'data-rotate-x
-			    (if (setq v (org-entry-get (point) "data-rotate-x"))
-				(setq data-rotate-x (org-export-impress-js-number v))
-			      data-rotate-x))
-	 (put-text-property start end 'data-rotate-y
-			    (if (setq v (org-entry-get (point) "data-rotate-y"))
-				(setq data-rotate-y (org-export-impress-js-number v))
-			      data-rotate-y))
-	 (put-text-property start end 'data-scale
-			    (if (setq v (org-entry-get (point) "data-scale"))
-				(setq data-scale (org-export-impress-js-number v))
-			      data-scale)))))))
+	   (put-text-property start end 'data-rotate
+			      (if (setq v (org-entry-get (point) "data-rotate"))
+				  (setq data-rotate (org-export-impress-js-number v))
+				data-rotate))
+	   (put-text-property start end 'data-rotate-x
+			      (if (setq v (org-entry-get (point) "data-rotate-x"))
+				  (setq data-rotate-x (org-export-impress-js-number v))
+				data-rotate-x))
+	   (put-text-property start end 'data-rotate-y
+			      (if (setq v (org-entry-get (point) "data-rotate-y"))
+				  (setq data-rotate-y (org-export-impress-js-number v))
+				data-rotate-y))
+	   (put-text-property start end 'data-scale
+			      (if (setq v (org-entry-get (point) "data-scale"))
+				  (setq data-scale (org-export-impress-js-number v))
+				data-scale))))))))
 
 (add-hook 'org-export-preprocess-after-headline-targets-hook
 	  'org-impress-js-save-entry-properties)

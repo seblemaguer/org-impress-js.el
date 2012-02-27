@@ -2671,12 +2671,10 @@ the alist of previous items."
 		(end (+ start (+ (org-current-level) 2)))) ;; FIXME
 	   (put-text-property start end 'step
 			      (or (org-entry-get (point) "step") "slide step"))
-
 	   (put-text-property start end 'data-x
 			      (if (setq v (org-entry-get (point) "data-x"))
 				  (setq data-x (org-export-impress-js-number v))
 				data-x))
-
 	   (put-text-property start end 'data-x
 			      (let ((v (org-entry-get (point) "data-x")))
 				(if v

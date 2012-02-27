@@ -2532,12 +2532,6 @@ the alist of previous items."
      ;; Not at an item: return line unchanged (side-effects only).
      (t line))))
 
-(defun org-impress-js-vec3-add (vec0 vec1)
-  ""
-  (destructuring-bind (vx0 vy0 vz0) vec0
-    (destructuring-bind (vx1 vy1 vz1) vec1
-      `(,(+ vx0 vx1) ,(+ vy0 vy1) ,(+ vz0 vz1)))))
-
 (defun org-impress-js-vec3-rotate-x (vec r)
   ""
   (destructuring-bind (sx sy sz) vec
@@ -2562,14 +2556,18 @@ the alist of previous items."
 	  (dz sz))
       `(,dx ,dy ,dz))))
 
-(defun org-impress-js-vec3-move (vec mvec)
+(defun org-impress-js-vec3-rotate (vec rvec)
   ""
-  (destructuring-bind (sx sy sz) vec
-    (destructuring-bind (mx my mz) mvec
-      (let ((dx (+ sx (* mx)))
-	    (dy (+ sy (* my)))
-	    (dz (+ sz (* mz))))
-	`(,dx ,dy ,dz)))))
+  (destructuring-bind (rx ry rz) rvec
+    (org-impress-js-vec3-rotate-y
+       (org-impress-js-vec3-rotate-x
+	(org-impress-js-vec3-rotate-z vec rz) rx) ry)))
+
+(defun org-impress-js-vec3-add (vec0 vec1)
+  ""
+  (destructuring-bind (vx0 vy0 vz0) vec0
+    (destructuring-bind (vx1 vy1 vz1) vec1
+      `(,(+ vx0 vx1) ,(+ vy0 vy1) ,(+ vz0 vz1)))))
 
 (defun org-impress-js-vec3-scale (vec scvec)
   ""
@@ -2580,21 +2578,9 @@ the alist of previous items."
 	    (dz (* sz scz)))
 	`(,dx ,dy ,dz)))))
 
-(defun org-impress-js-vec3-rot-trans (vec rvec)
+(defun org-export-impress-js-number (n)
   ""
-  (destructuring-bind (rx ry rz) rvec
-    (org-impress-js-vec3-rotate-y
-       (org-impress-js-vec3-rotate-x
-	(org-impress-js-vec3-rotate-z vec rz) rx) ry)))
-
-(defun org-impress-js-vec3-trans (vec rvec scale mvec)
-  ""
-  (destructuring-bind (rx ry rz) rvec
-    (org-impress-js-vec3-move
-     (org-impress-js-vec3-scale
-      (org-impress-js-vec3-rotate-y
-       (org-impress-js-vec3-rotate-x
-	(org-impress-js-vec3-rotate-z vec rz) rx) ry) `(,scale ,scale ,scale)) mvec)))
+  (string-to-number (format "%s" n)))
 
 (defconst org-export-impress-js-slide-width 1024
   "")
@@ -2616,83 +2602,77 @@ the alist of previous items."
 	(data-rotate-y 0)
 	(data-scale 1)
 	(make-num-f (lambda (s) (and s (string-to-number (format "%s" s)))))
-	(make-degree-f
-	 (lambda (d)
-	   (let* ((d (string-to-number (format "%s" d))))
-	     (if (zerop d) org-export-impress-js-default-rotation-degree d)))))
+	)
     (org-map-entries
      (lambda ()
-       (let* (v
-	      (move-x 0)
+       (let* ((move-x 0)
 	      (start (point))
 	      (end (+ start (+ (org-current-level) 2)))) ;; FIXME
+
 	 (and (org-entry-get (point) "left")
 	      (setq move-x org-export-impress-js-slide-width))
-	 (and (setq v (org-entry-get (point) "scale"))
-	      (setq data-scale
-		    (+ data-scale (funcall make-num-f v))))
+
+	 (setq data-scale
+	       (+ data-scale
+		  (org-export-impress-js-number (org-entry-get (point) "scale"))))
 
 	 (destructuring-bind (x y z)
-	     (let ((vv (let ((xx (funcall make-num-f (or (org-entry-get (point) "rotate-x") 0)))
-			     (yy (funcall make-num-f (or (org-entry-get (point) "rotate-y") 0)))
-			     (zz (funcall make-num-f (or (org-entry-get (point) "rotate") 0))))
-			 `(,(degrees-to-radians xx) ,(degrees-to-radians yy) ,(degrees-to-radians zz)))))
-	       (setq rvec (org-impress-js-vec3-add rvec (org-impress-js-vec3-rot-trans vv rvec))))
+	     (let ((v (let ((rx (org-export-impress-js-number (org-entry-get (point) "rotate-x")))
+			    (ry (org-export-impress-js-number (org-entry-get (point) "rotate-y")))
+			    (rz (org-export-impress-js-number (org-entry-get (point) "rotate"))))
+			`(,(degrees-to-radians rx)
+			  ,(degrees-to-radians ry)
+			  ,(degrees-to-radians rz)))))
+	       (setq rvec (org-impress-js-vec3-add rvec (org-impress-js-vec3-rotate v rvec))))
 	   (progn
 	     (setq data-rotate-x (format "%f" (radians-to-degrees x)))
 	     (setq data-rotate-y (format "%f" (radians-to-degrees y)))
-	     (setq data-rotate (format "%f" (radians-to-degrees z)))
-	     ))
+	     (setq data-rotate (format "%f" (radians-to-degrees z)))))
 
 	 (destructuring-bind (x y z)
-	     (let ((vec `(,move-x 0 0))
-		   (mvec `(,data-x ,data-y ,data-z)))
-	       (org-impress-js-vec3-trans vec rvec data-scale mvec))
+	     (let ((vec `(,data-x ,data-y ,data-z))
+		   (mvec `(,move-x 0 0))
+		   (svec `(,data-scale ,data-scale ,data-scale)))
+	       (org-impress-js-vec3-add
+		(org-impress-js-vec3-scale
+		 (org-impress-js-vec3-rotate mvec rvec) svec) vec))
 	   (progn
 	     (setq data-x (string-to-number (format "%f" x)))
 	     (setq data-y (string-to-number (format "%f" y)))
-	     (setq data-z (string-to-number (format "%f" z)))
-	     ))
-
+	     (setq data-z (string-to-number (format "%f" z)))))
 
 	 (put-text-property start end 'step
-			    (or
-			     (org-entry-get (point) "step") "slide step"))
+			    (or (org-entry-get (point) "step") "slide step"))
+
 	 (put-text-property start end 'data-x
-			    (setq data-x
-				  (or
-				   (funcall make-num-f (org-entry-get (point) "data-x"))
-				   data-x)))
+			    (if (setq v (org-entry-get (point) "data-x"))
+				(setq data-x (org-export-impress-js-number v))
+			      data-x))
 	 (put-text-property start end 'data-y
-			    (setq data-y
-				  (or
-				   (funcall make-num-f (org-entry-get (point) "data-y"))
-				   data-y)))
+			    (if (setq v (org-entry-get (point) "data-y"))
+				(setq data-y (org-export-impress-js-number v))
+			      data-y))
 	 (put-text-property start end 'data-z
-			    (setq data-z
-				  (or
-				   (funcall make-num-f (org-entry-get (point) "data-z"))
-				   data-z)))
+			    (if (setq v (org-entry-get (point) "data-z"))
+				(setq data-z (org-export-impress-js-number v))
+			      data-z))
+
 	 (put-text-property start end 'data-rotate
-			    (setq data-rotate
-				  (or
-				   (funcall make-num-f (org-entry-get (point) "data-rotate"))
-				   data-rotate)))
+			    (if (setq v (org-entry-get (point) "data-rotate"))
+				(setq data-rotate (org-export-impress-js-number v))
+			      data-rotate))
 	 (put-text-property start end 'data-rotate-x
-			    (setq data-rotate-x
-				  (or
-				   (funcall make-num-f (org-entry-get (point) "data-rotate-x"))
-				   data-rotate-x)))
+			    (if (setq v (org-entry-get (point) "data-rotate-x"))
+				(setq data-rotate-x (org-export-impress-js-number v))
+			      data-rotate-x))
 	 (put-text-property start end 'data-rotate-y
-			    (setq data-rotate-y
-				  (or
-				   (funcall make-num-f (org-entry-get (point) "data-rotate-y"))
-				   data-rotate-y)))
+			    (if (setq v (org-entry-get (point) "data-rotate-y"))
+				(setq data-rotate-y (org-export-impress-js-number v))
+			      data-rotate-y))
 	 (put-text-property start end 'data-scale
-			    (setq data-scale
-				  (or
-				   (funcall make-num-f (org-entry-get (point) "data-scale"))
-				   data-scale))))))))
+			    (if (setq v (org-entry-get (point) "data-scale"))
+				(setq data-scale (org-export-impress-js-number v))
+			      data-scale)))))))
 
 (add-hook 'org-export-preprocess-after-headline-targets-hook
 	  'org-impress-js-save-entry-properties)

@@ -2582,39 +2582,70 @@ the alist of previous items."
   ""
   (string-to-number (format "%s" n)))
 
-(defconst org-export-impress-js-slide-width 1024
+(defconst org-export-impress-js-default-page-width 1024
   "")
 
-(defconst org-export-impress-js-slide-height 768
+(defconst org-export-impress-js-default-page-height 768
+  "")
+
+(defconst org-export-impress-js-default-page-depth 300
   "")
 
 (defconst org-export-impress-js-default-rotation-degree 30
   "")
 
+(defun org-export-impress-js-org-entry-get (entry default)
+  ""
+  (let ((v (org-entry-get (point) entry)))
+    (if v
+	(if (string-equal (format "%s" v) "t")
+	    default
+	  (org-export-impress-js-number v))
+      0)))
+
 (defun org-impress-js-save-entry-properties ()
   ""
   (let ((rvec `(,0 ,0 ,0))
-	(data-x 0)
-	(data-y 0)
-	(data-z 0)
-	(data-rotate 0)
-	(data-rotate-x 0)
-	(data-rotate-y 0)
+	(data-x 0) (data-y 0) (data-z 0)
+	(data-rotate-x 0) (data-rotate-y 0) (data-rotate 0)
 	(data-scale 1))
     (org-map-entries
      (lambda ()
-       (let ((move-x 0))
-	 (and (org-entry-get (point) "left")
-	      (setq move-x org-export-impress-js-slide-width))
+       (let (move-x move-y move-z)
+
+	 (setq move-x
+	       (org-export-impress-js-org-entry-get
+		"move-x"
+		org-export-impress-js-default-page-width))
+	 (setq move-y
+	       (org-export-impress-js-org-entry-get
+		"move-y"
+		org-export-impress-js-default-page-height))
+	 (setq move-z
+	       (org-export-impress-js-org-entry-get
+		"move-z"
+		org-export-impress-js-default-page-depth))
+
+	 (and (zerop move-x) (zerop move-y) (zerop move-z)
+	      (setq move-x org-export-impress-js-default-page-width))
+
+	 (let ((v (org-entry-get (point) "no-move")))
+	   (and v (setq move-x 0) (setq move-y 0) (setq move-z 0)))
 
 	 (setq data-scale
 	       (+ data-scale
 		  (org-export-impress-js-number (org-entry-get (point) "scale"))))
 
 	 (destructuring-bind (x y z)
-	     (let ((v (let ((rx (org-export-impress-js-number (org-entry-get (point) "rotate-x")))
-			    (ry (org-export-impress-js-number (org-entry-get (point) "rotate-y")))
-			    (rz (org-export-impress-js-number (org-entry-get (point) "rotate"))))
+	     (let ((v (let ((rx (org-export-impress-js-org-entry-get
+				 "rotate-x"
+				 org-export-impress-js-default-rotation-degree))
+			    (ry (org-export-impress-js-org-entry-get
+				 "rotate-y"
+				 org-export-impress-js-default-rotation-degree))
+			    (rz (org-export-impress-js-org-entry-get
+				 "rotate"
+				 org-export-impress-js-default-rotation-degree)))
 			`(,(degrees-to-radians rx)
 			  ,(degrees-to-radians ry)
 			  ,(degrees-to-radians rz)))))
@@ -2626,7 +2657,7 @@ the alist of previous items."
 
 	 (destructuring-bind (x y z)
 	     (let ((vec `(,data-x ,data-y ,data-z))
-		   (mvec `(,move-x 0 0))
+		   (mvec `(,move-x ,move-y ,move-z))
 		   (svec `(,data-scale ,data-scale ,data-scale)))
 	       (org-impress-js-vec3-add
 		(org-impress-js-vec3-scale
@@ -2645,31 +2676,42 @@ the alist of previous items."
 			      (if (setq v (org-entry-get (point) "data-x"))
 				  (setq data-x (org-export-impress-js-number v))
 				data-x))
-	   (put-text-property start end 'data-y
-			      (if (setq v (org-entry-get (point) "data-y"))
-				  (setq data-y (org-export-impress-js-number v))
-				data-y))
-	   (put-text-property start end 'data-z
-			      (if (setq v (org-entry-get (point) "data-z"))
-				  (setq data-z (org-export-impress-js-number v))
-				data-z))
 
+	   (put-text-property start end 'data-x
+			      (let ((v (org-entry-get (point) "data-x")))
+				(if v
+				    (setq data-x (org-export-impress-js-number v))
+				  data-x)))
+	   (put-text-property start end 'data-y
+			      (let ((v (org-entry-get (point) "data-y")))
+				(if v
+				    (setq data-y (org-export-impress-js-number v))
+				  data-y)))
+	   (put-text-property start end 'data-z
+			      (let ((v (org-entry-get (point) "data-z")))
+				(if v
+				    (setq data-z (org-export-impress-js-number v))
+				  data-z)))
 	   (put-text-property start end 'data-rotate
-			      (if (setq v (org-entry-get (point) "data-rotate"))
-				  (setq data-rotate (org-export-impress-js-number v))
-				data-rotate))
+			      (let ((v (org-entry-get (point) "data-rotate")))
+				(if v
+				    (setq data-rotate (org-export-impress-js-number v))
+				  data-rotate)))
 	   (put-text-property start end 'data-rotate-x
-			      (if (setq v (org-entry-get (point) "data-rotate-x"))
-				  (setq data-rotate-x (org-export-impress-js-number v))
-				data-rotate-x))
+			      (let ((v (org-entry-get (point) "data-rotate-x")))
+				(if v
+				    (setq data-rotate-x (org-export-impress-js-number v))
+				  data-rotate-x)))
 	   (put-text-property start end 'data-rotate-y
-			      (if (setq v (org-entry-get (point) "data-rotate-y"))
-				  (setq data-rotate-y (org-export-impress-js-number v))
-				data-rotate-y))
+			      (let ((v (org-entry-get (point) "data-rotate-y")))
+				(if v
+				    (setq data-rotate-y (org-export-impress-js-number v))
+				  data-rotate-y)))
 	   (put-text-property start end 'data-scale
-			      (if (setq v (org-entry-get (point) "data-scale"))
-				  (setq data-scale (org-export-impress-js-number v))
-				data-scale))))))))
+			      (let ((v (org-entry-get (point) "data-scale")))
+				(if v
+				    (setq data-scale (org-export-impress-js-number v))
+				  data-scale)))))))))
 
 (add-hook 'org-export-preprocess-after-headline-targets-hook
 	  'org-impress-js-save-entry-properties)

@@ -1,22 +1,15 @@
-#+TITLE: Test
+#+TITLE: あいうえお
 #+AUTHOR: Your Name
 #+OPTIONS: toc:nil num:nil ^:nil
-#+STYLE: <script src="http://bartaz.github.com/impress.js/js/impress.js"></script><link href="http://bartaz.github.com/impress.js/css/impress-demo.css" rel="stylesheet" /><link href="mystyle.css" rel="stylesheet" />
+#+STYLE: <script src="js/impress.js"></script><link href="css/impress-demo.css" rel="stylesheet" /><link href="mystyle.css" rel="stylesheet" />
 
 * first
-  :PROPERTIES:
-  :data-x:      1000
-  :data-y:      0
-  :step:      slide step
-  :END:
 
   Hello, hello hello.
 
 * items
   :PROPERTIES:
-  :data-x:   2000
-  :data-y:   0
-  :step:   slide step
+  :rotate: 90
   :END:
 
   - item1
@@ -25,34 +18,23 @@
   - item2
   - item3
 
-* num items
+* numbered items
   :PROPERTIES:
-  :data-x:   3000
-  :data-y:   0
-  :step: slide step
+  :move-z: 1000
   :END:
 
   1. item1
     - sub item
-    - sub item
   2. item2
   3. item3
 
-* table
+* End
   :PROPERTIES:
-  :data-x:   4000
-  :data-y:   0
-  :step: slide step
+  :no-move: t
+  :rotate-x: 90
   :END:
 
-  | col | col2 | col3 |
-  |-----+------+------|
-  | v   | v    | v    |
-
-* end
-  :PROPERTIES:
-  :data-x:   3000
-  :data-y:   1000
-  :data-rotate:   180
-  :step:   step
-  :END:
+  1. item1
+    - sub item
+  2. item2
+  3. item3

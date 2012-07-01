@@ -30,11 +30,11 @@
 
 :git clone https://github.com/bartaz/impress.js.git ~/impress.js
 
-   copy js and css.
+   Copy js and css.
 
 :cp -a ~/impress.js/{js,css} ~/org-impress-js.el/
 
-   open ~/org-impress-js.el/example.html.
+   Open ~/org-impress-js.el/example.html in your web browser.
 
 ** LICENSE
 

@@ -19,7 +19,9 @@
 :(add-to-list 'load-path "~/org-impress-js.el")
 :(require 'org-impress-js)
 
-   To convert html file type below.
+   Open ~/org-impress-js.el/example.org in your emacs.
+
+   To convert the org file to html file type below.
 
 :M-x org-export-as-impress-js
 

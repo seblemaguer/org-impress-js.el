@@ -1,7 +1,7 @@
 #+TITLE: あいうえお
 #+AUTHOR: Your Name
 #+OPTIONS: toc:nil num:nil ^:nil
-#+STYLE: <script src="js/impress.js"></script><link href="css/impress-demo.css" rel="stylesheet" /><link href="mystyle.css" rel="stylesheet" />
+#+STYLE: <script src="http://bartaz.github.com/impress.js/js/impress.js"></script><link href="http://bartaz.github.com/impress.js/css/impress-demo.css" rel="stylesheet" /><link href="mystyle.css" rel="stylesheet" />
 
 * first
 

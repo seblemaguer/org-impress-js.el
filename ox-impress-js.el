@@ -1,6 +1,6 @@
 ;;; ox-impress-js.el --- impress.js Back-End for Org Export Engine
 
-;; Copyright (C) 2015 Takumi KINJO
+;; Copyright (C) 2014 Takumi KINJO
 
 ;; Author: Takumi Kinjo <takumi dot kinjo at gmail dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp

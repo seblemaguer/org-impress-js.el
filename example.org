@@ -1,8 +1,8 @@
 #+TITLE: org-impress-js.el
-#+AUTHOR: Takumi KINJO
+#+AUTHOR: Your Name
 #+OPTIONS: num:nil
-#+IMPRESSJS_STYLE: css/impress-demo.css
-#+IMPRESSJS_SRC: js/impress.js
+#+IMPRESSJS_STYLE: http://bartaz.github.io/impress.js/css/impress-demo.css
+#+IMPRESSJS_SRC: http://bartaz.github.io/impress.js/js/impress.js
 #+HTML_HEAD: <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
 * Hello
@@ -53,4 +53,4 @@ Hello, org-impress-js.el.
   :data-rotate-y: 90
   :END:
 
-  End.
+  Bye.

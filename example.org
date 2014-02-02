@@ -1,26 +1,44 @@
-#+TITLE: あいうえお
-#+AUTHOR: Your Name
-#+OPTIONS: toc:nil num:nil ^:nil
-#+STYLE: <script src="http://bartaz.github.com/impress.js/js/impress.js"></script><link href="http://bartaz.github.com/impress.js/css/impress-demo.css" rel="stylesheet" /><link href="mystyle.css" rel="stylesheet" />
+#+TITLE: org-impress-js.el
+#+AUTHOR: Takumi KINJO
+#+OPTIONS: num:nil
+#+IMPRESSJS_STYLE: css/impress-demo.css
+#+IMPRESSJS_SRC: js/impress.js
+#+HTML_HEAD: <link rel="stylesheet" href="mystyle.css" type="text/css" />
 
-* first
-
-  Hello, hello hello.
-
-* items
+* Hello
   :PROPERTIES:
-  :rotate: 90
+  :class:    slide step
+  :data-x: 1000
   :END:
 
-  - item1
-    - sub item
-      - sub sub item
-  - item2
-  - item3
+Hello, org-impress-js.el.
 
-* numbered items
+#+BEGIN_SRC sh
+  echo hello
+  for i in `ls`; do echo $i; done
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun foo ()
+    ""
+    t)
+#+END_SRC
+
+** Items
+   :PROPERTIES:
+   :data-x: 2000
+   :END:
+
+- item1
+  - sub item
+    - sub sub item
+- item2
+- item3
+
+* Numbered items
   :PROPERTIES:
-  :move-z: 1000
+  :data-x: 2000
+  :data-rotate-x: 90
   :END:
 
   1. item1
@@ -30,11 +48,9 @@
 
 * End
   :PROPERTIES:
-  :no-move: t
-  :rotate-x: 90
+  :data-x: 2000
+  :data-rotate-x: 90
+  :data-rotate-y: 90
   :END:
 
-  1. item1
-    - sub item
-  2. item2
-  3. item3
+  End.

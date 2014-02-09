@@ -2654,14 +2654,14 @@ holding contextual information."
 		(concat (format "outline-%d" level1) (and extra-class " ")
 			extra-class
 			(concat " " (if class class org-impress-js-default-slide-class)))
-		(concat (and x (format " data-x=\"%0.8f\"" (vnth 0 tran)))
-			(and y (format " data-y=\"%0.8f\"" (vnth 1 tran)))
-			(and z (format " data-z=\"%0.8f\"" (vnth 2 tran)))
+		(concat (format " data-x=\"%0.8f\"" (vnth 0 tran))
+			(format " data-y=\"%0.8f\"" (vnth 1 tran))
+			(format " data-z=\"%0.8f\"" (vnth 2 tran))
 			(and data-scale (format " data-scale=\"%s\"" data-scale))
 			(and data-rotate (format " data-rotate=\"%s\"" data-rotate))
-			(and rrx (format " data-rotate-x=\"%0.8f\"" (vnth 0 rot)))
-			(and rry (format " data-rotate-y=\"%0.8f\"" (vnth 1 rot)))
-			(and rrz (format " data-rotate-z=\"%0.8f\"" (vnth 2 rot))))
+			(format " data-rotate-x=\"%0.8f\"" (vnth 0 rot))
+			(format " data-rotate-y=\"%0.8f\"" (vnth 1 rot))
+			(format " data-rotate-z=\"%0.8f\"" (vnth 2 rot)))
 		(format "\n<h%d id=\"%s\">%s%s</h%d>\n"
 			level1
 			preferred-id

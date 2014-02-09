@@ -31,6 +31,12 @@
   :trans-z:  500
   :END:
 
+  First of all, check Org-mode version.
+
+  Note: This package was tested on Org-mode 8.2.5h.
+
+  : M-x org-version
+
   Get org-impress-js.el.
 
   : git clone https://github.com/kinjo/org-impress-js.el.git ~/org-impress-js.el
@@ -97,7 +103,7 @@
   because ox.el processes Org-mode file by the depth-first.
 
   * trans-x, trans-y, trans-z
-  * rotate-x, rotate-y, rotate-z
+  * rotate-x, rotate-y, rotate-z, rotate
 
 * LICENSE
   :PROPERTIES:

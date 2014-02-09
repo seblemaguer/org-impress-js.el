@@ -1,43 +1,109 @@
+#+TITLE: org-impress-js.el
+#+AUTHOR: Takumi KINJO
+#+OPTIONS: num:nil
+#+IMPRESSJS_STYLE: http://bartaz.github.io/impress.js/css/impress-demo.css
+#+IMPRESSJS_SRC: http://bartaz.github.io/impress.js/js/impress.js
+#+HTML_HEAD: <link rel="stylesheet" href="mystyle.css" type="text/css" />
+
 * org-impress-js.el
+  :PROPERTIES:
+  :rotate-y: 51
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
 
-** DESCRIPTION
+  impress.js Back-End for Org Export Engine.
 
-   impress.js Back-End for Org Export Engine.
+  This library is a customized HTML back-end for Org generic exporter
+  to export to impress.js. This library is based on ox-html.el and
+  impress.js. I am appreciate those great works.
 
-   This library is a customized HTML back-end for Org generic exporter
-   to export to impress.js. This library is based on ox-html.el and
-   impress.js. I am appreciate those great works.
+  * See http://orgmode.org/ about Org-mode.
 
-   See http://orgmode.org/ about Org-mode
+  * See https://github.com/bartaz/impress.js/ about impress.js.
 
-   See https://github.com/bartaz/impress.js/ about impress.js
+  _Tested on Org-mode version 8.2.5h and GNU Emacs 24.3.1._
 
-   Tested on Org-mode version 8.2.5h and GNU Emacs 24.3.1.
+* INSTALLATION
+  :PROPERTIES:
+  :rotate-y: 51
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
 
-** QUICK START
+  Get org-impress-js.el.
 
-   Get org-impress-js.el.
+  : git clone https://github.com/kinjo/org-impress-js.el.git ~/org-impress-js.el
 
-: git clone https://github.com/kinjo/org-impress-js.el.git ~/org-impress-js.el
+  Add following to ~/.emacs.d/init.el and reboot the emacs.
 
-   Add this to your .emacs.d/init.el and reboot emacs.
+  : (add-to-list 'load-path "~/org-impress-js.el")
+  : (require 'ox-impress-js)
 
-: (add-to-list 'load-path "~/org-impress-js.el")
-: (require 'ox-impress-js)
+* USAGE
+  :PROPERTIES:
+  :rotate-y: 51
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
 
-   Open ~/org-impress-js.el/example.org in your emacs.
+  Open README.org in your emacs.
 
-   To convert the Org file to an impress.js HTML file, type C-c C-e.
-   `*Org Export Dispatcher*' buffer will open, so follow the menu.
+  To convert to an impress.js HTML file, type C-c C-e.
 
-   ~/org-impress-js.el/example.html will be generated, if you type
-   `j' and `j'.
+  `*Org Export Dispatcher*' buffer will open, so follow the menu.
 
-   Finally, open it in your browser.
+  If you type `j' and `j', README.html will be
+  generated.
 
-: cd ~/org-impress-js.el/
-: open example.html
+  Open the file in your web browser.
 
-** LICENSE
+  : cd ~/org-impress-js.el/
+  : open README.html
 
-   Licensed under the GPLv3 license.
+* PROPERTIES
+  :PROPERTIES:
+  :rotate-y: 51
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
+
+  Following PROPERTIES are available.
+
+  * data-x, data-y, data-z
+
+    X, Y and Z position of the slide.
+
+  * data-rotate-x, data-rotate-y, data-rotate-z
+
+    Define the rotation of the slide around given axis in degrees.
+
+  * trans-x, trans-y, trans-z
+
+    Translate the slide to each axis.
+
+  * rotate-x, rotate-y, rotate-z
+
+    Rotate the slide to each axis in degrees.
+
+* KNOWN ISSUES
+  :PROPERTIES:
+  :rotate-y: 51
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
+
+  The following properties does not work in the nested headlines
+  because ox.el processes Org-mode file by the depth-first.
+
+  * trans-x, trans-y, trans-z
+  * rotate-x, rotate-y, rotate-z
+
+* LICENSE
+  :PROPERTIES:
+  :rotate-y: 51
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
+
+  Licensed under the GPLv3 license.

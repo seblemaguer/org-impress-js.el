@@ -48,3 +48,6 @@ li {
     margin: 15px;
     margin-left: 40px;
 }
+pre {
+    font-size: 70%;
+}

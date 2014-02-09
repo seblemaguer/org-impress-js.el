@@ -1370,6 +1370,127 @@ CSS classes, then this prefix can be very useful."
   :group 'org-export-impress-js
   :type 'string)
 
+;;;; impress.js
+
+(defcustom org-impress-js-default-slide-class "step slide"
+  "Default of the class attribute for the slides. \"step\" and \"step slide\"
+are available.")
+
+(defcustom org-impress-js-default-translation '(1000 0 0)
+  "Default translation vector for the slides. List are corresponding to
+X, Y and Z axis.")
+
+(defcustom org-impress-js-default-rotation '(0 0 0)
+  "Default rotational vector for the slides. List are angles by degrees
+around X, Y and Z axis.")
+
+
+;;; Matrix calculation functions
+
+(defmacro mnth (i j m)
+  "Return a i-j-th value in 4x4 matrix correspond as below.
+
+  | m00 m01 m02 m03 |
+  | m10 m11 m12 m13 |
+  | m20 m21 m22 m23 |
+  | m30 m31 m32 m33 |"
+  (list 'nth j (list 'nth i m)))
+
+(defmacro vnth (i v)
+  "Return a i-th value in 1x4 row vecotr."
+  (list 'nth i v))
+
+(defun make-vec (v)
+  "Make a new vector form `v'. `v' is a 4-vector."
+  (copy-tree v))
+
+(defun make-matx (m)
+  "Make a new matrix from `m'. `m' is a 4x4 matrix."
+  (copy-tree m))
+
+(defun unit-matx ()
+  "Return a 4x4 unit matrix."
+  (make-matx '((1 0 0 0)
+	       (0 1 0 0)
+	       (0 0 1 0)
+	       (0 0 0 1))))
+
+(defun add-vec (v0 v1)
+  "Add vector `v0' and `v1'. `v0' and `v1' are 4-vectors."
+  (list (+ (vnth 0 v0) (vnth 0 v1))
+	(+ (vnth 1 v0) (vnth 1 v1))
+	(+ (vnth 2 v0) (vnth 2 v1))
+	(+ (vnth 3 v0) (vnth 3 v1))))
+
+(defun matx-vec-prod (m v)
+  "Return a product of `m' and `v'. `m' is a 4x4 matrix and `v' is
+a 4-vector."
+  (list
+   (+ (* (vnth 0 v) (mnth 0 0 m)) (* (vnth 1 v) (mnth 0 1 m))
+      (* (vnth 2 v) (mnth 0 2 m)) (* (vnth 3 v) (mnth 0 3 m)))
+   (+ (* (vnth 0 v) (mnth 1 0 m)) (* (vnth 1 v) (mnth 1 1 m))
+      (* (vnth 2 v) (mnth 1 2 m)) (* (vnth 3 v) (mnth 1 3 m)))
+   (+ (* (vnth 0 v) (mnth 2 0 m)) (* (vnth 1 v) (mnth 2 1 m))
+      (* (vnth 2 v) (mnth 2 2 m)) (* (vnth 3 v) (mnth 2 3 m)))
+   (+ (* (vnth 0 v) (mnth 3 0 m)) (* (vnth 1 v) (mnth 3 1 m))
+      (* (vnth 2 v) (mnth 3 2 m)) (* (vnth 3 v) (mnth 3 3 m)))))
+
+(defun vec-matx-prod (v m)
+  "Return a product of `v' and `m'. `v' is a 4-vector and `m'
+is a 4x4 matrix."
+  (list
+   (+ (* (vnth 0 v) (mnth 0 0 m)) (* (vnth 1 v) (mnth 1 0 m))
+      (* (vnth 2 v) (mnth 2 0 m)) (* (vnth 3 v) (mnth 3 0 m)))
+   (+ (* (vnth 0 v) (mnth 0 1 m)) (* (vnth 1 v) (mnth 1 1 m))
+      (* (vnth 2 v) (mnth 2 1 m)) (* (vnth 3 v) (mnth 3 1 m)))
+   (+ (* (vnth 0 v) (mnth 0 2 m)) (* (vnth 1 v) (mnth 1 2 m))
+      (* (vnth 2 v) (mnth 2 2 m)) (* (vnth 3 v) (mnth 3 2 m)))
+   (+ (* (vnth 0 v) (mnth 0 3 m)) (* (vnth 1 v) (mnth 1 3 m))
+      (* (vnth 2 v) (mnth 2 3 m)) (* (vnth 3 v) (mnth 3 3 m)))))
+
+(defun matx-matx-prod (m0 m1)
+  "Return a product of `m0' and `m1'. `m0' and `m1' are 4x4 matrices."
+  (list
+   (vec-matx-prod (nth 0 m0) m1)
+   (vec-matx-prod (nth 1 m0) m1)
+   (vec-matx-prod (nth 2 m0) m1)
+   (vec-matx-prod (nth 3 m0) m1)))
+
+(defun rot-matx-z (m r)
+  "Return a matrix rotated around Z axis. `m' is a 4x4 matrix and
+`r' is a radian aroundx Z axis."
+  (let ((u (unit-matx)))
+    (setf (mnth 0 0 u) (cos r))
+    (setf (mnth 0 1 u) (- (sin r)))
+    (setf (mnth 1 0 u) (sin r))
+    (setf (mnth 1 1 u) (cos r))
+    (matx-matx-prod u m)))
+
+(defun rot-matx-x (m r)
+  "Return a matrix rotated around X axis. `m' is a 4x4 matrix and
+`r' is a radian aroundx X axis."
+  (let ((u (unit-matx)))
+    (setf (mnth 1 1 u) (cos r))
+    (setf (mnth 1 2 u) (- (sin r)))
+    (setf (mnth 2 1 u) (sin r))
+    (setf (mnth 2 2 u) (cos r))
+    (matx-matx-prod u m)))
+
+(defun rot-matx-y (m r)
+  "Return a matrix rotated around Y axis. `m' is a 4x4 matrix and
+`r' is a radian aroundx Y axis."
+  (let ((u (unit-matx)))
+    (setf (mnth 0 0 u) (cos r))
+    (setf (mnth 2 0 u) (sin r))
+    (setf (mnth 0 2 u) (- (sin r)))
+    (setf (mnth 2 2 u) (cos r))
+    (matx-matx-prod u m)))
+
+(defun rot-matx (m rx ry rz)
+  "Return a matrix rotated around Z-Y-X. `m' is a 4x4 matrix.
+`rx', `ry' and `rz' are angles around each axies."
+  (rot-matx-x (rot-matx-y (rot-matx-z m rz) ry) rx))
+
 
 ;;; Internal Functions
 
@@ -1575,6 +1696,19 @@ INFO is a plist used as a communication channel."
 	"\n%s\n"
 	(mapconcat 'org-impress-js-format-footnote-definition fn-alist "\n"))))))
 
+(defvar org-impress-js-slide-angles '(0 0 0 0)
+  "Accumulated euler angles.")
+(defvar org-impress-js-slide-trans '(0 0 0 0)
+  "Accumulated translation.")
+(defun org-impress-js-export-begin () 
+  "Called when export begin."
+  (setq org-impress-js-slide-angles '(0 0 0 0))
+  (setq org-impress-js-slide-trans '(0 0 0 0)))
+
+(defun org-impress-js-to-number (v)
+  "Convert to a number."
+  (and v (string-to-number (format "%s" v))))
+       
 
 ;;; Template
 
@@ -2425,14 +2559,21 @@ holding contextual information."
 	 (full-text (org-impress-js-format-headline--wrap headline info))
 	 ;; Attributes used to position presentation steps
 	 (class (org-export-get-node-property :CLASS headline))
-	 (data-x (org-export-get-node-property :DATA-X headline))
-	 (data-y (org-export-get-node-property :DATA-Y headline))
-	 (data-z (org-export-get-node-property :DATA-Z headline))
-	 (data-scale (org-export-get-node-property :DATA-SCALE headline))
-	 (data-rotate (org-export-get-node-property :DATA-ROTATE headline))
-	 (data-rotate-x (org-export-get-node-property :DATA-ROTATE-X headline))
-	 (data-rotate-y (org-export-get-node-property :DATA-ROTATE-Y headline))
-	 (data-rotate-z (org-export-get-node-property :DATA-ROTATE-Z headline)))
+	 (data-x (org-impress-js-to-number (org-export-get-node-property :DATA-X headline)))
+	 (data-y (org-impress-js-to-number (org-export-get-node-property :DATA-Y headline)))
+	 (data-z (org-impress-js-to-number (org-export-get-node-property :DATA-Z headline)))
+	 (data-scale (org-impress-js-to-number (org-export-get-node-property :DATA-SCALE headline)))
+	 (data-rotate (org-impress-js-to-number (org-export-get-node-property :DATA-ROTATE headline)))
+	 (data-rotate-x (org-impress-js-to-number (org-export-get-node-property :DATA-ROTATE-X headline)))
+	 (data-rotate-y (org-impress-js-to-number (org-export-get-node-property :DATA-ROTATE-Y headline)))
+	 (data-rotate-z (org-impress-js-to-number (org-export-get-node-property :DATA-ROTATE-Z headline)))
+	 (trans-x (org-impress-js-to-number (org-export-get-node-property :TRANS-X headline)))
+	 (trans-y (org-impress-js-to-number (org-export-get-node-property :TRANS-Y headline)))
+	 (trans-z (org-impress-js-to-number (org-export-get-node-property :TRANS-Z headline)))
+	 (rotate (org-impress-js-to-number (org-export-get-node-property :ROTATE headline)))
+	 (rotate-x (org-impress-js-to-number (org-export-get-node-property :ROTATE-X headline)))
+	 (rotate-y (org-impress-js-to-number (org-export-get-node-property :ROTATE-Y headline)))
+	 (rotate-z (org-impress-js-to-number (org-export-get-node-property :ROTATE-Z headline))))
     (cond
      ;; Case 1: This is a footnote section: ignore it.
      ((org-element-property :footnote-section-p headline) nil)
@@ -2452,6 +2593,16 @@ holding contextual information."
 	      (org-impress-js-end-plain-list type)))))
      ;; Case 3. Standard headline.  Export it as a section.
      (t
+      ;; Set default values to translation variables if needed.
+      (and (not (or data-x data-y data-z trans-x trans-y trans-z
+		    data-rotate-x data-rotate-y data-rotate-z data-rotate
+		    rotate-x rotate-y rotate-z rotate))
+	   (setq trans-x (vnth 0 org-impress-js-default-translation)
+		 trans-y (vnth 1 org-impress-js-default-translation)
+		 trans-z (vnth 2 org-impress-js-default-translation)
+		 rotate-x (vnth 0 org-impress-js-default-rotation)
+		 rotate-y (vnth 1 org-impress-js-default-rotation)
+		 rotate-z (vnth 2 org-impress-js-default-rotation)))
       (let* ((section-number (mapconcat 'number-to-string
 					(org-export-get-headline-number
 					 headline info) "-"))
@@ -2464,7 +2615,37 @@ holding contextual information."
 	     (extra-class (org-element-property :HTML_CONTAINER_CLASS headline))
 	     ;; Ignore the section indentations.
 	     (level1 1)
-	     (first-content (car (org-element-contents headline))))
+	     (first-content (car (org-element-contents headline)))
+	     (rot (let ((r (add-vec
+			    org-impress-js-slide-angles
+			    (list (or rotate-x 0)
+				  (or rotate-y 0)
+				  ;; `rotate' is prioritized.
+				  (or rotate-z rotate 0)
+				  0))))
+		    ;; Reset angles if corresponding data are given.
+		    (and data-rotate (setf (vnth 2 r) data-rotate))
+		    (and data-rotate-x (setf (vnth 0 r) data-rotate-x))
+		    (and data-rotate-y (setf (vnth 1 r) data-rotate-y))
+		    (or
+		     ;; data-rotate-z is prioritized.
+		     (and data-rotate-z (setf (vnth 2 r) data-rotate-z))
+		     (and data-rotate (setf (vnth 2 r) data-rotate)))
+		    r))
+	     (v (matx-vec-prod
+		 (rot-matx (unit-matx)
+			   (degrees-to-radians (vnth 0 rot))
+			   (degrees-to-radians (- (vnth 1 rot)))
+			   (degrees-to-radians (- (vnth 2 rot) 180)))
+		 (list (- (or trans-x 0)) (or trans-y 0) (or trans-z 0) 1)))
+	     (tran (let ((tran (add-vec org-impress-js-slide-trans v)))
+		     ;; Reset coordinates if corresponding data are given.
+		     (and data-x (setf (vnth 0 tran) data-x))
+		     (and data-y (setf (vnth 1 tran) data-y))
+		     (and data-z (setf (vnth 2 tran) data-z))
+		     tran)))
+	(setq org-impress-js-slide-angles rot)
+	(setq org-impress-js-slide-trans tran)
 	(format "<%s id=\"%s\" class=\"%s\"%s>%s%s\n"
 		(org-impress-js--container headline info)
 		(format "outline-container-%s"
@@ -2472,15 +2653,15 @@ holding contextual information."
 			    (concat "sec-" section-number)))
 		(concat (format "outline-%d" level1) (and extra-class " ")
 			extra-class
-			(if class (format " %s" class) " step"))
-		(concat (and data-x (format " data-x=\"%s\"" data-x))
-			(and data-y (format " data-y=\"%s\"" data-y))
-			(and data-z (format " data-z=\"%s\"" data-z))
+			(concat " " (if class class org-impress-js-default-slide-class)))
+		(concat (and x (format " data-x=\"%0.8f\"" (vnth 0 tran)))
+			(and y (format " data-y=\"%0.8f\"" (vnth 1 tran)))
+			(and z (format " data-z=\"%0.8f\"" (vnth 2 tran)))
 			(and data-scale (format " data-scale=\"%s\"" data-scale))
 			(and data-rotate (format " data-rotate=\"%s\"" data-rotate))
-			(and data-rotate-x (format " data-rotate-x=\"%s\"" data-rotate-x))
-			(and data-rotate-y (format " data-rotate-y=\"%s\"" data-rotate-y))
-			(and data-rotate-z (format " data-rotate-z=\"%s\"" data-rotate-z)))
+			(and rrx (format " data-rotate-x=\"%0.8f\"" (vnth 0 rot)))
+			(and rry (format " data-rotate-y=\"%0.8f\"" (vnth 1 rot)))
+			(and rrz (format " data-rotate-z=\"%0.8f\"" (vnth 2 rot))))
 		(format "\n<h%d id=\"%s\">%s%s</h%d>\n"
 			level1
 			preferred-id
@@ -3516,6 +3697,7 @@ Export is done in a buffer named \"*Org HTML Export*\", which
 will be displayed when `org-export-show-temporary-export-buffer'
 is non-nil."
   (interactive)
+  (org-impress-js-export-begin)
   (org-export-to-buffer 'html "*Org HTML Export*"
     async subtreep visible-only body-only ext-plist
     (lambda () (set-auto-mode t))))
@@ -3559,6 +3741,7 @@ file-local settings.
 
 Return output file's name."
   (interactive)
+  (org-impress-js-export-begin)
   (let* ((extension (concat "." org-impress-js-extension))
 	 (file (org-export-output-file-name extension subtreep))
 	 (org-export-coding-system org-impress-js-coding-system))

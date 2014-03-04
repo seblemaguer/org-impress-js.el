@@ -1491,6 +1491,13 @@ is a 4x4 matrix."
 `rx', `ry' and `rz' are angles around each axies."
   (rot-matx-x (rot-matx-y (rot-matx-z m rz) ry) rx))
 
+(defun matx-euler (m)
+  "Return euler angles (rx ry rz) extracted from `M'. `M' is a 4x4
+rotation matrix calculated in Z-Y-X euler angles."
+  (list (- (atan (mnth 1 2 m) (mnth 2 2 m)))
+	(atan (- (mnth 0 2 m)) (sqrt (+ (* (mnth 1 2 m) (mnth 1 2 m)) (* (mnth 2 2 m) (mnth 2 2 m)))))
+	(- (atan (mnth 0 1 m) (mnth 0 0 m)))))
+
 
 ;;; Internal Functions
 
@@ -2616,36 +2623,41 @@ holding contextual information."
 	     ;; Ignore the section indentations.
 	     (level1 1)
 	     (first-content (car (org-element-contents headline)))
-	     (rot (let ((r (add-vec
-			    org-impress-js-slide-angles
-			    (list (or rotate-x 0)
-				  (or rotate-y 0)
-				  ;; `rotate' is prioritized.
-				  (or rotate-z rotate 0)
-				  0))))
-		    ;; Reset angles if corresponding data are given.
-		    (and data-rotate (setf (vnth 2 r) data-rotate))
-		    (and data-rotate-x (setf (vnth 0 r) data-rotate-x))
-		    (and data-rotate-y (setf (vnth 1 r) data-rotate-y))
-		    (or
-		     ;; data-rotate-z is prioritized.
-		     (and data-rotate-z (setf (vnth 2 r) data-rotate-z))
-		     (and data-rotate (setf (vnth 2 r) data-rotate)))
-		    r))
-	     (v (matx-vec-prod
-		 (rot-matx (unit-matx)
-			   (degrees-to-radians (vnth 0 rot))
-			   (degrees-to-radians (- (vnth 1 rot)))
-			   (degrees-to-radians (- (vnth 2 rot) 180)))
-		 (list (- (or trans-x 0)) (or trans-y 0) (or trans-z 0) 1)))
-	     (tran (let ((tran (add-vec org-impress-js-slide-trans v)))
-		     ;; Reset coordinates if corresponding data are given.
-		     (and data-x (setf (vnth 0 tran) data-x))
-		     (and data-y (setf (vnth 1 tran) data-y))
-		     (and data-z (setf (vnth 2 tran) data-z))
-		     tran)))
-	(setq org-impress-js-slide-angles rot)
-	(setq org-impress-js-slide-trans tran)
+	     (rot (let ((angles org-impress-js-slide-angles))
+		    (matx-matx-prod
+		     (rot-matx (unit-matx)
+			       (if data-rotate-x (degrees-to-radians data-rotate-x) (vnth 0 angles))
+			       (if data-rotate-y (degrees-to-radians data-rotate-y) (vnth 1 angles))
+			       ;; `data-rotate-z' is prioritized than `data-rotate'.
+			       (if data-rotate-z (degrees-to-radians data-rotate-z)
+				 (if data-rotate (degrees-to-radians data-rotate)
+				   (vnth 2 angles))))
+		     (rot-matx (unit-matx)
+			       (degrees-to-radians (or rotate-x 0))
+			       (- (degrees-to-radians (or rotate-y 0)))
+			       ;; `rotate-z' is prioritized than `rotate'.
+			       (degrees-to-radians (or rotate-z rotate 0))))))
+	     (angles (setq org-impress-js-slide-angles (matx-euler rot)))
+	     (degrees (list
+		       (radians-to-degrees (vnth 0 angles))
+		       (- (radians-to-degrees (vnth 1 angles)))
+		       (radians-to-degrees (vnth 2 angles))))
+	     (tran (setq org-impress-js-slide-trans
+			 (let ((tran (add-vec
+				      org-impress-js-slide-trans
+				      (matx-vec-prod (rot-matx (unit-matx)
+							       (vnth 0 angles)
+							       (vnth 1 angles)
+							       (- (vnth 2 angles) pi))
+						     (list (- (or trans-x 0))
+							   (or trans-y 0)
+							   (or trans-z 0)
+							   1)))))
+			   ;; Reset coordinates if corresponding data are given.
+			   (and data-x (setf (vnth 0 tran) data-x))
+			   (and data-y (setf (vnth 1 tran) data-y))
+			   (and data-z (setf (vnth 2 tran) data-z))
+			   tran))))
 	(format "<%s id=\"%s\" class=\"%s\"%s>%s%s\n"
 		(org-impress-js--container headline info)
 		(format "outline-container-%s"
@@ -2659,9 +2671,9 @@ holding contextual information."
 			(format " data-z=\"%0.8f\"" (vnth 2 tran))
 			(and data-scale (format " data-scale=\"%s\"" data-scale))
 			(and data-rotate (format " data-rotate=\"%s\"" data-rotate))
-			(format " data-rotate-x=\"%0.8f\"" (vnth 0 rot))
-			(format " data-rotate-y=\"%0.8f\"" (vnth 1 rot))
-			(format " data-rotate-z=\"%0.8f\"" (vnth 2 rot)))
+			(format " data-rotate-x=\"%0.8f\"" (vnth 0 degrees))
+			(format " data-rotate-y=\"%0.8f\"" (vnth 1 degrees))
+			(format " data-rotate-z=\"%0.8f\"" (vnth 2 degrees)))
 		(format "\n<h%d id=\"%s\">%s%s</h%d>\n"
 			level1
 			preferred-id

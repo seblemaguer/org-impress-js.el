@@ -1,10 +1,9 @@
 #+TITLE: org-impress-js.el
 #+AUTHOR: Takumi KINJO
 #+OPTIONS: num:nil
-#+IMPRESSJS_STYLE: http://bartaz.github.io/impress.js/css/impress-demo.css
-#+IMPRESSJS_SRC: http://bartaz.github.io/impress.js/js/impress.js
-#+HTML_HEAD: <link rel="stylesheet" href="mystyle.css" type="text/css" />
-
+#+IMPRESSJS_STYLE: http://kinjo.github.io/org-impress-js.el/resources/css/impress-demo.css
+#+IMPRESSJS_SRC: http://kinjo.github.io/org-impress-js.el/resources/js/impress.js
+#+HTML_HEAD: <link rel="stylesheet" href="http://kinjo.github.io/org-impress-js.el/resources/css/mystyle.css" type="text/css" />
 * org-impress-js.el
   :PROPERTIES:
   :rotate-y: 51
@@ -14,13 +13,14 @@
 
   impress.js Back-End for Org Export Engine.
 
-  This library is a customized HTML back-end for Org generic exporter
-  to export to impress.js. This library is based on ox-html.el and
-  impress.js. I am appreciate those great works.
+  This library implements a impress.js back-end for Org
+  generic exporter based on ox-html.el.
 
-  * See http://orgmode.org/ about Org-mode.
+  http://kinjo.github.io/org-impress-js.el/ is a demo page.
 
-  * See https://github.com/bartaz/impress.js/ about impress.js.
+  See http://orgmode.org/ about Org-mode and see
+  https://github.com/bartaz/impress.js/ about impress.js.
+  I am appreciate those great works.
 
   _Tested on Org-mode version 8.2.5h and GNU Emacs 24.3.1._
 
@@ -59,8 +59,7 @@
 
   `*Org Export Dispatcher*' buffer will open, so follow the menu.
 
-  If you type `j' and `j', README.html will be
-  generated.
+  If you type `j' and then `j', README.html will be generated.
 
   Open the file in your web browser.
 

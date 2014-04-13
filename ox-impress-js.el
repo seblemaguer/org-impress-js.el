@@ -1,30 +1,35 @@
 ;;; ox-impress-js.el --- impress.js Back-End for Org Export Engine
 
-;; Copyright (C) 2014 Takumi KINJO
+;; Copyright (C) 2014 Takumi Kinjo.
 
-;; Author: Takumi Kinjo <takumi dot kinjo at gmail dot org>
+;; Author: Takumi KINJO <takumi dot kinjo at gmail dot org>
+;; URL: https://github.com/kinjo/org-html5presentation.el
+;; Version: 0.1
 ;; Keywords: outlines, hypermedia, calendar, wp
 
-;; This file is part of GNU Emacs.
+;; This file is not part of GNU Emacs.
 
-;; GNU Emacs is free software: you can redistribute it and/or modify
+;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
-;; This library is a customized HTML back-end for Org generic exporter
-;; to export to impress.js. This library is based on ox-html.el and
-;; impress.js. I am appreciate those great works.
+;; This library implements a impress.js back-end for Org
+;; generic exporter based on ox-html.el.
+
+;; See http://orgmode.org/ about Org-mode and see 
+;; https://github.com/bartaz/impress.js/ about impress.js.
+;; I am appreciate those great works.
 
 ;;; Code:
 
@@ -1705,8 +1710,10 @@ INFO is a plist used as a communication channel."
 
 (defvar org-impress-js-slide-angles '(0 0 0 0)
   "Accumulated euler angles.")
+
 (defvar org-impress-js-slide-trans '(0 0 0 0)
   "Accumulated translation.")
+
 (defun org-impress-js-export-begin () 
   "Called when export begin."
   (setq org-impress-js-slide-angles '(0 0 0 0))
@@ -3776,9 +3783,4 @@ Return output file name."
 
 
 (provide 'ox-impress-js)
-
-;; Local variables:
-;; generated-autoload-file: "org-loaddefs.el"
-;; End:
-
 ;;; ox-impress-js.el ends here

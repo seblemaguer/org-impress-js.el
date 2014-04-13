@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014 Takumi Kinjo.
 
 ;; Author: Takumi KINJO <takumi dot kinjo at gmail dot org>
-;; URL: https://github.com/kinjo/org-html5presentation.el
+;; URL: https://github.com/kinjo/org-impress-js.el
 ;; Version: 0.1
 ;; Keywords: outlines, hypermedia, calendar, wp
 

@@ -1331,7 +1331,7 @@ or for publication projects using the :html-head property."
   :package-version '(Org . "8.0")
   :type 'string)
 
-(defcustom org-impress-js-stylesheet "http://bartaz.github.io/impress.js/css/impress-demo.css"
+(defcustom org-impress-js-stylesheet "resources/css/impress-demo.css"
   "Path to a default CSS file for impress.js. 
 
 Use IMPRESSJS_STYLE option in your org-mode file is available too."
@@ -1340,7 +1340,7 @@ Use IMPRESSJS_STYLE option in your org-mode file is available too."
   :package-version '(Org . "8.0")
   :type 'string)
 
-(defcustom org-impress-js-javascript "http://bartaz.github.io/impress.js/js/impress.js"
+(defcustom org-impress-js-javascript "resources/js/impress.js"
   "Path to a JavaScript file for impress.js.
 
 Use IMPRESSJS_SRC option in your org-mode file is available too."

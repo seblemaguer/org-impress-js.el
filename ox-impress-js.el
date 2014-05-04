@@ -1042,7 +1042,7 @@ INFO is a plist used as a communication channel."
 		;; footnote-reference, link, radio-target and target
 		;; in table of contents.
 		(org-export-create-backend
-		 :parent 'html
+		 :parent 'impress-js
 		 :transcoders '((footnote-reference . ignore)
 				(link . (lambda (object c i) c))
 				(radio-target . (lambda (object c i) c))
@@ -1365,7 +1365,7 @@ will be displayed when `org-export-show-temporary-export-buffer'
 is non-nil."
   (interactive)
   (org-impress-js-export-begin)
-  (org-export-to-buffer 'html "*Org HTML Export*"
+  (org-export-to-buffer 'impress-js "*Org HTML Export*"
     async subtreep visible-only body-only ext-plist
     (lambda () (set-auto-mode t))))
 
@@ -1376,7 +1376,7 @@ This can be used in any buffer.  For example, you can write an
 itemized list in org-mode syntax in an HTML buffer and use this
 command to convert it."
   (interactive)
-  (org-export-replace-region-by 'html))
+  (org-export-replace-region-by 'impress-js))
 
 ;;;###autoload
 (defun org-impress-js-export-to-html
@@ -1424,7 +1424,7 @@ is the property list for the given project.  PUB-DIR is the
 publishing directory.
 
 Return output file name."
-  (org-publish-org-to 'html filename
+  (org-publish-org-to 'impress-js filename
 		      (concat "." (or (plist-get plist :html-extension)
 				      org-html-extension "html"))
 		      plist pub-dir))

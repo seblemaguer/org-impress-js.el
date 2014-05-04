@@ -151,6 +151,12 @@
 
 ;;; Internal Variables
 
+(defvar org-impress-js-slide-angles '(0 0 0 0)
+  "Accumulated euler angles.")
+
+(defvar org-impress-js-slide-trans '(0 0 0 0)
+  "Accumulated translation.")
+
 
 ;;; User Configuration Variables
 
@@ -605,12 +611,6 @@ rotation matrix calculated in Z-Y-X euler angles."
   (concat "<" tag " " attr " />"))
 
 (defun org-impress-js-doctype (info) "Return correct html doctype tag." "<!DOCTYPE html>")
-
-(defvar org-impress-js-slide-angles '(0 0 0 0)
-  "Accumulated euler angles.")
-
-(defvar org-impress-js-slide-trans '(0 0 0 0)
-  "Accumulated translation.")
 
 (defun org-impress-js-export-begin () 
   "Called when export begin."

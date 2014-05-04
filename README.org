@@ -11,18 +11,17 @@
   :trans-z:  500
   :END:
 
-  impress.js Back-End for Org Export Engine.
-
   This library implements a impress.js back-end for Org
   generic exporter based on ox-html.el.
 
   http://kinjo.github.io/org-impress-js.el/ is a demo page.
 
-  See http://orgmode.org/ about Org-mode and see
-  https://github.com/bartaz/impress.js/ about impress.js.
-  I am appreciate those great works.
+  * See http://orgmode.org/ about Org-mode.
+  * See http://bartaz.github.io/impress.js/ about impress.js.
 
-  _Tested on Org-mode version 8.2.5h and GNU Emacs 24.3.1._
+  I appreciate for their great works.
+
+  This requires *Org-mode version 8.2.6* and *GNU Emacs 24 or higher*.
 
 * INSTALLATION
   :PROPERTIES:
@@ -31,21 +30,23 @@
   :trans-z:  500
   :END:
 
-  First of all, check Org-mode version.
+  1) First of all, check Org-mode version.
+     This library has been tested on Org-mode 8.2.6.
+     #+BEGIN_SRC text
+       M-x org-version
+     #+END_SRC
 
-  Note: This package was tested on Org-mode 8.2.5h.
+  2) Get org-impress-js.el. For example,
+     #+BEGIN_SRC sh
+       git clone https://github.com/kinjo/org-impress-js.el.git \
+           ~/org-impress-js.el
+     #+END_SRC
 
-  : M-x org-version
-
-  Get org-impress-js.el.
-
-  : git clone https://github.com/kinjo/org-impress-js.el.git ~/org-impress-js.el
-
-  Add following to ~/.emacs.d/init.el and reboot the emacs.
-
-  : (add-to-list 'load-path "~/org-impress-js.el")
-  : (require 'ox-impress-js)
-
+  3) Add following to ~/.emacs.d/init.el and reboot emacs.
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list 'load-path "~/org-impress-js.el")
+       (require 'ox-impress-js)
+     #+END_SRC
 * USAGE
   :PROPERTIES:
   :rotate-y: 51
@@ -63,8 +64,10 @@
 
   Open the file in your web browser.
 
-  : cd ~/org-impress-js.el/
-  : open README.html
+  #+BEGIN_SRC sh
+    cd ~/org-impress-js.el/
+    open README.html
+  #+END_SRC
 
 * PROPERTIES
   :PROPERTIES:

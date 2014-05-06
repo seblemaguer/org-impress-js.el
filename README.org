@@ -1,79 +1,77 @@
 #+TITLE: org-impress-js.el
 #+AUTHOR: Takumi KINJO
-#+OPTIONS: num:nil
+#+OPTIONS: num:nil ^:nil
 #+IMPRESSJS_STYLE: http://kinjo.github.io/org-impress-js.el/resources/css/impress-demo.css
 #+IMPRESSJS_SRC: http://kinjo.github.io/org-impress-js.el/resources/js/impress.js
 #+HTML_HEAD: <link rel="stylesheet" href="http://kinjo.github.io/org-impress-js.el/resources/css/mystyle.css" type="text/css" />
+#+IMPRESSJS_TOC: trans-x:1000 trans-z:500 rotate-y:40 class:slide
 * org-impress-js.el
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
-
-  impress.js Back-End for Org Export Engine.
 
   This library implements a impress.js back-end for Org
   generic exporter based on ox-html.el.
 
   http://kinjo.github.io/org-impress-js.el/ is a demo page.
 
-  See http://orgmode.org/ about Org-mode and see
-  https://github.com/bartaz/impress.js/ about impress.js.
-  I am appreciate those great works.
+  * See http://orgmode.org/ about Org-mode.
+  * See http://bartaz.github.io/impress.js/ about impress.js.
 
-  _Tested on Org-mode version 8.2.5h and GNU Emacs 24.3.1._
+  I appreciate for their great works.
+
+  This requires *Org-mode version 8.2.6* and *GNU Emacs 24 or higher*.
 
 * INSTALLATION
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
 
-  First of all, check Org-mode version.
+  1) First of all, check Org-mode version.
+     This library has been tested on Org-mode 8.2.6.
+     #+BEGIN_SRC text
+       M-x org-version
+     #+END_SRC
 
-  Note: This package was tested on Org-mode 8.2.5h.
+  2) Get org-impress-js.el. For example,
+     #+BEGIN_SRC sh
+       git clone https://github.com/kinjo/org-impress-js.el.git \
+           ~/org-impress-js.el
+     #+END_SRC
 
-  : M-x org-version
-
-  Get org-impress-js.el.
-
-  : git clone https://github.com/kinjo/org-impress-js.el.git ~/org-impress-js.el
-
-  Add following to ~/.emacs.d/init.el and reboot the emacs.
-
-  : (add-to-list 'load-path "~/org-impress-js.el")
-  : (require 'ox-impress-js)
-
+  3) Add following to ~/.emacs.d/init.el and reboot emacs.
+     #+BEGIN_SRC emacs-lisp
+       (add-to-list 'load-path "~/org-impress-js.el")
+       (require 'ox-impress-js)
+     #+END_SRC
 * USAGE
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
 
-  Open README.org in your emacs.
+  1. Open README.org in your emacs.
 
-  To convert to an impress.js HTML file, type C-c C-e.
+  2. To convert to an impress.js HTML file, type C-c C-e.
 
-  `*Org Export Dispatcher*' buffer will open, so follow the menu.
+  3. `*Org Export Dispatcher*' buffer will open, so follow the menu.
+     If you type `j' and then `j', README.html will be generated.
 
-  If you type `j' and then `j', README.html will be generated.
-
-  Open the file in your web browser.
-
-  : cd ~/org-impress-js.el/
-  : open README.html
+  4. Open the file with your web browser.
 
 * PROPERTIES
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
 
-  Following PROPERTIES are available.
+  Following special properties are available.
 
   * data-x, data-y, data-z
 
@@ -91,9 +89,31 @@
 
     Rotate the slide to each axis in degrees.
 
+* KEYWORDS
+  :PROPERTIES:
+  :rotate-y: 40
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
+
+  Following special keywords are available.
+
+  * IMPRESSJS_SRC
+
+    Specify a path to the JavaScript file of impress.js.
+
+  * IMPRESSJS_STYLE
+
+    Specify a path to the CSS file of impress.js.
+
+  * IMPRESSJS_TOC
+
+    Specify the properties for TOC slide. The properties previously described
+    are available.
+
 * KNOWN ISSUES
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
@@ -106,7 +126,7 @@
 
 * LICENSE
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:

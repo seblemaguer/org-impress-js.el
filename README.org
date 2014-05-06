@@ -1,12 +1,13 @@
 #+TITLE: org-impress-js.el
 #+AUTHOR: Takumi KINJO
-#+OPTIONS: num:nil
+#+OPTIONS: num:nil ^:nil
 #+IMPRESSJS_STYLE: http://kinjo.github.io/org-impress-js.el/resources/css/impress-demo.css
 #+IMPRESSJS_SRC: http://kinjo.github.io/org-impress-js.el/resources/js/impress.js
 #+HTML_HEAD: <link rel="stylesheet" href="http://kinjo.github.io/org-impress-js.el/resources/css/mystyle.css" type="text/css" />
+#+IMPRESSJS_TOC: trans-x:1000 trans-z:500 rotate-y:40 class:slide
 * org-impress-js.el
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
@@ -25,7 +26,7 @@
 
 * INSTALLATION
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
@@ -49,34 +50,28 @@
      #+END_SRC
 * USAGE
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
 
-  Open README.org in your emacs.
+  1. Open README.org in your emacs.
 
-  To convert to an impress.js HTML file, type C-c C-e.
+  2. To convert to an impress.js HTML file, type C-c C-e.
 
-  `*Org Export Dispatcher*' buffer will open, so follow the menu.
+  3. `*Org Export Dispatcher*' buffer will open, so follow the menu.
+     If you type `j' and then `j', README.html will be generated.
 
-  If you type `j' and then `j', README.html will be generated.
-
-  Open the file in your web browser.
-
-  #+BEGIN_SRC sh
-    cd ~/org-impress-js.el/
-    open README.html
-  #+END_SRC
+  4. Open the file with your web browser.
 
 * PROPERTIES
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
 
-  Following PROPERTIES are available.
+  Following special properties are available.
 
   * data-x, data-y, data-z
 
@@ -94,9 +89,31 @@
 
     Rotate the slide to each axis in degrees.
 
+* KEYWORDS
+  :PROPERTIES:
+  :rotate-y: 40
+  :trans-x:  1000
+  :trans-z:  500
+  :END:
+
+  Following special keywords are available.
+
+  * IMPRESSJS_SRC
+
+    Specify a path to the JavaScript file of impress.js.
+
+  * IMPRESSJS_STYLE
+
+    Specify a path to the CSS file of impress.js.
+
+  * IMPRESSJS_TOC
+
+    Specify the properties for TOC slide. The properties previously described
+    are available.
+
 * KNOWN ISSUES
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
@@ -109,7 +126,7 @@
 
 * LICENSE
   :PROPERTIES:
-  :rotate-y: 51
+  :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:

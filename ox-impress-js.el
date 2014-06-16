@@ -5,6 +5,7 @@
 ;; Author: Takumi Kinjo <takumi dot kinjo at gmail dot org>
 ;; URL: https://github.com/kinjo/org-impress-js.el
 ;; Version: 0.1
+;; Package-Requires: ((org "8"))
 ;; Keywords: outlines, hypermedia, calendar, wp
 
 ;; This file is not part of GNU Emacs.

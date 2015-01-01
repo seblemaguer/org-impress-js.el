@@ -1,6 +1,6 @@
 ;;; ox-impress-js.el --- impress.js Back-End for Org Export Engine
 
-;; Copyright (C) 2014 Takumi Kinjo.
+;; Copyright (C) 2014, 2015 Takumi Kinjo.
 
 ;; Author: Takumi Kinjo <takumi dot kinjo at gmail dot org>
 ;; URL: https://github.com/kinjo/org-impress-js.el
@@ -40,74 +40,15 @@
 ;;; Dependencies
 
 (require 'ox-html)
-(require 'ox-publish)
-(require 'format-spec)
-(eval-when-compile (require 'cl) (require 'table nil 'noerror))
-
-
-;;; Function Declarations
-
-(declare-function org-id-find-id-file "org-id" (id))
-(declare-function htmlize-region "ext:htmlize" (beg end))
-(declare-function org-pop-to-buffer-same-window
-		  "org-compat" (&optional buffer-or-name norecord label))
-(declare-function mm-url-decode-entities "mm-url" ())
 
 ;;; Define Back-End
 
-(org-export-define-backend 'impress-js
-  '((bold . org-html-bold)
-    (center-block . org-html-center-block)
-    (clock . org-html-clock)
-    (code . org-html-code)
-    (drawer . org-html-drawer)
-    (dynamic-block . org-html-dynamic-block)
-    (entity . org-html-entity)
-    (example-block . org-html-example-block)
-    (export-block . org-html-export-block)
-    (export-snippet . org-html-export-snippet)
-    (fixed-width . org-html-fixed-width)
-    (footnote-definition . org-impress-js-footnote-definition)
-    (footnote-reference . org-html-footnote-reference)
-    (headline . org-impress-js-headline)
-    (horizontal-rule . org-html-horizontal-rule)
-    (inline-src-block . org-html-inline-src-block)
-    (inlinetask . org-html-inlinetask)
+(org-export-define-derived-backend 'impress-js 'html
+  :translate-alist 
+  '((headline . org-impress-js-headline)
     (inner-template . org-impress-js-inner-template)
-    (italic . org-html-italic)
-    (item . org-html-item)
-    (keyword . org-html-keyword)
-    (latex-environment . org-html-latex-environment)
-    (latex-fragment . org-html-latex-fragment)
-    (line-break . org-html-line-break)
-    (link . org-html-link)
-    (paragraph . org-html-paragraph)
-    (plain-list . org-html-plain-list)
-    (plain-text . org-html-plain-text)
-    (planning . org-html-planning)
-    (property-drawer . org-html-property-drawer)
-    (quote-block . org-html-quote-block)
-    (quote-section . org-html-quote-section)
-    (radio-target . org-html-radio-target)
     (section . org-impress-js-section)
-    (special-block . org-html-special-block)
-    (src-block . org-html-src-block)
-    (statistics-cookie . org-html-statistics-cookie)
-    (strike-through . org-html-strike-through)
-    (subscript . org-html-subscript)
-    (superscript . org-html-superscript)
-    (table . org-html-table)
-    (table-cell . org-html-table-cell)
-    (table-row . org-html-table-row)
-    (target . org-html-target)
-    (template . org-impress-js-template)
-    (timestamp . org-html-timestamp)
-    (underline . org-html-underline)
-    (verbatim . org-html-verbatim)
-    (verse-block . org-html-verse-block))
-  :export-block "impress.js"
-  :filters-alist '((:filter-options . org-html-infojs-install-script)
-		   (:filter-final-output . org-html-final-function))
+    (template . org-impress-js-template))  
   :menu-entry
   '(?j "Export to impress.js HTML"
        ((?J "As impress.js HTML buffer" org-impress-js-export-as-html)
@@ -117,35 +58,13 @@
 	      (if a (org-impress-js-export-to-html t s v b)
 		(org-open-file (org-impress-js-export-to-html nil s v b)))))))
   :options-alist
-  '((:html-extension nil nil org-html-extension)
-    (:html-link-org-as-html nil nil org-html-link-org-files-as-html)
-    (:html-doctype "HTML_DOCTYPE" nil org-impress-js-doctype)
-    (:html-container "HTML_CONTAINER" nil org-html-container-element)
-    (:html-html5-fancy nil "html5-fancy" org-html-html5-fancy)
-    (:html-link-use-abs-url nil "html-link-use-abs-url" org-html-link-use-abs-url)
+  '((:html-doctype "HTML_DOCTYPE" nil org-impress-js-doctype)
     (:html-description nil nil org-impress-js-description)
     (:html-fallback-message nil nil org-impress-js-fallback-message)
     (:html-hint-message nil nil org-impress-js-hint-message)
     (:html-hint-js nil nil org-impress-js-hint-js)
-    (:html-link-home "HTML_LINK_HOME" nil org-html-link-home)
-    (:html-link-up "HTML_LINK_UP" nil org-html-link-up)
-    (:html-mathjax "HTML_MATHJAX" nil "" space)
-    (:html-postamble nil "html-postamble" org-html-postamble)
-    (:html-preamble nil "html-preamble" org-html-preamble)
-    (:html-head "HTML_HEAD" nil org-html-head newline)
-    (:html-head-extra "HTML_HEAD_EXTRA" nil org-html-head-extra newline)
     (:html-impress-js-stylesheet "IMPRESSJS_STYLE" nil org-impress-js-stylesheet newline)
     (:html-impress-js-javascript "IMPRESSJS_SRC" nil org-impress-js-javascript newline)
-    (:html-head-include-default-style nil "html-style" org-html-head-include-default-style)
-    (:html-head-include-scripts nil "html-scripts" org-html-head-include-scripts)
-    (:html-table-attributes nil nil org-html-table-default-attributes)
-    (:html-table-row-tags nil nil org-html-table-row-tags)
-    (:html-xml-declaration nil nil org-html-xml-declaration)
-    (:html-inline-images nil nil org-html-inline-images)
-    (:infojs-opt "INFOJS_OPT" nil nil)
-    (:creator "CREATOR" nil org-html-creator-string)
-    (:with-latex nil "tex" org-html-with-latex)
-    (:latex-header "LATEX_HEADER" nil nil newline)
     (:impress-js-toc "IMPRESSJS_TOC" nil nil newline)))
 
 
@@ -281,10 +200,6 @@ Use IMPRESSJS_SRC option in your Org file is available too."
 (defmacro vnth (i v)
   "Return i-th value on 1x4 row vecotr."
   (list 'nth i v))
-
-(defun make-vec (v)
-  "Make new vector from `v'. `v' is 4-vector."
-  (copy-tree v))
 
 (defun make-matx (m)
   "Make new matrix from `m'. `m' is 4x4 matrix."

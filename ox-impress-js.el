@@ -800,12 +800,18 @@ holding contextual information."
       (let* ((section-number (mapconcat 'number-to-string
 					(org-export-get-headline-number
 					 headline info) "-"))
-	     (ids (remove 'nil
-			  (list (org-element-property :CUSTOM_ID headline)
-				(concat "sec-" section-number)
-				(org-element-property :ID headline))))
+	     (ids (delq nil
+			(list (org-element-property :CUSTOM_ID headline)
+			      (org-export-get-headline-id headline info)
+			      (org-element-property :ID headline))))
 	     (preferred-id (car ids))
-	     (extra-ids (cdr ids))
+	     (extra-ids (mapconcat
+			 (lambda (id)
+			   (org-html--anchor
+			    (org-export-solidify-link-text
+			     (if (org-uuidgen-p id) (concat "ID-" id) id))
+			    nil nil info))
+			 (cdr ids) ""))
 	     (extra-class (org-element-property :HTML_CONTAINER_CLASS headline))
 	     ;; Ignore the section indentations.
 	     (level1 1)

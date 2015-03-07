@@ -627,19 +627,15 @@ INFO is a plist used as a communication channel."
 	    ;; Label.
 	    (org-export-solidify-link-text
 	     (or (org-element-property :CUSTOM_ID headline)
-		 (concat "outline-container-sec-"
-			 (mapconcat #'number-to-string headline-number "-"))))
+		 (concat "outline-container-"
+			 (org-export-get-headline-id headline info))))
 	    ;; Body.
 	    (concat
 	     (and (not (org-export-low-level-p headline info))
 		  (org-export-numbered-headline-p headline info)
 		  (concat (mapconcat #'number-to-string headline-number ".")
 			  ". "))
-	     (apply (if (not (eq org-html-format-headline-function 'ignore))
-			(lambda (todo todo-type priority text tags &rest ignore)
-			  (funcall org-html-format-headline-function
-				   todo todo-type priority text tags))
-		      #'org-html-format-headline)
+	     (apply (plist-get info :html-format-headline-function)
 		    todo todo-type priority text tags :section-number nil)))))
 
 (defun org-impress-js--toc-slide-plist (info)
@@ -773,7 +769,11 @@ holding contextual information."
 					 (org-export-get-headline-number
 					  headline info) ".")))
 	 ;; Create the headline text.
-	 (full-text (org-html-format-headline--wrap headline info))
+	 (full-text
+	  (if (plist-get info :html-format-headline-function)
+	      (funcall (plist-get info :html-format-headline-function)
+		       todo todo-type priority text tags info)
+	    (full-text (org-html-format-headline--wrap headline info))))
 	 ;; Attributes used to position presentation steps
 	 (class (org-export-get-node-property :CLASS headline))
 	 (props (org-impress-js-set-default-data-plist
@@ -820,7 +820,7 @@ holding contextual information."
 		(org-html--container headline info)
 		(format "outline-container-%s"
 			(or (org-element-property :CUSTOM_ID headline)
-			    (concat "sec-" section-number)))
+			    (org-export-get-headline-id headline info)))
 		(concat (format "outline-%d" level1) (and extra-class " ")
 			extra-class
 			(concat " " (if class class org-impress-js-default-slide-class)))

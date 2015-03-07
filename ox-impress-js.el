@@ -627,19 +627,15 @@ INFO is a plist used as a communication channel."
 	    ;; Label.
 	    (org-export-solidify-link-text
 	     (or (org-element-property :CUSTOM_ID headline)
-		 (concat "outline-container-sec-"
-			 (mapconcat #'number-to-string headline-number "-"))))
+		 (concat "outline-container-"
+			 (org-export-get-headline-id headline info))))
 	    ;; Body.
 	    (concat
 	     (and (not (org-export-low-level-p headline info))
 		  (org-export-numbered-headline-p headline info)
 		  (concat (mapconcat #'number-to-string headline-number ".")
 			  ". "))
-	     (apply (if (not (eq org-html-format-headline-function 'ignore))
-			(lambda (todo todo-type priority text tags &rest ignore)
-			  (funcall org-html-format-headline-function
-				   todo todo-type priority text tags))
-		      #'org-html-format-headline)
+	     (apply (plist-get info :html-format-headline-function)
 		    todo todo-type priority text tags :section-number nil)))))
 
 (defun org-impress-js--toc-slide-plist (info)
@@ -773,7 +769,11 @@ holding contextual information."
 					 (org-export-get-headline-number
 					  headline info) ".")))
 	 ;; Create the headline text.
-	 (full-text (org-html-format-headline--wrap headline info))
+	 (full-text
+	  (if (plist-get info :html-format-headline-function)
+	      (funcall (plist-get info :html-format-headline-function)
+		       todo todo-type priority text tags info)
+	    (full-text (org-html-format-headline--wrap headline info))))
 	 ;; Attributes used to position presentation steps
 	 (class (org-export-get-node-property :CLASS headline))
 	 (props (org-impress-js-set-default-data-plist
@@ -800,12 +800,18 @@ holding contextual information."
       (let* ((section-number (mapconcat 'number-to-string
 					(org-export-get-headline-number
 					 headline info) "-"))
-	     (ids (remove 'nil
-			  (list (org-element-property :CUSTOM_ID headline)
-				(concat "sec-" section-number)
-				(org-element-property :ID headline))))
+	     (ids (delq nil
+			(list (org-element-property :CUSTOM_ID headline)
+			      (org-export-get-headline-id headline info)
+			      (org-element-property :ID headline))))
 	     (preferred-id (car ids))
-	     (extra-ids (cdr ids))
+	     (extra-ids (mapconcat
+			 (lambda (id)
+			   (org-html--anchor
+			    (org-export-solidify-link-text
+			     (if (org-uuidgen-p id) (concat "ID-" id) id))
+			    nil nil info))
+			 (cdr ids) ""))
 	     (extra-class (org-element-property :HTML_CONTAINER_CLASS headline))
 	     ;; Ignore the section indentations.
 	     (level1 1)
@@ -820,7 +826,7 @@ holding contextual information."
 		(org-html--container headline info)
 		(format "outline-container-%s"
 			(or (org-element-property :CUSTOM_ID headline)
-			    (concat "sec-" section-number)))
+			    (org-export-get-headline-id headline info)))
 		(concat (format "outline-%d" level1) (and extra-class " ")
 			extra-class
 			(concat " " (if class class org-impress-js-default-slide-class)))
@@ -853,7 +859,7 @@ holding contextual information."
 ;;;; Section
 
 (defun org-impress-js-section (section contents info)
-  "Transcode a SECTION element from Org to impress.js HTML.
+  "Transcode a SECTION element from Org to HTML for impress.js.
 CONTENTS holds the contents of the section.  INFO is a plist
 holding contextual information."
   (let ((parent (org-export-get-parent-headline section)))
@@ -861,16 +867,19 @@ holding contextual information."
     (if (not parent) contents
       ;; Get div's class and id references.
       (let* ((class-num (+ (org-export-get-relative-level parent info)
-			   (1- org-html-toplevel-hlevel)))
+			   (1- (plist-get info :html-toplevel-hlevel))))
 	     (section-number
-	      (mapconcat
-	       'number-to-string
-	       (org-export-get-headline-number parent info) "-")))
+	      (and (org-export-numbered-headline-p parent info)
+		   (mapconcat
+		    #'number-to-string
+		    (org-export-get-headline-number parent info) "-"))))
         ;; Build return value.
 	(format "<div class=\"outline-text-%d\" id=\"text-%s\">\n%s</div>\n</div>"
 		class-num
-		(or (org-element-property :CUSTOM_ID parent) section-number)
-		contents)))))
+		(or (org-element-property :CUSTOM_ID parent)
+		    section-number
+		    (org-export-get-headline-id parent info))
+		(or contents ""))))))
 
 
 ;;; End-user functions

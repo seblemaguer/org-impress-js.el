@@ -853,7 +853,7 @@ holding contextual information."
 ;;;; Section
 
 (defun org-impress-js-section (section contents info)
-  "Transcode a SECTION element from Org to impress.js HTML.
+  "Transcode a SECTION element from Org to HTML for impress.js.
 CONTENTS holds the contents of the section.  INFO is a plist
 holding contextual information."
   (let ((parent (org-export-get-parent-headline section)))
@@ -861,16 +861,19 @@ holding contextual information."
     (if (not parent) contents
       ;; Get div's class and id references.
       (let* ((class-num (+ (org-export-get-relative-level parent info)
-			   (1- org-html-toplevel-hlevel)))
+			   (1- (plist-get info :html-toplevel-hlevel))))
 	     (section-number
-	      (mapconcat
-	       'number-to-string
-	       (org-export-get-headline-number parent info) "-")))
+	      (and (org-export-numbered-headline-p parent info)
+		   (mapconcat
+		    #'number-to-string
+		    (org-export-get-headline-number parent info) "-"))))
         ;; Build return value.
 	(format "<div class=\"outline-text-%d\" id=\"text-%s\">\n%s</div>\n</div>"
 		class-num
-		(or (org-element-property :CUSTOM_ID parent) section-number)
-		contents)))))
+		(or (org-element-property :CUSTOM_ID parent)
+		    section-number
+		    (org-export-get-headline-id parent info))
+		(or contents ""))))))
 
 
 ;;; End-user functions

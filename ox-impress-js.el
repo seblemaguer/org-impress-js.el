@@ -65,7 +65,8 @@
     (:html-hint-js nil nil org-impress-js-hint-js)
     (:html-impress-js-stylesheet "IMPRESSJS_STYLE" nil org-impress-js-stylesheet newline)
     (:html-impress-js-javascript "IMPRESSJS_SRC" nil org-impress-js-javascript newline)
-    (:impress-js-toc "IMPRESSJS_TOC" nil nil newline)))
+    (:impress-js-toc "IMPRESSJS_TOC" nil nil newline)
+    (:impress-js-title "IMPRESSJS_TITLE" nil nil newline)))
 
 
 ;;; Internal Variables
@@ -82,7 +83,10 @@
   "Vector for the slide position.")
 
 (defvar org-impress-js-toc-data-plist nil
-  "Data properties for the TOC slide.")
+  "Data properties of TOC slide.")
+
+(defvar org-impress-js-title-data-plist nil
+  "Data properties of title slide.")
 
 
 ;;; User Configuration Variables
@@ -311,6 +315,7 @@ rotation matrix calculated as Z-Y-X euler angles."
 This is called from org-export-before-processing-hook."
   (when (eq 'impress-js property)
     (setq org-impress-js-toc-data-plist nil
+	  org-impress-js-title-data-plist nil
 	  org-impress-js-slide-angles '(0 0 0 0)
 	  org-impress-js-slide-position '(0 0 0 0))))
 
@@ -454,7 +459,10 @@ INFO is a plist used as a communication channel."
 Postamble will be embeded if available. See `org-html-postamble'."
   (org-element-normalize-string
    (concat
-    "<div id=\"title\" class=\"step\" data-x=\"0\" data-y=\"0\" data-scale=\"1\">\n"
+    (let* ((props (org-impress-js--global-slide-plist info :impress-js-title))
+	   (class (plist-get props 'class))
+	   (attrs org-impress-js-title-data-plist))
+      (format "<div id=\"title\" class=\"%s\" %s>\n" class attrs))
     ;; Document title.
     (let ((title (plist-get info :title)))
       (format "<h1>%s</h1>\n" (org-export-data (or title "") info)))
@@ -586,7 +594,7 @@ contents as a string, or nil if it is empty."
 			     (plist-get info :html-html5-fancy))
 			"nav"
 		      "div"))
-	 (props (org-impress-js--toc-slide-plist info))
+	 (props (org-impress-js--global-slide-plist info :impress-js-toc))
 	 (class (plist-get props 'class))
 	 (attrs org-impress-js-toc-data-plist))
     (when toc-entries
@@ -638,11 +646,13 @@ INFO is a plist used as a communication channel."
 	     (apply (plist-get info :html-format-headline-function)
 		    todo todo-type priority text tags :section-number nil)))))
 
-(defun org-impress-js--toc-slide-plist (info)
-  "Set default properties for the TOC slide.
-INFO is a plist used as a communication channel."
-  (let ((plist (org-impress-js-parse-keyword
-		(plist-get info :impress-js-toc))))
+(defun org-impress-js--global-slide-plist (info option)
+  "Read properties for position, translation and rotation from an export
+option. These properties are used for title and TOC slide building.
+
+INFO is a plist holding contextual information. OPTION is a string
+represents an export option."
+  (let ((plist (org-impress-js-parse-keyword (plist-get info option))))
     (setq plist
 	  (plist-put plist 'class
 		     (concat "step "
@@ -734,11 +744,26 @@ CONTENTS holds the contents of the headline.  INFO is a plist
 holding contextual information."
   ;; Empty contents?
   (setq contents (or contents ""))
-  (when (and (plist-get info :with-toc)
-	     (null org-impress-js-toc-data-plist))
+  (when (null org-impress-js-title-data-plist)
+    (setq org-impress-js-title-data-plist
+	  (let* ((props (org-impress-js--global-slide-plist info :impress-js-title))
+		 (angles (org-impress-js--angles props))
+		 (trans (org-impress-js--trans props angles))
+		 (degrees (list
+			   (radians-to-degrees (vnth 0 angles))
+			   (- (radians-to-degrees (vnth 1 angles)))
+			   (radians-to-degrees (vnth 2 angles))))
+		 (attrs
+		  (org-impress-js--build-data-attrs
+		   `(data-x ,(vnth 0 trans) data-y ,(vnth 1 trans) data-z ,(vnth 2 trans)
+			    data-scale ,(plist-get props 'data-scale)
+			    data-rotate-x ,(vnth 0 degrees)
+			    data-rotate-y ,(vnth 1 degrees)
+			    data-rotate-z ,(vnth 2 degrees)))))
+	    attrs)))
+  (when (and (plist-get info :with-toc) (null org-impress-js-toc-data-plist))
     (setq org-impress-js-toc-data-plist
-	  (let* ((props (org-impress-js--toc-slide-plist info))
-		 (class (plist-get props 'class))
+	  (let* ((props (org-impress-js--global-slide-plist info :impress-js-toc))
 		 (angles (org-impress-js--angles props))
 		 (trans (org-impress-js--trans props angles))
 		 (degrees (list

@@ -4,6 +4,7 @@
 #+IMPRESSJS_STYLE: http://kinjo.github.io/org-impress-js.el/resources/css/impress-demo.css
 #+IMPRESSJS_SRC: http://kinjo.github.io/org-impress-js.el/resources/js/impress.js
 #+HTML_HEAD: <link rel="stylesheet" href="http://kinjo.github.io/org-impress-js.el/resources/css/mystyle.css" type="text/css" />
+#+IMPRESSJS_TITLE: trans-x:1000 trans-z:500 data-rotate-x:30 data-rotate-y:45 class:step
 #+IMPRESSJS_TOC: trans-x:1000 trans-z:500 rotate-y:40 class:slide
 * WHAT'S THIS?
   :PROPERTIES:
@@ -61,12 +62,12 @@
 
   1. Open README.org in your emacs.
 
-  2. To convert to an impress.js HTML file, type C-c C-e.
+  2. To export to impress.js HTML file, type =C-c= =C-e=.
 
-  3. `*Org Export Dispatcher*' buffer will open, so follow the menu.
-     If you type `j' and then `j', README.html will be generated.
+  3. =*Org Export Dispatcher*= buffer will open.
+     Hit =J= key 2 times, then README.html will be exported.
 
-  4. Open the file with your web browser.
+  4. Open exported file in your web browser.
 
 * PROPERTIES
   :PROPERTIES:
@@ -75,45 +76,48 @@
   :trans-z:  500
   :END:
 
-  Following special properties are available.
+  Following special properties are available in each slide.
 
-  * data-x, data-y, data-z
+  * =data-x=, =data-y=, =data-z=
 
     X, Y and Z position of the slide.
 
-  * data-rotate-x, data-rotate-y, data-rotate-z
+  * =data-rotate-x=, =data-rotate-y=, =data-rotate-z=
 
     Define the rotation of the slide around given axis in degrees.
 
-  * trans-x, trans-y, trans-z
+  * =trans-x=, =trans-y=, =trans-z=
 
     Translate the slide to each axis.
 
-  * rotate-x, rotate-y, rotate-z
+  * =rotate-x=, =rotate-y=, =rotate-z=
 
     Rotate the slide to each axis in degrees.
 
-* KEYWORDS
+* EXPORT OPTIONS
   :PROPERTIES:
   :rotate-y: 40
   :trans-x:  1000
   :trans-z:  500
   :END:
 
-  Following special keywords are available.
+  Following special export options are available.
 
-  * IMPRESSJS_SRC
+  * =#+IMPRESSJS_SRC=
 
-    Specify a path to the JavaScript file of impress.js.
+    A URL or filepath to impress.js.
 
-  * IMPRESSJS_STYLE
+  * =#+IMPRESSJS_STYLE=
 
-    Specify a path to the CSS file of impress.js.
+    A URL or filepath to impress.js's CSS file.
 
-  * IMPRESSJS_TOC
+  * =#+IMPRESSJS_TITLE=
 
-    Specify the properties for TOC slide. The properties previously described
-    are available.
+    Properties for title slide. The properties described above are available.
+
+  * =#+IMPRESSJS_TOC=
+
+    Properties for TOC slide. The properties described above are available.
 
 * KNOWN ISSUES
   :PROPERTIES:
@@ -122,8 +126,8 @@
   :trans-z:  500
   :END:
 
-  The following properties does not work in the nested headlines
-  because ox.el processes Org-mode file by the depth-first.
+  Following properties does not work in nested headlines.
+  Because ox.el processes Org file by the depth-first.
 
   * trans-x, trans-y, trans-z
   * rotate-x, rotate-y, rotate-z, rotate

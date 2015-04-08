@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title>org-impress-js.el</title>
-<!-- 2015-04-06 Mon 15:52 -->
+<!-- 2015-04-08 Wed 13:21 -->
 <meta  charset="utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="viewport" content="width=1024" />
@@ -149,15 +149,15 @@ for the JavaScript code in this tag.
 <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
 </div>
 <div id="impress">
-<div id="title" class="step" data-x="0" data-y="0" data-scale="1">
+<div id="title" class="step step"  data-x="353.55339059" data-y="-530.33008589" data-z="918.55865354" data-scale="1.00000000" data-rotate-x="30.00000000" data-rotate-y="-45.00000000" data-rotate-z="-0.00000000">
 <h1>org-impress-js.el</h1>
 <div id="postamble" class="status">
 <p class="author">Author: Takumi KINJO</p>
-<p class="date">Created: 2015-04-06 Mon 15:52</p>
+<p class="date">Created: 2015-04-08 Wed 13:21</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </div>
-<div id="table-of-contents" class="step slide"  data-x="1087.43824796" data-y="0.00000000" data-z="-259.76538813" data-scale="1.00000000" data-rotate-x="-0.00000000" data-rotate-y="40.00000000" data-rotate-z="-0.00000000">
+<div id="table-of-contents" class="step slide"  data-x="1306.17021731" data-y="-822.95663179" data-z="1425.40269868" data-scale="1.00000000" data-rotate-x="30.00000000" data-rotate-y="-5.00000000" data-rotate-z="-0.00000000">
 <h1>Table of Contents</h1>
 <div id="text-table-of-contents">
 <ul>
@@ -165,13 +165,13 @@ for the JavaScript code in this tag.
 <li><a href="#/outline-container-unnumbered-2">INSTALLATION</a></li>
 <li><a href="#/outline-container-unnumbered-3">USAGE</a></li>
 <li><a href="#/outline-container-unnumbered-4">PROPERTIES</a></li>
-<li><a href="#/outline-container-unnumbered-5">KEYWORDS</a></li>
+<li><a href="#/outline-container-unnumbered-5">EXPORT OPTIONS</a></li>
 <li><a href="#/outline-container-unnumbered-6">KNOWN ISSUES</a></li>
 <li><a href="#/outline-container-unnumbered-7">LICENSE</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-unnumbered-1" class="outline-1 step slide"  data-x="1753.49030214" data-y="0.00000000" data-z="-1157.74905231" data-rotate-x="-0.00000000" data-rotate-y="80.00000000" data-rotate-z="-0.00000000">
+<div id="outline-container-unnumbered-1" class="outline-1 step slide"  data-x="2412.11047978" data-y="-740.95642468" data-z="1283.37417375" data-rotate-x="30.00000000" data-rotate-y="35.00000000" data-rotate-z="-0.00000000">
 <h1 id="unnumbered-1">WHAT'S THIS?</h1>
 <div class="outline-text-2" id="text-unnumbered-1">
 <p>
@@ -204,7 +204,7 @@ tagged version (tagged with org-8.2.10).
 </div>
 </div>
 
-<div id="outline-container-unnumbered-2" class="outline-1 step slide"  data-x="1686.50300403" data-y="0.00000000" data-z="-2273.77445609" data-rotate-x="-180.00000000" data-rotate-y="60.00000000" data-rotate-z="-180.00000000">
+<div id="outline-container-unnumbered-2" class="outline-1 step slide"  data-x="3153.89243802" data-y="-322.69827281" data-z="558.92980403" data-rotate-x="30.00000000" data-rotate-y="75.00000000" data-rotate-z="-0.00000000">
 <h1 id="unnumbered-2">INSTALLATION</h1>
 <div class="outline-text-2" id="text-unnumbered-2">
 <ol class="org-ol">
@@ -240,32 +240,32 @@ Add load-path in your init.el and restart the emacs.
 </ol>
 </div>
 </div>
-<div id="outline-container-unnumbered-3" class="outline-1 step slide"  data-x="917.82045490" data-y="0.00000000" data-z="-3085.64090981" data-rotate-x="-180.00000000" data-rotate-y="20.00000000" data-rotate-z="-180.00000000">
+<div id="outline-container-unnumbered-3" class="outline-1 step slide"  data-x="3184.42806980" data-y="236.11018614" data-z="-408.95483858" data-rotate-x="-150.00000000" data-rotate-y="65.00000000" data-rotate-z="-180.00000000">
 <h1 id="unnumbered-3">USAGE</h1>
 <div class="outline-text-2" id="text-unnumbered-3">
 <ol class="org-ol">
 <li>Open README.org in your emacs.</li>
 
-<li>To convert to an impress.js HTML file, type C-c C-e.</li>
+<li>To export to impress.js HTML file, type <code>C-c</code> <code>C-e</code>.</li>
 
-<li>`*Org Export Dispatcher*' buffer will open, so follow the menu.
-If you type `j' and then `j', README.html will be generated.</li>
+<li><code>*Org Export Dispatcher*</code> buffer will open.
+Hit <code>J</code> key 2 times, then README.html will be exported.</li>
 
-<li>Open the file with your web browser.</li>
+<li>Open exported file in your web browser.</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-unnumbered-4" class="outline-1 step slide"  data-x="-192.88223754" data-y="0.00000000" data-z="-3213.46707688" data-rotate-x="-180.00000000" data-rotate-y="-20.00000000" data-rotate-z="-180.00000000">
+<div id="outline-container-unnumbered-4" class="outline-1 step slide"  data-x="2489.42941363" data-y="673.99626377" data-z="-1167.39577296" data-rotate-x="-150.00000000" data-rotate-y="25.00000000" data-rotate-z="-180.00000000">
 <h1 id="unnumbered-4">PROPERTIES</h1>
 <div class="outline-text-2" id="text-unnumbered-4">
 <p>
-Following special properties are available.
+Following special properties are available in each slide.
 </p>
 
 <ul class="org-ul">
 <li><p>
-data-x, data-y, data-z
+<code>data-x</code>, <code>data-y</code>, <code>data-z</code>
 </p>
 
 <p>
@@ -273,7 +273,7 @@ X, Y and Z position of the slide.
 </p></li>
 
 <li><p>
-data-rotate-x, data-rotate-y, data-rotate-z
+<code>data-rotate-x</code>, <code>data-rotate-y</code>, <code>data-rotate-z</code>
 </p>
 
 <p>
@@ -281,7 +281,7 @@ Define the rotation of the slide around given axis in degrees.
 </p></li>
 
 <li><p>
-trans-x, trans-y, trans-z
+<code>trans-x</code>, <code>trans-y</code>, <code>trans-z</code>
 </p>
 
 <p>
@@ -289,7 +289,7 @@ Translate the slide to each axis.
 </p></li>
 
 <li><p>
-rotate-x, rotate-y, rotate-z
+<code>rotate-x</code>, <code>rotate-y</code>, <code>rotate-z</code>
 </p>
 
 <p>
@@ -299,48 +299,55 @@ Rotate the slide to each axis in degrees.
 </div>
 </div>
 
-<div id="outline-container-unnumbered-5" class="outline-1 step slide"  data-x="-1125.89493944" data-y="0.00000000" data-z="-2597.44167309" data-rotate-x="-180.00000000" data-rotate-y="-60.00000000" data-rotate-z="-180.00000000">
-<h1 id="unnumbered-5">KEYWORDS</h1>
+<div id="outline-container-unnumbered-5" class="outline-1 step slide"  data-x="1394.09406479" data-y="786.06819779" data-z="-1361.51005679" data-rotate-x="-150.00000000" data-rotate-y="-15.00000000" data-rotate-z="-180.00000000">
+<h1 id="unnumbered-5">EXPORT OPTIONS</h1>
 <div class="outline-text-2" id="text-unnumbered-5">
 <p>
-Following special keywords are available.
+Following special export options are available.
 </p>
 
 <ul class="org-ul">
 <li><p>
-IMPRESSJS_SRC
+<code>#+IMPRESSJS_SRC</code>
 </p>
 
 <p>
-Specify a path to the JavaScript file of impress.js.
+A URL or filepath to impress.js.
 </p></li>
 
 <li><p>
-IMPRESSJS_STYLE
+<code>#+IMPRESSJS_STYLE</code>
 </p>
 
 <p>
-Specify a path to the CSS file of impress.js.
+A URL or filepath to impress.js's CSS file.
 </p></li>
 
 <li><p>
-IMPRESSJS_TOC
+<code>#+IMPRESSJS_TITLE</code>
 </p>
 
 <p>
-Specify the properties for TOC slide. The properties previously described
-are available.
+Properties for title slide. The properties described above are available.
+</p></li>
+
+<li><p>
+<code>#+IMPRESSJS_TOC</code>
+</p>
+
+<p>
+Properties for TOC slide. The properties described above are available.
 </p></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-unnumbered-6" class="outline-1 step slide"  data-x="-1444.65063828" data-y="0.00000000" data-z="-1525.80983125" data-rotate-x="-0.00000000" data-rotate-y="-80.00000000" data-rotate-z="-0.00000000">
+<div id="outline-container-unnumbered-6" class="outline-1 step slide"  data-x="410.94160630" data-y="519.88628473" data-z="-900.46945932" data-rotate-x="-150.00000000" data-rotate-y="-55.00000000" data-rotate-z="-180.00000000">
 <h1 id="unnumbered-6">KNOWN ISSUES</h1>
 <div class="outline-text-2" id="text-unnumbered-6">
 <p>
-The following properties does not work in the nested headlines
-because ox.el processes Org-mode file by the depth-first.
+Following properties does not work in nested headlines.
+Because ox.el processes Org file by the depth-first.
 </p>
 
 <ul class="org-ul">
@@ -350,7 +357,7 @@ because ox.el processes Org-mode file by the depth-first.
 </div>
 </div>
 
-<div id="outline-container-unnumbered-7" class="outline-1 step slide"  data-x="-1000.00000000" data-y="0.00000000" data-z="-500.00000000" data-rotate-x="-0.00000000" data-rotate-y="-40.00000000" data-rotate-z="-0.00000000">
+<div id="outline-container-unnumbered-7" class="outline-1 step slide"  data-x="0.00000000" data-y="0.00000000" data-z="0.00000000" data-rotate-x="30.00000000" data-rotate-y="-85.00000000" data-rotate-z="-0.00000000">
 <h1 id="unnumbered-7">LICENSE</h1>
 <div class="outline-text-2" id="text-unnumbered-7">
 <p>

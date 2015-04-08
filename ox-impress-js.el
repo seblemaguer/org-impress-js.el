@@ -586,7 +586,7 @@ contents as a string, or nil if it is empty."
 			     (plist-get info :html-html5-fancy))
 			"nav"
 		      "div"))
-	 (props (org-impress-js--toc-slide-plist info))
+	 (props (org-impress-js--global-slide-plist info :impress-js-toc))
 	 (class (plist-get props 'class))
 	 (attrs org-impress-js-toc-data-plist))
     (when toc-entries
@@ -638,11 +638,13 @@ INFO is a plist used as a communication channel."
 	     (apply (plist-get info :html-format-headline-function)
 		    todo todo-type priority text tags :section-number nil)))))
 
-(defun org-impress-js--toc-slide-plist (info)
-  "Set default properties for the TOC slide.
-INFO is a plist used as a communication channel."
-  (let ((plist (org-impress-js-parse-keyword
-		(plist-get info :impress-js-toc))))
+(defun org-impress-js--global-slide-plist (info option)
+  "Read properties for positioning, translation and rotation from an export
+option. These properties are used for title and TOC slide building.
+
+INFO is a plist holding contextual information. OPTION is a string
+represents an export option."
+  (let ((plist (org-impress-js-parse-keyword (plist-get info option))))
     (setq plist
 	  (plist-put plist 'class
 		     (concat "step "
@@ -737,7 +739,7 @@ holding contextual information."
   (when (and (plist-get info :with-toc)
 	     (null org-impress-js-toc-data-plist))
     (setq org-impress-js-toc-data-plist
-	  (let* ((props (org-impress-js--toc-slide-plist info))
+	  (let* ((props (org-impress-js--global-slide-plist info :impress-js-toc))
 		 (class (plist-get props 'class))
 		 (angles (org-impress-js--angles props))
 		 (trans (org-impress-js--trans props angles))

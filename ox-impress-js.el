@@ -830,13 +830,6 @@ holding contextual information."
 			      (org-export-get-headline-id headline info)
 			      (org-element-property :ID headline))))
 	     (preferred-id (car ids))
-	     (extra-ids (mapconcat
-			 (lambda (id)
-			   (org-html--anchor
-			    (org-export-solidify-link-text
-			     (if (org-uuidgen-p id) (concat "ID-" id) id))
-			    nil nil info))
-			 (cdr ids) ""))
 	     (extra-class (org-element-property :HTML_CONTAINER_CLASS headline))
 	     ;; Ignore the section indentations.
 	     (level1 1)
@@ -849,9 +842,9 @@ holding contextual information."
 		       (radians-to-degrees (vnth 2 angles)))))
 	(format "<%s id=\"%s\" class=\"%s\" %s>%s%s\n"
 		(org-html--container headline info)
-		(format "outline-container-%s"
-			(or (org-element-property :CUSTOM_ID headline)
-			    (org-export-get-headline-id headline info)))
+		(if (null (cdr ids))
+		    (concat "outline-container-" preferred-id)
+		  preferred-id)
 		(concat (format "outline-%d" level1) (and extra-class " ")
 			extra-class
 			(concat " " (if class class org-impress-js-default-slide-class)))
@@ -861,18 +854,16 @@ holding contextual information."
 			  data-rotate-x ,(vnth 0 degrees)
 			  data-rotate-y ,(vnth 1 degrees)
 			  data-rotate-z ,(vnth 2 degrees)))
-		(format "\n<h%d id=\"%s\">%s%s</h%d>\n"
-			level1
-			preferred-id
-			(mapconcat
-			 (lambda (x)
-			   (let ((id (org-export-solidify-link-text
-				      (if (org-uuidgen-p x) (concat "ID-" x)
-					x))))
-			     (org-html--anchor id)))
-			 extra-ids "")
-			full-text
-			level1)
+		(format "\n<h%d>%s</h%d>\n"
+			level
+			(concat
+			 (and numberedp
+			      (format
+			       "<span class=\"section-number-%d\">%s</span> "
+			       level
+			       (mapconcat #'number-to-string numbers ".")))
+			 full-text)
+			level)
 		;; When there is no section, pretend there is an empty
 		;; one to get the correct <div class="outline- ...>
 		;; which is needed by `org-info.js'.

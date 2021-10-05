@@ -28,7 +28,7 @@
 ;; This library implements a impress.js back-end for Org
 ;; generic exporter based on ox-html.el.
 
-;; See http://orgmode.org/ about Org-mode and see 
+;; See http://orgmode.org/ about Org-mode and see
 ;; http://bartaz.github.io/impress.js/ about impress.js.
 ;; I appreciate for their great works.
 
@@ -44,19 +44,19 @@
 ;;; Define Back-End
 
 (org-export-define-derived-backend 'impress-js 'html
-  :translate-alist 
+  :translate-alist
   '((headline . org-impress-js-headline)
     (inner-template . org-impress-js-inner-template)
     (section . org-impress-js-section)
-    (template . org-impress-js-template))  
+    (template . org-impress-js-template))
   :menu-entry
   '(?j "Export to impress.js HTML"
        ((?J "As impress.js HTML buffer" org-impress-js-export-as-html)
-	(?j "As impress.js HTML file" org-impress-js-export-to-html)
-	(?o "As impress.js HTML file and open"
-	    (lambda (a s v b)
-	      (if a (org-impress-js-export-to-html t s v b)
-		(org-open-file (org-impress-js-export-to-html nil s v b)))))))
+	    (?j "As impress.js HTML file" org-impress-js-export-to-html)
+	    (?o "As impress.js HTML file and open"
+	        (lambda (a s v b)
+	          (if a (org-impress-js-export-to-html t s v b)
+		        (org-open-file (org-impress-js-export-to-html nil s v b)))))))
   :options-alist
   '((:html-doctype "HTML_DOCTYPE" nil org-impress-js-doctype)
     (:html-description nil nil org-impress-js-description)
@@ -73,7 +73,7 @@
 
 (defconst org-impress-js-data-props
   '(data-x data-y data-z data-scale data-rotate data-rotate-x data-rotate-y data-rotate-z
-	   trans-x trans-y trans-z rotate rotate-x rotate-y rotate-z)
+	       trans-x trans-y trans-z rotate rotate-x rotate-y rotate-z)
   "Org properties for data properties for impress.js.")
 
 (defvar org-impress-js-slide-angles '(0 0 0 0)
@@ -155,14 +155,14 @@ org-info.js for your website."
   :version "24.4"
   :package-version '(Org . "8.0")
   :type '(list :greedy t
-	       (list :tag "Preamble"
-		     (const :format "" preamble)
-		     (string :tag "element") (string :tag "     id"))
-	       (list :tag "Content"
-		     (const :format "" content)
-		     (string :tag "element") (string :tag "     id"))
-	       (list :tag "Postamble" (const :format "" postamble)
-		     (string :tag "     id") (string :tag "element"))))
+	           (list :tag "Preamble"
+		             (const :format "" preamble)
+		             (string :tag "element") (string :tag "     id"))
+	           (list :tag "Content"
+		             (const :format "" content)
+		             (string :tag "element") (string :tag "     id"))
+	           (list :tag "Postamble" (const :format "" postamble)
+		             (string :tag "     id") (string :tag "element"))))
 
 ;;;; Template :: Generic
 
@@ -212,16 +212,16 @@ Use IMPRESSJS_SRC option in your Org file is available too."
 (defun unit-matx ()
   "Return 4x4 unit matrix."
   (make-matx '((1 0 0 0)
-	       (0 1 0 0)
-	       (0 0 1 0)
-	       (0 0 0 1))))
+	           (0 1 0 0)
+	           (0 0 1 0)
+	           (0 0 0 1))))
 
 (defun add-vec (v0 v1)
   "Add vectors `v0' and `v1'. `v0' and `v1' are 4-vectors."
   (list (+ (vnth 0 v0) (vnth 0 v1))
-	(+ (vnth 1 v0) (vnth 1 v1))
-	(+ (vnth 2 v0) (vnth 2 v1))
-	(+ (vnth 3 v0) (vnth 3 v1))))
+	    (+ (vnth 1 v0) (vnth 1 v1))
+	    (+ (vnth 2 v0) (vnth 2 v1))
+	    (+ (vnth 3 v0) (vnth 3 v1))))
 
 (defun matx-vec-prod (m v)
   "Product of `m' and `v'. `m' is 4x4 matrix and `v' is 4-vector."
@@ -294,8 +294,8 @@ Use IMPRESSJS_SRC option in your Org file is available too."
   "Return euler angles (rx ry rz) extracted from `M'. `M' is 4x4
 rotation matrix calculated as Z-Y-X euler angles."
   (list (- (atan (mnth 1 2 m) (mnth 2 2 m)))
-	(atan (- (mnth 0 2 m)) (sqrt (+ (* (mnth 1 2 m) (mnth 1 2 m)) (* (mnth 2 2 m) (mnth 2 2 m)))))
-	(- (atan (mnth 0 1 m) (mnth 0 0 m)))))
+	    (atan (- (mnth 0 2 m)) (sqrt (+ (* (mnth 1 2 m) (mnth 1 2 m)) (* (mnth 2 2 m) (mnth 2 2 m)))))
+	    (- (atan (mnth 0 1 m) (mnth 0 0 m)))))
 
 
 ;;; Internal Functions
@@ -315,28 +315,28 @@ rotation matrix calculated as Z-Y-X euler angles."
 This is called from org-export-before-processing-hook."
   (when (eq 'impress-js property)
     (setq org-impress-js-toc-data-plist nil
-	  org-impress-js-title-data-plist nil
-	  org-impress-js-slide-angles '(0 0 0 0)
-	  org-impress-js-slide-position '(0 0 0 0))))
+	      org-impress-js-title-data-plist nil
+	      org-impress-js-slide-angles '(0 0 0 0)
+	      org-impress-js-slide-position '(0 0 0 0))))
 
 (defun org-impress-js-to-number (v)
   "Convert to number."
   (and v (string-to-number (format "%s" v))))
-       
+
 (defun org-impress-js-parse-keyword (keyword-value)
   "Parse keyword value."
   (let ((props (or keyword-value "")))
     (let ((plist)
-	  (all (append org-impress-js-data-props '(class))))
+	      (all (append org-impress-js-data-props '(class))))
       (dolist (p all)
-	(when (and (string-match (concat "\\(\\`\\|[ \t]\\)"
-					 (regexp-quote (symbol-name p))
-					 ":\\(([^)\n]+)\\|[^ \t\n\r;,]*\\)")
-				 props))
-	  (setq plist (plist-put plist
-				 p
-				 (car (read-from-string
-				       (match-string 2 props)))))))
+	    (when (and (string-match (concat "\\(\\`\\|[ \t]\\)"
+					                     (regexp-quote (symbol-name p))
+					                     ":\\(([^)\n]+)\\|[^ \t\n\r;,]*\\)")
+				                 props))
+	      (setq plist (plist-put plist
+				                 p
+				                 (car (read-from-string
+				                       (match-string 2 props)))))))
       plist)))
 
 (defun org-impress-js-set-default-data-plist (plist)
@@ -344,20 +344,20 @@ This is called from org-export-before-processing-hook."
 values are given by `plist' and return plist.
 `plist' has values for each property declared in `org-impress-js-data-props'."
   (and (not (or (plist-get plist 'data-scale)
-		(plist-get plist 'data-x)
-		(plist-get plist 'data-y)
-		(plist-get plist 'data-z)
-		(plist-get plist 'trans-x)
-		(plist-get plist 'trans-y)
-		(plist-get plist 'trans-z)
-		(plist-get plist 'data-rotate-x)
-		(plist-get plist 'data-rotate-y)
-		(plist-get plist 'data-rotate-z)
-		(plist-get plist 'data-rotate)
-		(plist-get plist 'rotate-x)
-		(plist-get plist 'rotate-y)
-		(plist-get plist 'rotate-z)
-		(plist-get plist 'rotate)))
+		        (plist-get plist 'data-x)
+		        (plist-get plist 'data-y)
+		        (plist-get plist 'data-z)
+		        (plist-get plist 'trans-x)
+		        (plist-get plist 'trans-y)
+		        (plist-get plist 'trans-z)
+		        (plist-get plist 'data-rotate-x)
+		        (plist-get plist 'data-rotate-y)
+		        (plist-get plist 'data-rotate-z)
+		        (plist-get plist 'data-rotate)
+		        (plist-get plist 'rotate-x)
+		        (plist-get plist 'rotate-y)
+		        (plist-get plist 'rotate-z)
+		        (plist-get plist 'rotate)))
        (plist-put plist 'trans-x (vnth 0 org-impress-js-default-trans))
        (plist-put plist 'trans-y (vnth 1 org-impress-js-default-trans))
        (plist-put plist 'trans-z (vnth 2 org-impress-js-default-trans))
@@ -373,37 +373,37 @@ values are given by `plist' and return plist.
   "Return meta tags for exported document.
 INFO is a plist used as a communication channel."
   (let ((protect-string
-	 (lambda (str)
-	   (replace-regexp-in-string
-	    "\"" "&quot;" (org-html-encode-plain-text str))))
-	(title (org-export-data (plist-get info :title) info))
-	(author (and (plist-get info :with-author)
-		     (let ((auth (plist-get info :author)))
-		       (and auth
-			    ;; Return raw Org syntax, skipping non
-			    ;; exportable objects.
-			    (org-element-interpret-data
-			     (org-element-map auth
-				 (cons 'plain-text org-element-all-objects)
-			       'identity info))))))
-	(description (plist-get info :html-description))
-	(keywords (plist-get info :keywords))
-	(charset (or (and org-html-coding-system
-			  (fboundp 'coding-system-get)
-			  (coding-system-get org-html-coding-system
-					     'mime-charset))
-		     "iso-8859-1")))
+	     (lambda (str)
+	       (replace-regexp-in-string
+	        "\"" "&quot;" (org-html-encode-plain-text str))))
+	    (title (org-export-data (plist-get info :title) info))
+	    (author (and (plist-get info :with-author)
+		             (let ((auth (plist-get info :author)))
+		               (and auth
+			                ;; Return raw Org syntax, skipping non
+			                ;; exportable objects.
+			                (org-element-interpret-data
+			                 (org-element-map auth
+				                 (cons 'plain-text org-element-all-objects)
+			                   'identity info))))))
+	    (description (plist-get info :html-description))
+	    (keywords (plist-get info :keywords))
+	    (charset (or (and org-html-coding-system
+			              (fboundp 'coding-system-get)
+			              (coding-system-get org-html-coding-system
+					                         'mime-charset))
+		             "iso-8859-1")))
     (concat
      (format "<title>%s</title>\n" title)
      (when (plist-get info :time-stamp-file)
        (format-time-string
-	 (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
+	    (concat "<!-- " org-html-metadata-timestamp-format " -->\n")))
      (format
       (if (org-impress-js-html5-p info)
-	  (org-impress-js-close-tag "meta" " charset=\"%s\"" info)
-	(org-impress-js-close-tag
-	 "meta" " http-equiv=\"Content-Type\" content=\"text/html;charset=%s\""
-	 info))
+	      (org-impress-js-close-tag "meta" " charset=\"%s\"" info)
+	    (org-impress-js-close-tag
+	     "meta" " http-equiv=\"Content-Type\" content=\"text/html;charset=%s\""
+	     info))
       charset) "\n"
      (org-impress-js-close-tag "meta" " name=\"generator\" content=\"Org-mode\"" info)
      "\n"
@@ -411,29 +411,29 @@ INFO is a plist used as a communication channel."
      "\n"
      (org-impress-js-close-tag "meta" " name=\"apple-mobile-web-app-capable\" content=\"yes\"" info) "\n"
      (and (org-string-nw-p author)
-	  (concat
-	   (org-impress-js-close-tag "meta"
-			       (format " name=\"author\" content=\"%s\""
-				       (funcall protect-string author))
-			       info)
-	   "\n"))
+	      (concat
+	       (org-impress-js-close-tag "meta"
+			                         (format " name=\"author\" content=\"%s\""
+				                             (funcall protect-string author))
+			                         info)
+	       "\n"))
      (and (org-string-nw-p description)
-	  (concat
-	   (org-impress-js-close-tag "meta"
-			       (format " name=\"description\" content=\"%s\"\n"
-				       (funcall protect-string description))
-			       info)
-	   "\n"))
+	      (concat
+	       (org-impress-js-close-tag "meta"
+			                         (format " name=\"description\" content=\"%s\"\n"
+				                             (funcall protect-string description))
+			                         info)
+	       "\n"))
      (and (org-string-nw-p keywords)
-	  (concat
-	   (org-impress-js-close-tag "meta"
-			       (format " name=\"keywords\" content=\"%s\""
-				       (funcall protect-string keywords))
-			       info)
-	   "\n"))
-      (org-impress-js-close-tag "link" " href=\"http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic\" rel=\"stylesheet\"" info) "\n"
-      (org-impress-js-close-tag "link" " rel=\"shortcut icon\" href=\"favicon.png\"" info) "\n"
-      (org-impress-js-close-tag "link" " rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\"" info) "\n")))
+	      (concat
+	       (org-impress-js-close-tag "meta"
+			                         (format " name=\"keywords\" content=\"%s\""
+				                             (funcall protect-string keywords))
+			                         info)
+	       "\n"))
+     (org-impress-js-close-tag "link" " href=\"http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic\" rel=\"stylesheet\"" info) "\n"
+     (org-impress-js-close-tag "link" " rel=\"shortcut icon\" href=\"favicon.png\"" info) "\n"
+     (org-impress-js-close-tag "link" " rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\"" info) "\n")))
 
 (defun org-impress-js--build-impress-js-stylesheet (info)
   "Return a link tag to load impress.js CSS file.
@@ -442,16 +442,16 @@ INFO is a plist used as a communication channel."
    (concat
     (when (plist-get info :html-impress-js-stylesheet)
       (org-impress-js-close-tag "link"
-			  (format " rel=\"stylesheet\" href=\"%s\" type=\"text/css\""
-				  (plist-get info :html-impress-js-stylesheet))
-			  info)))))
+			                    (format " rel=\"stylesheet\" href=\"%s\" type=\"text/css\""
+				                        (plist-get info :html-impress-js-stylesheet))
+			                    info)))))
 
 (defun org-impress-js--build-fallback-message (info)
   "Return impress.js fallback-message as a string.
 INFO is a plist used as a communication channel."
   (concat "<div class=\"fallback-message\">\n"
-	  (plist-get info :html-fallback-message)
-	  "</div>\n"))
+	      (plist-get info :html-fallback-message)
+	      "</div>\n"))
 
 (defun org-impress-js--build-title (info)
   "Return a title slide.
@@ -460,8 +460,8 @@ Postamble will be embeded if available. See `org-html-postamble'."
   (org-element-normalize-string
    (concat
     (let* ((props (org-impress-js--global-slide-plist info :impress-js-title))
-	   (class (plist-get props 'class))
-	   (attrs org-impress-js-title-data-plist))
+	       (class (plist-get props 'class))
+	       (attrs org-impress-js-title-data-plist))
       (format "<div id=\"title\" class=\"%s\" %s>\n" class attrs))
     ;; Document title.
     (let ((title (plist-get info :title)))
@@ -473,38 +473,38 @@ Postamble will be embeded if available. See `org-html-postamble'."
   "Return impress.js hint message as a string.
 INFO is a plist used as a communication channel."
   (concat "<div class=\"hint\">\n"
-	  (plist-get info :html-hint-message)
-	  "</div>\n"))
+	      (plist-get info :html-hint-message)
+	      "</div>\n"))
 
 (defun org-impress-js--build-init-impress-js (info)
   "Return a init script for impress.js as a string.
 INFO is a plist used as a communication channel."
   (concat "<script>\n"
-	  (plist-get info :html-hint-js)
-	  "</script>\n"
-	  (format "<script src=\"%s\"></script>\n"
-		  (plist-get info :html-impress-js-javascript))
-	  "<script>impress().init();</script>\n"))
+	      (plist-get info :html-hint-js)
+	      "</script>\n"
+	      (format "<script src=\"%s\"></script>\n"
+		          (plist-get info :html-impress-js-javascript))
+	      "<script>impress().init();</script>\n"))
 
 (defun org-impress-js--build-data-attrs (plist)
   "Return the data attributes for impress.js as a string.
 `plist' has values for each property declared in `org-impress-js-data-props'."
   (let ((data-x (plist-get plist 'data-x))
-	(data-y (plist-get plist 'data-y))
-	(data-z (plist-get plist 'data-z))
-	(data-scale (plist-get plist 'data-scale))
-	(data-rotate (plist-get plist 'data-rotate))
-	(data-rotate-x (plist-get plist 'data-rotate-x))
-	(data-rotate-y (plist-get plist 'data-rotate-y))
-	(data-rotate-z (plist-get plist 'data-rotate-z)))
+	    (data-y (plist-get plist 'data-y))
+	    (data-z (plist-get plist 'data-z))
+	    (data-scale (plist-get plist 'data-scale))
+	    (data-rotate (plist-get plist 'data-rotate))
+	    (data-rotate-x (plist-get plist 'data-rotate-x))
+	    (data-rotate-y (plist-get plist 'data-rotate-y))
+	    (data-rotate-z (plist-get plist 'data-rotate-z)))
     (concat (format " data-x=\"%0.8f\"" data-x)
-	    (format " data-y=\"%0.8f\"" data-y)
-	    (format " data-z=\"%0.8f\"" data-z)
-	    (and data-scale (format " data-scale=\"%0.8f\"" data-scale))
-	    (and data-rotate (format " data-rotate=\"%0.8f\"" data-rotate))
-	    (format " data-rotate-x=\"%0.8f\"" data-rotate-x)
-	    (format " data-rotate-y=\"%0.8f\"" data-rotate-y)
-	    (format " data-rotate-z=\"%0.8f\"" data-rotate-z))))
+	        (format " data-y=\"%0.8f\"" data-y)
+	        (format " data-z=\"%0.8f\"" data-z)
+	        (and data-scale (format " data-scale=\"%0.8f\"" data-scale))
+	        (and data-rotate (format " data-rotate=\"%0.8f\"" data-rotate))
+	        (format " data-rotate-x=\"%0.8f\"" data-rotate-x)
+	        (format " data-rotate-y=\"%0.8f\"" data-rotate-y)
+	        (format " data-rotate-z=\"%0.8f\"" data-rotate-z))))
 
 (defun org-impress-js-inner-template (contents info)
   "Return body of document string after impress.js HTML conversion.
@@ -526,19 +526,19 @@ holding export options."
   (concat
    (when (and (not (org-impress-js-html5-p info)) (org-impress-js-xhtml-p info))
      (let ((decl (or (and (stringp org-html-xml-declaration)
-			      org-html-xml-declaration)
-			 (cdr (assoc (plist-get info :html-extension)
-				     org-html-xml-declaration))
-			 (cdr (assoc "html" org-html-xml-declaration))
+			              org-html-xml-declaration)
+			         (cdr (assoc (plist-get info :html-extension)
+				                 org-html-xml-declaration))
+			         (cdr (assoc "html" org-html-xml-declaration))
 
-			 "")))
+			         "")))
        (when (not (or (eq nil decl) (string= "" decl)))
-	 (format "%s\n"
-		 (format decl
-		  (or (and org-html-coding-system
-			   (fboundp 'coding-system-get)
-			   (coding-system-get org-html-coding-system 'mime-charset))
-		      "iso-8859-1"))))))
+	     (format "%s\n"
+		         (format decl
+		                 (or (and org-html-coding-system
+			                      (fboundp 'coding-system-get)
+			                      (coding-system-get org-html-coding-system 'mime-charset))
+		                     "iso-8859-1"))))))
    (org-impress-js-doctype info)
    "\n"
    (format "<html lang=\"%s\">\n" (plist-get info :language))
@@ -550,24 +550,24 @@ holding export options."
    "</head>\n"
    "<body class=\"impress-not-supported\">\n"
    (let ((link-up (org-trim (plist-get info :html-link-up)))
-	 (link-home (org-trim (plist-get info :html-link-home))))
+	     (link-home (org-trim (plist-get info :html-link-home))))
      (unless (and (string= link-up "") (string= link-home ""))
        (format org-html-home/up-format
-	       (or link-up link-home)
-	       (or link-home link-up))))
+	           (or link-up link-home)
+	           (or link-home link-up))))
    ;; Preamble.
    ;; (org-html--build-pre/postamble 'preamble info)
    ;; Fallback message.
    (org-impress-js--build-fallback-message info)
    ;; Document contents.
    (format "<%s id=\"%s\">\n"
-	   (nth 1 (assq 'content org-impress-js-divs))
-	   (nth 2 (assq 'content org-impress-js-divs)))
+	       (nth 1 (assq 'content org-impress-js-divs))
+	       (nth 2 (assq 'content org-impress-js-divs)))
    ;; Title.
    (org-impress-js--build-title info)
    contents
    (format "</%s>\n"
-	   (nth 1 (assq 'content org-impress-js-divs)))
+	       (nth 1 (assq 'content org-impress-js-divs)))
    ;; Postamble.
    ;; (org-html--build-pre/postamble 'postamble info)
    ;; Hint message.
@@ -586,65 +586,64 @@ DEPTH is an integer specifying the depth of the table.  INFO is a
 plist used as a communication channel.  Return the table of
 contents as a string, or nil if it is empty."
   (let* ((toc-entries
-	  (mapcar (lambda (headline)
-		    (cons (org-impress-js--format-toc-headline headline info)
-			  (org-export-get-relative-level headline info)))
-		  (org-export-collect-headlines info depth)))
-	 (outer-tag (if (and (org-html-html5-p info)
-			     (plist-get info :html-html5-fancy))
-			"nav"
-		      "div"))
-	 (props (org-impress-js--global-slide-plist info :impress-js-toc))
-	 (class (plist-get props 'class))
-	 (attrs org-impress-js-toc-data-plist))
+	      (mapcar (lambda (headline)
+		            (cons (org-impress-js--format-toc-headline headline info)
+			              (org-export-get-relative-level headline info)))
+		          (org-export-collect-headlines info depth)))
+	     (outer-tag (if (and (org-html-html5-p info)
+			                 (plist-get info :html-html5-fancy))
+			            "nav"
+		              "div"))
+	     (props (org-impress-js--global-slide-plist info :impress-js-toc))
+	     (class (plist-get props 'class))
+	     (attrs org-impress-js-toc-data-plist))
     (when toc-entries
       (concat (format "<%s id=\"table-of-contents\" class=\"%s\" %s>\n"
-		      outer-tag class attrs)
-	      (format "<h1>%s</h1>\n"
-		      (org-html--translate "Table of Contents" info))
-	      "<div id=\"text-table-of-contents\">"
-	      (org-html--toc-text toc-entries)
-	      "</div>\n"
-	      (format "</%s>\n" outer-tag)))))
+		              outer-tag class attrs)
+	          (format "<h1>%s</h1>\n"
+		              (org-html--translate "Table of Contents" info))
+	          "<div id=\"text-table-of-contents\">"
+	          (org-html--toc-text toc-entries)
+	          "</div>\n"
+	          (format "</%s>\n" outer-tag)))))
 
 (defun org-impress-js--format-toc-headline (headline info)
   "Return an appropriate table of contents entry for HEADLINE.
 INFO is a plist used as a communication channel."
   (let* ((headline-number (org-export-get-headline-number headline info))
-	 (todo (and (plist-get info :with-todo-keywords)
-		    (let ((todo (org-element-property :todo-keyword headline)))
-		      (and todo (org-export-data todo info)))))
-	 (todo-type (and todo (org-element-property :todo-type headline)))
-	 (priority (and (plist-get info :with-priority)
-			(org-element-property :priority headline)))
-	 (text (org-export-data-with-backend
-		(org-export-get-alt-title headline info)
-		;; Create an anonymous back-end that will ignore any
-		;; footnote-reference, link, radio-target and target
-		;; in table of contents.
-		(org-export-create-backend
-		 :parent 'html
-		 :transcoders '((footnote-reference . ignore)
-				(link . (lambda (object c i) c))
-				(radio-target . (lambda (object c i) c))
-				(target . ignore)))
-		info))
-	 (tags (and (eq (plist-get info :with-tags) t)
-		    (org-export-get-tags headline info))))
+	     (todo (and (plist-get info :with-todo-keywords)
+		            (let ((todo (org-element-property :todo-keyword headline)))
+		              (and todo (org-export-data todo info)))))
+	     (todo-type (and todo (org-element-property :todo-type headline)))
+	     (priority (and (plist-get info :with-priority)
+			            (org-element-property :priority headline)))
+	     (text (org-export-data-with-backend
+		        (org-export-get-alt-title headline info)
+		        ;; Create an anonymous back-end that will ignore any
+		        ;; footnote-reference, link, radio-target and target
+		        ;; in table of contents.
+		        (org-export-create-backend
+		         :parent 'html
+		         :transcoders '((footnote-reference . ignore)
+				                (link . (lambda (object c i) c))
+				                (radio-target . (lambda (object c i) c))
+				                (target . ignore)))
+		        info))
+	     (tags (and (eq (plist-get info :with-tags) t)
+		            (org-export-get-tags headline info))))
     (format "<a href=\"#/%s\">%s</a>"
-	    ;; Label.
-	    (org-export-solidify-link-text
-	     (or (org-element-property :CUSTOM_ID headline)
-		 (concat "outline-container-"
-			 (org-export-get-headline-id headline info))))
-	    ;; Body.
-	    (concat
-	     (and (not (org-export-low-level-p headline info))
-		  (org-export-numbered-headline-p headline info)
-		  (concat (mapconcat #'number-to-string headline-number ".")
-			  ". "))
-	     (apply (plist-get info :html-format-headline-function)
-		    todo todo-type priority text tags :section-number nil)))))
+	        ;; Label.
+            (or (org-element-property :CUSTOM_ID headline)
+			    (concat "outline-container-"
+			            (org-export-get-headline-number headline info)))
+	        ;; Body.
+	        (concat
+	         (and (not (org-export-low-level-p headline info))
+		          (org-export-numbered-headline-p headline info)
+		          (concat (mapconcat #'number-to-string headline-number ".")
+			              ". "))
+	         (apply (plist-get info :html-format-headline-function)
+		            todo todo-type priority text tags :section-number nil)))))
 
 (defun org-impress-js--global-slide-plist (info option)
   "Read properties for position, translation and rotation from an export
@@ -654,14 +653,14 @@ INFO is a plist holding contextual information. OPTION is a string
 represents an export option."
   (let ((plist (org-impress-js-parse-keyword (plist-get info option))))
     (setq plist
-	  (plist-put plist 'class
-		     (concat "step "
-			     (and (plist-get plist 'class)
-				  (format "%s" (plist-get plist 'class))))))
+	      (plist-put plist 'class
+		             (concat "step "
+			                 (and (plist-get plist 'class)
+				                  (format "%s" (plist-get plist 'class))))))
     (dolist (p org-impress-js-data-props)
       (plist-put plist p (org-impress-js-to-number (plist-get plist p))))
     (or (plist-get plist 'data-scale)
-	(plist-put plist 'data-scale 1))
+	    (plist-put plist 'data-scale 1))
     (org-impress-js-set-default-data-plist plist)))
 
 
@@ -674,27 +673,27 @@ represents an export option."
 `org-impress-js-slide-angles'.
 `plist' has values for each property declared in `org-impress-js-data-props'."
   (let* ((data-rotate (plist-get plist 'data-rotate))
-	 (data-rotate-x (plist-get plist 'data-rotate-x))
-	 (data-rotate-y (plist-get plist 'data-rotate-y))
-	 (data-rotate-z (plist-get plist 'data-rotate-z))
-	 (rotate (plist-get plist 'rotate))
-	 (rotate-x (plist-get plist 'rotate-x))
-	 (rotate-y (plist-get plist 'rotate-y))
-	 (rotate-z (plist-get plist 'rotate-z))
-	 (rot (let ((angles org-impress-js-slide-angles))
-		(matx-matx-prod
-		 (rot-matx (unit-matx)
-			   (if data-rotate-x (degrees-to-radians data-rotate-x) (vnth 0 angles))
-			   (if data-rotate-y (degrees-to-radians data-rotate-y) (vnth 1 angles))
-			   ;; `data-rotate-z' is prioritized than `data-rotate'.
-			   (if data-rotate-z (degrees-to-radians data-rotate-z)
-			     (if data-rotate (degrees-to-radians data-rotate)
-			       (vnth 2 angles))))
-		 (rot-matx (unit-matx)
-			   (degrees-to-radians (or rotate-x 0))
-			   (- (degrees-to-radians (or rotate-y 0)))
-			   ;; `rotate-z' is prioritized than `rotate'.
-			   (degrees-to-radians (or rotate-z rotate 0)))))))
+	     (data-rotate-x (plist-get plist 'data-rotate-x))
+	     (data-rotate-y (plist-get plist 'data-rotate-y))
+	     (data-rotate-z (plist-get plist 'data-rotate-z))
+	     (rotate (plist-get plist 'rotate))
+	     (rotate-x (plist-get plist 'rotate-x))
+	     (rotate-y (plist-get plist 'rotate-y))
+	     (rotate-z (plist-get plist 'rotate-z))
+	     (rot (let ((angles org-impress-js-slide-angles))
+		        (matx-matx-prod
+		         (rot-matx (unit-matx)
+			               (if data-rotate-x (degrees-to-radians data-rotate-x) (vnth 0 angles))
+			               (if data-rotate-y (degrees-to-radians data-rotate-y) (vnth 1 angles))
+			               ;; `data-rotate-z' is prioritized than `data-rotate'.
+			               (if data-rotate-z (degrees-to-radians data-rotate-z)
+			                 (if data-rotate (degrees-to-radians data-rotate)
+			                   (vnth 2 angles))))
+		         (rot-matx (unit-matx)
+			               (degrees-to-radians (or rotate-x 0))
+			               (- (degrees-to-radians (or rotate-y 0)))
+			               ;; `rotate-z' is prioritized than `rotate'.
+			               (degrees-to-radians (or rotate-z rotate 0)))))))
     (setq org-impress-js-slide-angles (matx-euler rot))))
 
 (defun org-impress-js--trans (plist angles)
@@ -703,27 +702,27 @@ represents an export option."
 `plist' has values for each property declared in `org-impress-js-data-props'.
 `angles' is a vector for the slide angles is return by `org-impress-js--angles'."
   (let ((data-x (plist-get plist 'data-x))
-	(data-y (plist-get plist 'data-y))
-	(data-z (plist-get plist 'data-z))
-	(trans-x (plist-get plist 'trans-x))
-	(trans-y (plist-get plist 'trans-y))
-	(trans-z (plist-get plist 'trans-z)))
+	    (data-y (plist-get plist 'data-y))
+	    (data-z (plist-get plist 'data-z))
+	    (trans-x (plist-get plist 'trans-x))
+	    (trans-y (plist-get plist 'trans-y))
+	    (trans-z (plist-get plist 'trans-z)))
     (setq org-impress-js-slide-position
-	  (let ((tran (add-vec
-		       org-impress-js-slide-position
-		       (matx-vec-prod (rot-matx (unit-matx)
-						(vnth 0 angles)
-						(vnth 1 angles)
-						(- (vnth 2 angles) pi))
-				      (list (- (or trans-x 0))
-					    (or trans-y 0)
-					    (or trans-z 0)
-					    1)))))
-	    ;; Reset coordinates if corresponding data are given.
-	    (and data-x (setf (vnth 0 tran) data-x))
-	    (and data-y (setf (vnth 1 tran) data-y))
-	    (and data-z (setf (vnth 2 tran) data-z))
-	    tran))))
+	      (let ((tran (add-vec
+		               org-impress-js-slide-position
+		               (matx-vec-prod (rot-matx (unit-matx)
+						                        (vnth 0 angles)
+						                        (vnth 1 angles)
+						                        (- (vnth 2 angles) pi))
+				                      (list (- (or trans-x 0))
+					                        (or trans-y 0)
+					                        (or trans-z 0)
+					                        1)))))
+	        ;; Reset coordinates if corresponding data are given.
+	        (and data-x (setf (vnth 0 tran) data-x))
+	        (and data-y (setf (vnth 1 tran) data-y))
+	        (and data-z (setf (vnth 2 tran) data-z))
+	        tran))))
 
 (defun org-impress-js--node-plist (headline)
   "Return the property values declared in the current headline.
@@ -731,11 +730,11 @@ Properties can be handled here are declared in `org-impress-js-data-props'."
   (let ((plist))
     (dolist (p org-impress-js-data-props)
       (setq plist
-	    (plist-put plist p
-		       (org-impress-js-to-number
-			(org-export-get-node-property
-			 (intern (format ":%s" (upcase (symbol-name p))))
-			 headline)))))
+	        (plist-put plist p
+		               (org-impress-js-to-number
+			            (org-export-get-node-property
+			             (intern (format ":%s" (upcase (symbol-name p))))
+			             headline)))))
     plist))
 
 (defun org-impress-js-headline (headline contents info)
@@ -746,63 +745,64 @@ holding contextual information."
   (setq contents (or contents ""))
   (when (null org-impress-js-title-data-plist)
     (setq org-impress-js-title-data-plist
-	  (let* ((props (org-impress-js--global-slide-plist info :impress-js-title))
-		 (angles (org-impress-js--angles props))
-		 (trans (org-impress-js--trans props angles))
-		 (degrees (list
-			   (radians-to-degrees (vnth 0 angles))
-			   (- (radians-to-degrees (vnth 1 angles)))
-			   (radians-to-degrees (vnth 2 angles))))
-		 (attrs
-		  (org-impress-js--build-data-attrs
-		   `(data-x ,(vnth 0 trans) data-y ,(vnth 1 trans) data-z ,(vnth 2 trans)
-			    data-scale ,(plist-get props 'data-scale)
-			    data-rotate-x ,(vnth 0 degrees)
-			    data-rotate-y ,(vnth 1 degrees)
-			    data-rotate-z ,(vnth 2 degrees)))))
-	    attrs)))
+	      (let* ((props (org-impress-js--global-slide-plist info :impress-js-title))
+		         (angles (org-impress-js--angles props))
+		         (trans (org-impress-js--trans props angles))
+		         (degrees (list
+			               (radians-to-degrees (vnth 0 angles))
+			               (- (radians-to-degrees (vnth 1 angles)))
+			               (radians-to-degrees (vnth 2 angles))))
+		         (attrs
+		          (org-impress-js--build-data-attrs
+		           `(data-x ,(vnth 0 trans) data-y ,(vnth 1 trans) data-z ,(vnth 2 trans)
+			                data-scale ,(plist-get props 'data-scale)
+			                data-rotate-x ,(vnth 0 degrees)
+			                data-rotate-y ,(vnth 1 degrees)
+			                data-rotate-z ,(vnth 2 degrees)))))
+	        attrs)))
   (when (and (plist-get info :with-toc) (null org-impress-js-toc-data-plist))
     (setq org-impress-js-toc-data-plist
-	  (let* ((props (org-impress-js--global-slide-plist info :impress-js-toc))
-		 (angles (org-impress-js--angles props))
-		 (trans (org-impress-js--trans props angles))
-		 (degrees (list
-			   (radians-to-degrees (vnth 0 angles))
-			   (- (radians-to-degrees (vnth 1 angles)))
-			   (radians-to-degrees (vnth 2 angles))))
-		 (attrs
-		  (org-impress-js--build-data-attrs
-		   `(data-x ,(vnth 0 trans) data-y ,(vnth 1 trans) data-z ,(vnth 2 trans)
-			    data-scale ,(plist-get props 'data-scale)
-			    data-rotate-x ,(vnth 0 degrees)
-			    data-rotate-y ,(vnth 1 degrees)
-			    data-rotate-z ,(vnth 2 degrees)))))
-	    attrs)))
+	      (let* ((props (org-impress-js--global-slide-plist info :impress-js-toc))
+		         (angles (org-impress-js--angles props))
+		         (trans (org-impress-js--trans props angles))
+		         (degrees (list
+			               (radians-to-degrees (vnth 0 angles))
+			               (- (radians-to-degrees (vnth 1 angles)))
+			               (radians-to-degrees (vnth 2 angles))))
+		         (attrs
+		          (org-impress-js--build-data-attrs
+		           `(data-x ,(vnth 0 trans) data-y ,(vnth 1 trans) data-z ,(vnth 2 trans)
+			                data-scale ,(plist-get props 'data-scale)
+			                data-rotate-x ,(vnth 0 degrees)
+			                data-rotate-y ,(vnth 1 degrees)
+			                data-rotate-z ,(vnth 2 degrees)))))
+	        attrs)))
   (let* ((numberedp (org-export-numbered-headline-p headline info))
-	 (level (org-export-get-relative-level headline info))
-	 (text (org-export-data (org-element-property :title headline) info))
-	 (todo (and (plist-get info :with-todo-keywords)
-		    (let ((todo (org-element-property :todo-keyword headline)))
-		      (and todo (org-export-data todo info)))))
-	 (todo-type (and todo (org-element-property :todo-type headline)))
-	 (tags (and (plist-get info :with-tags)
-		    (org-export-get-tags headline info)))
-	 (priority (and (plist-get info :with-priority)
-			(org-element-property :priority headline)))
-	 (section-number (and (org-export-numbered-headline-p headline info)
-			      (mapconcat 'number-to-string
-					 (org-export-get-headline-number
-					  headline info) ".")))
-	 ;; Create the headline text.
-	 (full-text
-	  (if (plist-get info :html-format-headline-function)
-	      (funcall (plist-get info :html-format-headline-function)
-		       todo todo-type priority text tags info)
-	    (full-text (org-html-format-headline--wrap headline info))))
-	 ;; Attributes used to position presentation steps
-	 (class (org-export-get-node-property :CLASS headline))
-	 (props (org-impress-js-set-default-data-plist
-		 (org-impress-js--node-plist headline))))
+         (numbers (org-export-get-headline-number headline info))
+	     (level (org-export-get-relative-level headline info))
+	     (text (org-export-data (org-element-property :title headline) info))
+	     (todo (and (plist-get info :with-todo-keywords)
+		            (let ((todo (org-element-property :todo-keyword headline)))
+		              (and todo (org-export-data todo info)))))
+	     (todo-type (and todo (org-element-property :todo-type headline)))
+	     (tags (and (plist-get info :with-tags)
+		            (org-export-get-tags headline info)))
+	     (priority (and (plist-get info :with-priority)
+			            (org-element-property :priority headline)))
+	     (section-number (and (org-export-numbered-headline-p headline info)
+			                  (mapconcat 'number-to-string
+					                     (org-export-get-headline-number
+					                      headline info) ".")))
+	     ;; Create the headline text.
+	     (full-text
+	      (if (plist-get info :html-format-headline-function)
+	          (funcall (plist-get info :html-format-headline-function)
+		               todo todo-type priority text tags info)
+	        (full-text (org-html-format-headline--wrap headline info))))
+	     ;; Attributes used to position presentation steps
+	     (class (org-export-get-node-property :CLASS headline))
+	     (props (org-impress-js-set-default-data-plist
+		         (org-impress-js--node-plist headline))))
     (cond
      ;; Case 1: This is a footnote section: ignore it.
      ((org-element-property :footnote-section-p headline) nil)
@@ -812,65 +812,65 @@ holding contextual information."
      ((org-export-low-level-p headline info)
       ;; Build the real contents of the sub-tree.
       (let* ((type (if numberedp 'ordered 'unordered))
-	     (itemized-body (org-html-format-list-item
-			     contents type nil info nil full-text)))
-	(concat
-	 (and (org-export-first-sibling-p headline info)
-	      (org-html-begin-plain-list type))
-	 itemized-body
-	 (and (org-export-last-sibling-p headline info)
-	      (org-html-end-plain-list type)))))
+	         (itemized-body (org-html-format-list-item
+			                 contents type nil info nil full-text)))
+	    (concat
+	     (and (org-export-first-sibling-p headline info)
+	          (org-html-begin-plain-list type))
+	     itemized-body
+	     (and (org-export-last-sibling-p headline info)
+	          (org-html-end-plain-list type)))))
      ;; Case 3. Standard headline.  Export it as a section.
      (t
       (let* ((section-number (mapconcat 'number-to-string
-					(org-export-get-headline-number
-					 headline info) "-"))
-	     (ids (delq nil
-			(list (org-element-property :CUSTOM_ID headline)
-			      (org-export-get-headline-id headline info)
-			      (org-element-property :ID headline))))
-	     (preferred-id (car ids))
-	     (extra-class (org-element-property :HTML_CONTAINER_CLASS headline))
-	     ;; Ignore the section indentations.
-	     (level1 1)
-	     (first-content (car (org-element-contents headline)))
-	     (angles (org-impress-js--angles props))
-	     (trans (org-impress-js--trans props angles))
-	     (degrees (list
-		       (radians-to-degrees (vnth 0 angles))
-		       (- (radians-to-degrees (vnth 1 angles)))
-		       (radians-to-degrees (vnth 2 angles)))))
-	(format "<%s id=\"%s\" class=\"%s\" %s>%s%s\n"
-		(org-html--container headline info)
-		(if (null (cdr ids))
-		    (concat "outline-container-" preferred-id)
-		  preferred-id)
-		(concat (format "outline-%d" level1) (and extra-class " ")
-			extra-class
-			(concat " " (if class class org-impress-js-default-slide-class)))
-		(org-impress-js--build-data-attrs
-		 `(data-x ,(vnth 0 trans) data-y ,(vnth 1 trans) data-z ,(vnth 2 trans)
-			  data-scale ,(plist-get props 'data-scale)
-			  data-rotate-x ,(vnth 0 degrees)
-			  data-rotate-y ,(vnth 1 degrees)
-			  data-rotate-z ,(vnth 2 degrees)))
-		(format "\n<h%d>%s</h%d>\n"
-			level
-			(concat
-			 (and numberedp
-			      (format
-			       "<span class=\"section-number-%d\">%s</span> "
-			       level
-			       (mapconcat #'number-to-string numbers ".")))
-			 full-text)
-			level)
-		;; When there is no section, pretend there is an empty
-		;; one to get the correct <div class="outline- ...>
-		;; which is needed by `org-info.js'.
-		(if (not (eq (org-element-type first-content) 'section))
-		    (concat (org-impress-js-section first-content "" info)
-			    contents)
-		  contents)))))))
+					                    (org-export-get-headline-number
+					                     headline info) "-"))
+	         (ids (delq nil
+			            (list (org-element-property :CUSTOM_ID headline)
+			                  (org-export-get-headline-number headline info)
+			                  (org-element-property :ID headline))))
+	         (preferred-id (car ids))
+	         (extra-class (org-element-property :HTML_CONTAINER_CLASS headline))
+	         ;; Ignore the section indentations.
+	         (level1 1)
+	         (first-content (car (org-element-contents headline)))
+	         (angles (org-impress-js--angles props))
+	         (trans (org-impress-js--trans props angles))
+	         (degrees (list
+		               (radians-to-degrees (vnth 0 angles))
+		               (- (radians-to-degrees (vnth 1 angles)))
+		               (radians-to-degrees (vnth 2 angles)))))
+	    (format "<%s id=\"%s\" class=\"%s\" %s>%s%s\n"
+		        (org-html--container headline info)
+		        (if (null (cdr ids))
+		            (concat "outline-container-" preferred-id)
+		          preferred-id)
+		        (concat (format "outline-%d" level1) (and extra-class " ")
+			            extra-class
+			            (concat " " (if class class org-impress-js-default-slide-class)))
+		        (org-impress-js--build-data-attrs
+		         `(data-x ,(vnth 0 trans) data-y ,(vnth 1 trans) data-z ,(vnth 2 trans)
+			              data-scale ,(plist-get props 'data-scale)
+			              data-rotate-x ,(vnth 0 degrees)
+			              data-rotate-y ,(vnth 1 degrees)
+			              data-rotate-z ,(vnth 2 degrees)))
+		        (format "\n<h%d>%s</h%d>\n"
+			            level
+			            (concat
+			             (and numberedp
+			                  (format
+			                   "<span class=\"section-number-%d\">%s</span> "
+			                   level
+			                   (mapconcat #'number-to-string numbers ".")))
+			             full-text)
+			            level)
+		        ;; When there is no section, pretend there is an empty
+		        ;; one to get the correct <div class="outline- ...>
+		        ;; which is needed by `org-info.js'.
+		        (if (not (eq (org-element-type first-content) 'section))
+		            (concat (org-impress-js-section first-content "" info)
+			                contents)
+		          contents)))))))
 
 ;;;; Section
 
@@ -883,26 +883,26 @@ holding contextual information."
     (if (not parent) contents
       ;; Get div's class and id references.
       (let* ((class-num (+ (org-export-get-relative-level parent info)
-			   (1- (plist-get info :html-toplevel-hlevel))))
-	     (section-number
-	      (and (org-export-numbered-headline-p parent info)
-		   (mapconcat
-		    #'number-to-string
-		    (org-export-get-headline-number parent info) "-"))))
+			               (1- (plist-get info :html-toplevel-hlevel))))
+	         (section-number
+	          (and (org-export-numbered-headline-p parent info)
+		           (mapconcat
+		            #'number-to-string
+		            (org-export-get-headline-number parent info) "-"))))
         ;; Build return value.
-	(format "<div class=\"outline-text-%d\" id=\"text-%s\">\n%s</div>\n</div>"
-		class-num
-		(or (org-element-property :CUSTOM_ID parent)
-		    section-number
-		    (org-export-get-headline-id parent info))
-		(or contents ""))))))
+	    (format "<div class=\"outline-text-%d\" id=\"text-%s\">\n%s</div>\n</div>"
+		        class-num
+		        (or (org-element-property :CUSTOM_ID parent)
+		            section-number
+		            (org-export-get-headline-number parent info))
+		        (or contents ""))))))
 
 
 ;;; End-user functions
 
 ;;;###autoload
 (defun org-impress-js-export-as-html
-  (&optional async subtreep visible-only body-only ext-plist)
+    (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer to an HTML buffer.
 
 If narrowing is active in the current buffer, only export its
@@ -948,7 +948,7 @@ command to convert it."
 
 ;;;###autoload
 (defun org-impress-js-export-to-html
-  (&optional async subtreep visible-only body-only ext-plist)
+    (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer to a impress.js HTML file.
 
 If narrowing is active in the current buffer, only export its
@@ -977,8 +977,8 @@ file-local settings.
 Return output file's name."
   (interactive)
   (let* ((extension (concat "." org-html-extension))
-	 (file (org-export-output-file-name extension subtreep))
-	 (org-export-coding-system org-html-coding-system))
+	     (file (org-export-output-file-name extension subtreep))
+	     (org-export-coding-system org-html-coding-system))
     (org-export-to-file 'impress-js file
       async subtreep visible-only body-only ext-plist)))
 
@@ -992,9 +992,9 @@ publishing directory.
 
 Return output file name."
   (org-publish-org-to 'impress-js filename
-		      (concat "." (or (plist-get plist :html-extension)
-				      org-html-extension "html"))
-		      plist pub-dir))
+		              (concat "." (or (plist-get plist :html-extension)
+				                      org-html-extension "html"))
+		              plist pub-dir))
 
 (add-hook 'org-export-before-processing-hook 'org-impress-js-begin)
 
